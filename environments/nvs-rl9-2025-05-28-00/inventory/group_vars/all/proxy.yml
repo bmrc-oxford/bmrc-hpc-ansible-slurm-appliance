@@ -1,0 +1,5 @@
+proxy_basic_user: adamh
+proxy_basic_password: "{{ vault_proxy_basic_password }}"
+proxy_plays_only: true
+proxy_http_address: "nvsmirror00.nvs.bmrc.ox.ac.uk"
+proxy_http_port: 3128

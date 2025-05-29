@@ -1,0 +1,8 @@
+[nvs_freeipa_server]
+ipa-a ansible_host=ipa-a.nvs.bmrc.ox.ac.uk ansible_user=centos 
+
+[freeipa:children]
+# As for environments/common/inventory/groups
+# Allows defining variables common to freeipa_server and _client
+freeipa_client
+nvs_freeipa_server

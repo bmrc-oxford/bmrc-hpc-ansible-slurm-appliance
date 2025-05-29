@@ -1,0 +1,8 @@
+- hosts: nvs_freeipa_server
+  gather_facts: no
+  become: yes
+  tasks:
+      - name: Ensure FreeIPA client hosts are added to the NVS FreeIPA server
+        import_role:
+          name: freeipa
+          tasks_from: addhost.yml
