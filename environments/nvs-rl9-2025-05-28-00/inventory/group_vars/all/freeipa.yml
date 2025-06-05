@@ -1,1 +1,7 @@
-"node_fqdn": "ipa-a.nvs.bmrc.ox.ac.uk"
+node_fqdn: "{{ inventory_hostname }}.{{ openhpc_cluster_name }}.{{ cluster_domain_suffix }}"  # works even without facts unlike ansible_fqdn
+
+# TODO: specify in a vault-encrypted file!
+#vault_freeipa_admin_password:
+
+# TODO: is this correct?
+freeipa_admin_user: admin
