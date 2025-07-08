@@ -1,0 +1,8 @@
+---
+
+- name: Template passwords
+  template:
+    src: passwords.yml
+    dest: "{{ openhpc_passwords_output_path }}"
+  delegate_to: localhost
+  run_once: true

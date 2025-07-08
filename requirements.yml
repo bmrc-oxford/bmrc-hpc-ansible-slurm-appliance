@@ -1,0 +1,60 @@
+---
+roles:
+  - src: https://github.com/stackhpc/ansible-role-cluster-nfs.git
+    version: v25.3.2
+    name: stackhpc.nfs
+  - src: https://github.com/stackhpc/ansible-role-openhpc.git
+    version: v1.2.0
+    name: stackhpc.openhpc
+  - src: https://github.com/stackhpc/ansible-node-exporter.git
+    version: stackhpc
+    name: cloudalchemy.node_exporter
+  - src: https://github.com/cloudalchemy/ansible-prometheus.git
+    version: 4d2c8d742de39e50387e0aa6d5510b21c7451343 # need fix in preceeding commit for rocky
+    name: cloudalchemy.prometheus
+  - src: cloudalchemy.alertmanager
+    version: 0.19.1
+  - src: https://github.com/stackhpc/ansible-grafana.git
+    name: cloudalchemy.grafana
+    version: stackhpc-0.19.0 # fix grafana install
+  - src: https://github.com/OSC/ood-ansible.git
+    name: osc.ood
+    version: v3.1.5
+  - src: https://github.com/stackhpc/ansible-role-os-manila-mount.git
+    name: stackhpc.os-manila-mount
+    version: v25.3.1
+  - src: mrlesmithjr.chrony
+    version: v0.1.4
+
+collections:
+  - name: containers.podman
+    version: 1.16.2
+  - name: community.grafana
+    version: 1.5.4
+  - name: ansible.posix
+    version: 1.5.4
+  - name: ansible.netcommon
+    version: 5.1.1
+  - name: community.general
+    version: 7.1.0
+  - name: community.crypto
+    version: 2.10.0
+  - name: community.mysql
+    version: 3.7.2
+  - name: openstack.cloud
+    version: 2.1.0
+  - name: https://github.com/azimuth-cloud/ansible-collection-terraform
+    type: git
+    version: 0.4.0
+  - name: https://github.com/azimuth-cloud/ansible-collection-image-utils
+    type: git
+    version: 0.5.0
+  # stackhpc.pulp has pulp.squeezer as dependency, any version, but latest
+  # requires newer ansible than can install
+  - name: pulp.squeezer
+    version: 0.0.15
+  - name: stackhpc.pulp
+    version: 0.5.5
+  - name: stackhpc.linux
+    version: 1.5.0
+...

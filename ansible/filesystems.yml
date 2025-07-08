@@ -1,0 +1,38 @@
+---
+
+- name: Setup block devices
+  hosts: block_devices
+  become: yes
+  tags: block_devices
+  tasks:
+    - include_role:
+        name: block_devices
+
+- name: Setup NFS
+  hosts: nfs
+  become: true
+  tags:
+    - nfs
+  tasks:
+    - include_role:
+        name: stackhpc.nfs
+
+- name: Setup Manila share mounts
+  hosts: manila
+  become: true
+  tags: manila
+  tasks:
+    - include_role:
+        name: stackhpc.os-manila-mount
+        tasks_from: "{{ item }}"
+      loop: "{{ ['lookup.yml', 'mount.yml'] if appliances_mode == 'configure' else ['main.yml'] }}"
+
+- name: Setup Lustre clients
+  hosts: lustre
+  become: true
+  tags: lustre
+  tasks:
+    - include_role:
+        name: lustre
+        # NB install is ONLY run in builder
+        tasks_from: configure.yml

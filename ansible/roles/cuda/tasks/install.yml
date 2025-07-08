@@ -1,0 +1,59 @@
+
+# Based on https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/
+
+- name: Install cuda repo
+  get_url:
+    dest: "/etc/yum.repos.d/cuda-rhel{{ ansible_distribution_major_version }}.repo"
+    url: "{{ cuda_repo_url }}"
+
+- name: Check if nvidia driver module is enabled
+  ansible.builtin.command: dnf module list --enabled nvidia-driver
+  changed_when: false
+  failed_when: false
+  register: _cuda_driver_module_enabled
+
+- name: Enable nvidia driver module
+  ansible.builtin.command: "dnf module enable -y nvidia-driver:{{ cuda_nvidia_driver_stream }}"
+  register: _cuda_driver_module_enable
+  when: "'No matching Modules to list' in _cuda_driver_module_enabled.stderr"
+  changed_when: "'Nothing to do' not in _cuda_driver_module_enable.stdout"
+
+- name: Install nvidia drivers
+  ansible.builtin.dnf:
+    name: "{{ cuda_nvidia_driver_pkg }}"
+  register: _cuda_driver_install
+
+- name: Check kernel has not been modified
+  assert:
+    that: "'kernel ' not in _cuda_driver_install.stdout | default('')" # space ensures we don't flag e.g. kernel-devel-matched
+    fail_msg: "{{ _cuda_driver_install.stdout_lines | default([]) | select('search', 'kernel ') }}"
+
+# Based on https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html
+
+- name: Install cuda packages
+  ansible.builtin.dnf:
+    name: "{{ cuda_packages }}"
+  when: cuda_package_version != 'none'
+  register: cuda_package_install
+
+- name: Add cuda binaries to path
+  lineinfile:
+    path: /etc/profile.d/sh.local
+    line: 'export PATH=$PATH:$(ls -1d /usr/local/cuda-* | sort -V | tail -1)/bin'
+  when: cuda_package_version != 'none'
+
+- name: Enable NVIDIA Persistence Daemon
+  systemd:
+    name: nvidia-persistenced
+    enabled: true
+    state: "{{ cuda_persistenced_state }}"
+
+- name: Reboot
+  ansible.builtin.reboot:
+    post_reboot_delay: 30
+  when: cuda_package_install.changed
+
+- name: Wait for hosts to be reachable
+  wait_for_connection:
+    sleep: 15
+  when: cuda_package_install.changed

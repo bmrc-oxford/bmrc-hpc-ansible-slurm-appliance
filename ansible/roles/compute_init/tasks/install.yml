@@ -1,0 +1,70 @@
+---
+
+- name: Ensure directories exist
+  file:
+    path: "/etc/ansible-init/playbooks/{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  loop:
+    - templates
+    - files
+    - library
+    - filter_plugins
+    - tasks
+    - roles
+
+- name: Inject files from roles
+  synchronize:
+    src: '{{ item.src }}'
+    dest: '/etc/ansible-init/playbooks/{{ item.dest }}'
+    archive: false
+    rsync_opts: ["-p", "--chmod=D770,F644", "--owner=root", "--group=root"]
+    recursive: true
+    use_ssh_args: true
+  become: true
+  loop:
+    - src: ../../resolv_conf/templates/resolv.conf.j2
+      dest: templates/resolv.conf.j2
+    - src: ../../stackhpc.os-manila-mount/templates/ceph.conf.j2
+      dest: templates/ceph.conf.j2
+    - src: ../../stackhpc.os-manila-mount/templates/ceph.keyring.j2
+      dest: templates/ceph.keyring.j2
+    - src: ../../resolv_conf/files/NetworkManager-dns-none.conf
+      dest: files/NetworkManager-dns-none.conf
+    - src: ../../basic_users
+      dest: roles/
+    - src: ../../cacerts
+      dest: roles/
+    - src: ../../sssd
+      dest: roles/
+    - src: ../../sshd
+      dest: roles/
+    - src: ../../tuned/tasks/configure.yml
+      dest: tasks/tuned.yml
+    - src: ../../stackhpc.nfs
+      dest: roles/
+    - src: ../../mrlesmithjr.chrony
+      dest: roles/
+    - src: ../../lustre
+      dest: roles/
+    - src: ../../nhc
+      dest: roles/
+
+- name: Add filter_plugins to ansible.cfg
+  lineinfile:
+    path: /etc/ansible-init/ansible.cfg
+    line: "filter_plugins = /etc/ansible-init/filter_plugins"
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Add compute initialisation playbook
+  copy:
+    src: compute-init.yml
+    dest: /etc/ansible-init/playbooks/10-compute-init.yml
+    owner: root
+    group: root
+    mode: 0644

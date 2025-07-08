@@ -1,0 +1,93 @@
+# Should be run on compute nodes you want to run the graphical desktop on
+- name: Enable TurboVNC repo
+  tags: install
+  get_url:
+    url: https://raw.githubusercontent.com/TurboVNC/repo/main/TurboVNC.repo
+    dest: /etc/yum.repos.d/TurboVNC.repo
+
+- name: Install EPEL
+  tags: install
+  yum:
+    name: epel-release
+
+- name: Check /etc/init.d
+  ansible.builtin.stat:
+    path: /etc/init.d
+  register: init_d
+
+- name: Move OFED-installed init scripts
+  # turbovnc installs chkconfig which symlinks /etc/init.d from /etc/rc.d/init.d
+  # but OFED has already created that and installed files in it.
+  # See https://access.redhat.com/solutions/6969215
+  ansible.builtin.command:
+    cmd: mv /etc/init.d /etc/init.d.orig
+    creates: /etc/init.d.orig
+  when:
+    - init_d.stat.exists
+    - not init_d.stat.islnk
+
+- name: Install VNC-related packages
+  tags: install
+  dnf:
+    name:
+      - turbovnc-3.0.1
+      - nmap-ncat
+      - python3.9
+      - dbus-x11
+
+- name: Stop turbovnc service
+  # This is not actually required
+  systemd:
+    name: tvncserver
+    state: stopped
+    enabled: false
+
+- name: Replace OFED-installed init scripts
+  ansible.builtin.copy:
+    src: /etc/init.d.orig/ # trailing / to get contents
+    dest: /etc/init.d
+    remote_src: true
+  when:
+    - init_d.stat.exists
+    - not init_d.stat.islnk
+
+- name: Install Xfce desktop
+  tags: install
+  yum:
+    name: '@Xfce'
+  when: appliances_mode != 'configure' # dnf group/module installs aren't idempotent so only run during build
+  
+# - name: Ensure python3.9 installed
+#   dnf:
+#     name: python39
+#   tags: install
+
+- name: Install websockify venv
+  # Requires separate step so that the upgraded pip is used to install packages
+  pip:
+    name: pip
+    state: latest
+    virtualenv: /opt/websockify-py39
+    virtualenv_command: python3.9 -m venv
+  tags: install
+
+- name: Install websockify package in venv
+  pip:
+    name: websockify
+    virtualenv: /opt/websockify-py39
+    virtualenv_command: python3 -m venv
+  tags: install
+
+- name: Symlink websockify to where Open Ondemand expects
+  file: "{{ item }}"
+  loop:
+    - path: /opt/websockify
+      state: directory
+    - src: /opt/websockify-py39/bin/websockify
+      dest: /opt/websockify/run
+      state: link
+- name: Disable screensaver # as users might not have passwords
+  yum:
+    name: xfce4-screensaver
+    state: absent
+  when: not (openondemand_desktop_screensaver | bool)

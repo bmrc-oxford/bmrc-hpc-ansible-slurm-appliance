@@ -1,0 +1,4 @@
+---
+
+selinux_state: disabled
+selinux_policy: targeted

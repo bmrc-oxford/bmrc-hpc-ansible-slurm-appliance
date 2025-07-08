@@ -1,0 +1,32 @@
+---
+- name: Remove password and disable Pulp repos
+  ansible.builtin.yum_repository:
+    file: "{{ item.file }}"
+    name: "{{ item.name }}"
+    baseurl: "{{ item.base_url }}"
+    description: "{{ item.name }}"
+    enabled: false
+  loop: "{{ dnf_repos_repolist }}"
+
+- name: Remove password and disable EPEL repo
+  ansible.builtin.yum_repository:
+    name: epel
+    file: epel
+    description: "{{ dnf_repos_epel_description }}"
+    baseurl: "{{ dnf_repos_epel_baseurl }}"
+    gpgcheck: false
+    enabled: false
+
+- name: Get all repo files
+  ansible.builtin.find:
+    paths: /etc/yum.repos.d
+    patterns: '*.repo'
+  register: _dnf_repo_files
+
+- name: Disable every repo
+  ansible.builtin.replace:
+    path: "{{ item.path }}"
+    regexp: '^enabled\ ?=\ ?1'
+    replace: 'enabled=0'
+    backup: yes
+  loop: "{{ _dnf_repo_files.files }}"

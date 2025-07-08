@@ -1,0 +1,5 @@
+---
+# See: ansible/roles/hpctests/README.md
+# for variable definitions.
+
+# hpctests_user:
