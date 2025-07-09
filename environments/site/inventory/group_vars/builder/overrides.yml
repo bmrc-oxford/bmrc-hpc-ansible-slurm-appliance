@@ -1,0 +1,4 @@
+proxy_basic_user: ff28d9
+proxy_basic_password: "{{ vault_proxy_basic_password }}"
+proxy_http_address: nvsmirror00-ext.nvs.bmrc.ox.ac.uk
+
