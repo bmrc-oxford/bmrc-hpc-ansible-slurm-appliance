@@ -1,0 +1,1 @@
+openondemand_servername: "{{ hostvars[groups['openondemand'].0].node_fip if groups['openondemand'] else '' }}"
