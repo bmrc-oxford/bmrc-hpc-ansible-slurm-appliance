@@ -193,3 +193,7 @@ output "image_id" {
 output "fqdns" {
   value = local.fqdns
 }
+
+output "fips" {
+  value =  {for idx in range(length(var.fip_addresses)): var.nodes[idx] => var.fip_addresses[idx]}
+}
