@@ -1,7 +1,9 @@
 flavor = "m1.medium"                           # 4GB
 networks = ["ee42ccc3-907c-405e-8e1e-8ab4322e6bba"]   # analytics-vxlan
-source_image_name = "openhpc-RL9-250704-1445-ff88ca4e"   # Name of image to create VM with, i.e. starting image
+source_image_name = "openhpc-RL9-250704-1445-ff88ca4e.raw"   # Name of image to create VM with, i.e. starting image
 inventory_groups = "proxy,freeipa_client"            # Additional inventory groups to add build VM to
-floating_ip_network = "external"
-floating_ip = "10.167.2.236 # FIP 4b073dc3-0c2c-40b8-a844-d00907e26796 NB: this is not an upstream variable!
+#floating_ip_network = "external"
+floating_ip = "980eb247-7ccb-4d51-af7e-1bc5cc949ff7" # 10.167.2.61
+security_groups = ["default", "SSH"]
+
 
