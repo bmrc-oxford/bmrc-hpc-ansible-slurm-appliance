@@ -1,0 +1,2 @@
+[nvs_freeipa_server]
+ipa-a.nvs.bmrc.ox.ac.uk ansible_host=ipa-a.nvs.bmrc.ox.ac.uk ansible_user=centos
