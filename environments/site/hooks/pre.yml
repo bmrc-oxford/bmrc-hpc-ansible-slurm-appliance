@@ -17,7 +17,7 @@
         ipa_user: "{{ freeipa_admin_user }}"
         state: present
         validate_certs: false
-      delegate_to: nvs_freeipa_server
+      delegate_to: "{{ groups['nvs_freeipa_server'].0 }}"
       register: _ipa_host_check
       check_mode: yes
       changed_when: false
@@ -33,7 +33,7 @@
         state: present
         validate_certs: false
         ipa_timeout: 30
-      delegate_to: nvs_freeipa_server
+      delegate_to: "{{ groups['nvs_freeipa_server'].0 }}"
       when: "'sshpubkeyfp' not in _ipa_host_check.host"
       register: _ipa_host_add
 
