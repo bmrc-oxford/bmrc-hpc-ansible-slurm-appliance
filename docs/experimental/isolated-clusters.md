@@ -1,133 +1,130 @@
 # Isolated Clusters
 
-This document explains how to create clusters which do not have outbound internet
-access by default.
+Full functionality of the appliance requires that there is outbound internet
+access from all nodes, possibly via a [proxy](../../ansible/roles/proxy/).
 
-The approach is to:
-- Create a squid proxy with basic authentication and add a user.
-- Configure the appliance to set proxy environment variables via Ansible's
-  [remote environment support](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_environment.html).
+However many features (as defined by Ansible inventory groups/roles) will work
+if the cluster network(s) provide no outbound access. Currently this includes
+all "default" features, i.e. roles/groups which are enabled either in the
+`common` environment or in the `environments/$ENV/inventory/groups` file
+created by cookiecutter for a new environment.
 
-This means that proxy environment variables are not present on the hosts at all
-and are only injected when running Ansible, meaning the basic authentication
-credentials are not exposed to cluster users.
+The full list of features and whether they are functional on such an "isolated"
+network is shown in the table below. Note that:
 
-## Deploying Squid using the appliance
-If an external squid is not available, one can be deployed by the cluster on a
-dual-homed host. See [docs/networks.md#proxies](../networks.md#proxies) for
-guidance, but note a separate host should be used rather than a Slurm node, to
-avoid users on that node getting direct access.
+1. The `hpl` test from the `ansible/adhoc/hpctests.yml` playbook is not
+   functional and must be skipped using:
 
-If the deploy host is RockyLinux, this could be used as the squid host by adding
-it to inventory:
+    ```shell
+    ansible-playbook ansible/adhoc/hpctests.yml --skip-tags hpl-solo
+    ```
 
-```ini
-# environments/$ENV/inventory/squid
-[squid]
-# configure squid on deploy host
-localhost ansible_host=10.20.0.121 ansible_connection=local
-```
+2. Using [EESSI](https://www.eessi.io/docs/) necessarily requires outbound
+   network access for the CernVM File System. However this can be provided
+   via an authenticated proxy. While the proxy configuration on the cluster node
+   is readable by all users, this proxy could be limited via acls to only provide
+   access to EESSI's CVMFS Stratum 1 servers.
 
-The IP address should be the deploy hosts's IP on the cluster network and is used
-later to define the proxy address. Other connection variables (e.g. `ansible_user`)
-could be set if required.
+## Support by feature for isolated networks
 
-## Using Squid with basic authentication
+See above for definition of "Default" features. In the "Isolated?" column:
+- "Y": Feature works without outbound internet access.
+- "N": Known not to work.
+- "?": Not investigated at present.
 
-First create usernames/passwords on the squid host (tested on RockyLinux 8.9):
-
-```shell
-SQUID_USER=rocky
-dnf install -y httpd-tools
-htpasswd -c /etc/squid/passwords $SQUID_USER # enter pasword at prompt
-sudo chown squid /etc/squid/passwords
-sudo chmod u=rw,go= /etc/squid/passwords
-```
-
-This can be tested by running:
-```
-/usr/lib64/squid/basic_ncsa_auth /etc/squid/passwords
-```
-
-and entering `$SQUID_USER PASSWORD`, which should respond `OK`.
-
-If using the appliance to deploy squid, override the default `squid`
-configuration to use basic auth:
-
-```yaml
-# environments/$ENV/inventory/group_vars/all/squid.yml:
-squid_acls:
-    - acl ncsa_users proxy_auth REQUIRED
-squid_auth_param: |
-    auth_param basic program /usr/lib64/squid/basic_ncsa_auth /etc/squid/passwords
-    auth_param basic children 5
-    auth_param basic credentialsttl 1 minute
-```
-
-See the [squid docs](https://wiki.squid-cache.org/ConfigExamples/Authenticate/Ncsa) for more information.
-
-## Proxy Configuration
-
-Configure the appliance to configure proxying on all cluster nodes:
-
-```ini
-# environments/.stackhpc/inventory/groups:
-...
-[proxy:children]
-cluster
-...
-```
-
-Now configure the appliance to set proxy variables via remote environment
-rather than by writing it to the host, and provide the basic authentication
-credentials:
-
-```yaml
-#environments/$ENV/inventory/group_vars/all/proxy.yml:
-proxy_basic_user: $SQUID_USER
-proxy_basic_password: "{{ vault_proxy_basic_password }}"
-proxy_plays_only: true
-```
-
-```yaml
-#environments/$ENV/inventory/group_vars/all/vault_proxy.yml:
-vault_proxy_basic_password: $SECRET
-```
-This latter file should be vault-encrypted.
-
-If using an appliance-deployed squid then the other [proxy role variables](../../ansible/roles/proxy/README.md)
-will be automatically constructed (see environments/common/inventory/group_vars/all/proxy.yml).
-You may need to override `proxy_http_address` if the hostname of the squid node
-is not resolvable by the cluster. This is typically the case if squid is deployed
-to the deploy host, in which case the IP address may be specified instead using
-the above example inventory as:
-
-```
-proxy_http_address: "{{ hostvars[groups['squid'] | first].ansible_host }}"
-```
-
-If using an external squid, at a minimum set `proxy_http_address`. You may
-also need to set `proxy_http_port` or any other [proxy role's variables](../../ansible/roles/proxy/README.md)
-if the calculated parameters are not appropriate.
+| Inventory group/role  | Default? | Isolated? |
+| ----------------------| -------- | --------- |
+| alertmanager          | Y | Y | 
+| ansible_init          | Y | Y | 
+| basic_users           | Y | Y | 
+| block_devices         | Y | No (depreciated) | 
+| cacerts               | - | Y | 
+| chrony                | - | Y | 
+| compute_init          | - | Y | 
+| cuda                  | - | ? | 
+| eessi                 | Y | Y - see above | 
+| etc_hosts             | Y | Y | 
+| extra_packages        | - | No | 
+| fail2ban              | Y | Y | 
+| filebeat              | Y | Y | 
+| firewalld             | Y | Y | 
+| freeipa_client        | - | Y - image build required |
+| gateway               | n/a | n/a - build only | 
+| grafana               | Y | Y | 
+| hpctests              | Y | Y  - except hpl-solo, see above | 
+| k3s_agent             | - | ? | 
+| k3s_server            | - | ? | 
+| k9s                   | - | ? | 
+| lustre                | - | ? | 
+| manila                | Y | Y | 
+| mysql                 | Y | Y | 
+| nfs                   | Y | Y | 
+| nhc                   | Y | Y | 
+| node_exporter         | Y | Y | 
+| openhpc               | Y | Y | 
+| openondemand          | Y | Y | 
+| openondemand_desktop  | Y | Y | 
+| openondemand_jupyter  | Y | Y | 
+| opensearch            | Y | Y | 
+| podman                | Y | Y | 
+| persist_hostkeys      | Y | Y | 
+| prometheus            | Y | Y | 
+| proxy                 | - | Y | 
+| resolv_conf           | - | ? | 
+| slurm_exporter        | Y | Y | 
+| slurm_stats           | Y | Y | 
+| squid                 | - | ? | 
+| sshd                  | - | ? | 
+| sssd                  | - | ? | 
+| systemd               | Y | Y | 
+| tuned                 | - | Y | 
+| update                | - | No |
 
 ## Image build
+A site image build may be required, either for features using packages not
+present in StackHPC images (e.g `freeipa_client`) or to [add additional packages](../operations.md#adding-additional-packages).
+Clearly in this case the build VM does require outbound internet access. For an
+"isolated" environment, this could be achieved by [configuring image build](../image-build.md)
+to use a different network from the cluster. Alternatively if an authenticated
+proxy is available the image build can be configured to use that, e.g.:
 
-TODO: probably not currently functional!
+```yaml
+# environments/$ENV/builder.pkrvars.hcl:
+...
+inventory_groups = 'proxy,freeipa_client'
+```
 
-## EESSI
+```yaml
+# environments/$ENV/group_vars/builder/overrrides.yml:
+proxy_basic_user: someuser
+proxy_basic_password: "{{ vault_proxy_basic_password }}"
+proxy_http_address: squid.mysite.org
+```
 
-Although EESSI will install with the above configuration, as there is no
-outbound internet access except for Ansible tasks, making it functional will
-require [configuring a proxy for CVMFS](https://multixscale.github.io/cvmfs-tutorial-hpc-best-practices/access/proxy/#client-system-configuration).
+```yaml
+# environments/$ENV/group_vars/builder/vault_overrrides.yml:
+# NB: vault-encrypt this file
+vault_proxy_basic_password: 'super-secret-password'
+```
 
-## Isolation Using Security Group Rules
+See [ansible/roles/proxy/README.md](../../ansible/roles/proxy/README.md) and
+the convenience variables at
+[environments/common/inventory/group_vars/all/proxy.yml](../../environments/common/inventory/group_vars/all/proxy.yml).
 
-The below shows the security groups/rules (as displayed by Horizon ) which can
-be used to "isolate" a cluster when using a network which has a subnet gateway
-provided by a router to an external network. It therefore also indicates what
-access is required for a different networking configuration.
+By default, the proxy configuration will be removed at the end of the build and
+hence will not be present in the image.
 
-Security group `isolated`:
+## Network considerations
+
+Even when outbound internet access is not required, nodes do require some
+outbound access, as well as connectivity inbound from the deploy host and
+inbound connectivity for users. This section documents the minimal connectivity
+required, in the form of the minimally-permissive security group rules. Often
+default security groups are less restrictive than these.
+
+Assuming nodes and the deploy host have a security group `isolated` applied then
+the following rules are required:
+
 
     # allow outbound DNS
     ALLOW IPv4 53/tcp to 0.0.0.0/0
@@ -140,25 +137,27 @@ Security group `isolated`:
     # allow hosts to reach metadata server (e.g. for cloud-init keys):
     ALLOW IPv4 80/tcp to 169.254.169.254/32
 
-    # allow hosts to reach squid proxy:
-    ALLOW IPv4 3128/tcp to 10.179.2.123/32
+    # optionally: allow hosts to reach squid proxy for EESSI:
+    ALLOW IPv4 3128/tcp to <squid cidr>
 
-Security group `isolated-ssh-https` allows inbound ssh and https (for OpenOndemand):
+Note that name resolution happens on the hosts, not on the proxy, hence DNS is
+required for nodes even with a proxy.
 
-    ALLOW IPv4 443/tcp from 0.0.0.0/0
-    ALLOW IPv4 22/tcp from 0.0.0.0/0
+For nodes running OpenOndemand, inbound ssh and https are also required
+(e.g. in a security group called `isolated-ssh-https`):
 
+If non-default security groups are required, then the OpenTofu variables
+`login_security_groups` and `nonlogin_security_groups` can be used to set
+these, e.g.:
 
-Then OpenTofu is configured as:
+```terraform
+# environments/site/tofu/cluster.auto.tfvars:
+login_security_groups = [
+    "isolated",  # allow all in-cluster services
+    "isolated-ssh-https",      # access via ssh and ondemand
+]
+nonlogin_security_groups = [
+    "isolated"
+]
+```
 
-
-    login_security_groups = [
-        "isolated",  # allow all in-cluster services
-        "isolated-ssh-https",      # access via ssh and ondemand
-    ]
-    nonlogin_security_groups = [
-        "isolated"
-    ]
-
-Note that DNS is required (and is configured by the cloud when the subnet has
-a gateway) because name resolution happens on the hosts, not on the proxy.

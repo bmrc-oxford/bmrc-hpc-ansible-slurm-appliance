@@ -1,3 +1,4 @@
+# ansible-slurm-appliance
 [![Test deployment and image build on OpenStack](https://github.com/stackhpc/ansible-slurm-appliance/actions/workflows/stackhpc.yml/badge.svg)](https://github.com/stackhpc/ansible-slurm-appliance/actions/workflows/stackhpc.yml)
 
 # StackHPC Slurm Appliance
@@ -24,8 +25,6 @@ While it is tested on OpenStack it should work on any cloud with appropriate Ope
 The default configuration in this repository may be used to create a cluster to explore use of the appliance. It provides:
 - Persistent state backed by an OpenStack volume.
 - NFS-based shared file system backed by another OpenStack volume.
-
-Note that the Open OnDemand portal and its remote apps are not usable with this default configuration.
 
 It requires an OpenStack cloud, and an Ansible "deploy host" with access to that cloud.
 

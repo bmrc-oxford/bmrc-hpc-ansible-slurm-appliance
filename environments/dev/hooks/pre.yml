@@ -1,0 +1,2 @@
+- name: Import site pre-hook
+  import_playbook: "{{ lookup('env', 'APPLIANCES_ENVIRONMENT_ROOT') }}/../site/hooks/pre.yml"

@@ -1,0 +1,7 @@
+os_manila_mount_shares:
+  - share_name: "{{ openhpc_cluster_name }}-home"
+    mount_path: /home
+  - share_name: "{{ openhpc_cluster_name }}-apps"
+    mount_path: /apps
+  - share_name: "{{ openhpc_cluster_name }}-data"
+    mount_path: /data

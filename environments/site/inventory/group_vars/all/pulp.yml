@@ -1,0 +1,3 @@
+dnf_repos_username: slurm-oxford-bmrc-v2
+dnf_repos_password: "{{ vault_dnf_repos_password }}"
+

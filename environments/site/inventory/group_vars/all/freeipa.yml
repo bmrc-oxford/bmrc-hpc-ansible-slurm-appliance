@@ -1,0 +1,3 @@
+freeipa_admin_user: admin
+freeipa_client_ip: "{{ ansible_host }}" # actually a role default, but used in the pre-hook here
+
