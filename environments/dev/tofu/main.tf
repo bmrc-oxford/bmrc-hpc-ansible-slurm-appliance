@@ -6,6 +6,12 @@ variable "environment_root" {
 locals {
  user_name = basename(pathexpand("~"))
 }
+
+# Cannot use a pre-allocated FIP for dev environment as there may be multiple instantiations
+resource "openstack_networking_floatingip_v2" "login" {
+  pool = "external"
+}
+
 module "cluster" {
   source = "../../site/tofu/"
 
@@ -16,7 +22,7 @@ module "cluster" {
     interactive = {
         nodes = ["login-0"]
         flavor = "m1.highmem"
-        fip_addresses = ["10.167.2.160"]
+        fip_addresses = [openstack_networking_floatingip_v2.login.address]
     }
   }
 
