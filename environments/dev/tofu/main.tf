@@ -10,7 +10,7 @@ module "cluster" {
   source = "../../site/tofu/"
 
   cluster_name = local.user_name
-  cluster_nodename_template = "$${node}.${local.user_name}.$${cluster_domain_suffix}"
+  cluster_nodename_template = "${local.user_name}-$${node}.$${cluster_domain_suffix}"
 
   login = {
     interactive = {
