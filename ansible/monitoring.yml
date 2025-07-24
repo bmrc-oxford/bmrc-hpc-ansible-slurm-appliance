@@ -17,6 +17,7 @@
 - name: Setup slurm stats
   hosts: slurm_stats
   tags: slurm_stats
+  environment: "{{ appliances_environment_vars }}"
   tasks:
     - include_role:
         name: slurm_stats
@@ -52,6 +53,7 @@
   hosts: slurm_exporter
   become: true
   tags: slurm_exporter
+  environment: "{{ appliances_environment_vars }}"
   tasks:
     - include_role:
         name: slurm_exporter
@@ -79,6 +81,7 @@
 - name: Deploy grafana
   hosts: grafana
   tags: grafana
+  environment: "{{ appliances_environment_vars }}"
   tasks:
     - name: Skip plugin installation in configure mode
       # done during fatimage - can't do this in vars block as that is recursive

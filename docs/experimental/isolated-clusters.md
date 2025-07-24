@@ -125,6 +125,7 @@ default security groups are less restrictive than these.
 Assuming nodes and the deploy host have a security group `isolated` applied then
 the following rules are required:
 
+
     # allow outbound DNS
     ALLOW IPv4 53/tcp to 0.0.0.0/0
     ALLOW IPv4 53/udp to 0.0.0.0/0
@@ -145,9 +146,6 @@ required for nodes even with a proxy.
 For nodes running OpenOndemand, inbound ssh and https are also required
 (e.g. in a security group called `isolated-ssh-https`):
 
-    ALLOW IPv4 443/tcp from 0.0.0.0/0
-    ALLOW IPv4 22/tcp from 0.0.0.0/0
-
 If non-default security groups are required, then the OpenTofu variables
 `login_security_groups` and `nonlogin_security_groups` can be used to set
 these, e.g.:
@@ -162,3 +160,4 @@ nonlogin_security_groups = [
     "isolated"
 ]
 ```
+
