@@ -1,3 +1,8 @@
+---
+
+# Override default nfs-root-squashed config now using manila:
+basic_users_homedir_server_path: /home
+
 basic_users_users:
   - name: demo_user
     password: "{{ vault_demo_user_password | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}" # idempotent

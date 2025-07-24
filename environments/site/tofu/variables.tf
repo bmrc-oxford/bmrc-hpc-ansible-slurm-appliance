@@ -231,7 +231,7 @@ variable "home_volume_type" {
 
 variable "home_volume_provisioning" {
     type = string
-    default = "manage"
+    default = "none" # use manila instead for all clusters
     description = <<-EOT
         How to manage the home volume. Valid values are:
             "manage": (Default) OpenTofu will create a volume "$cluster_name-home"

@@ -1,5 +1,4 @@
-[nfs:children]
-openhpc
+[nfs]
 
 [mysql:children]
 control
@@ -61,7 +60,8 @@ cluster
 
 [freeipa_client:children]
 # Hosts to be a FreeIPA client. See ansible/roles/freeipa/README.md
-openhpc
+#openhpc
+#TODO: add this back once fixed CA cert
 
 [cuda]
 # Hosts to install NVIDIA CUDA on - see ansible/roles/cuda/README.md
@@ -76,8 +76,9 @@ openhpc
 [proxy]
 # Hosts to configure http/s proxies - see ansible/roles/proxy/README.md
 
-[manila]
+[manila:children]
 # Hosts to configure for manila fileshares
+openhpc
 
 [persist_hostkeys:children]
 # Hosts to use common set of hostkeys which persist across reimaging.
