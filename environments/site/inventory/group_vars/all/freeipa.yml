@@ -1,3 +1,4 @@
 freeipa_admin_user: admin
 freeipa_client_ip: "{{ ansible_host }}" # actually a role default, but used in the pre-hook here
+freeipa_ca_cert_file: /etc/ipa/ca.crt # deploy host is installed so can use that
 
