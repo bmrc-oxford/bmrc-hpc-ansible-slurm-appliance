@@ -60,8 +60,7 @@ cluster
 
 [freeipa_client:children]
 # Hosts to be a FreeIPA client. See ansible/roles/freeipa/README.md
-#openhpc
-#TODO: add this back once fixed CA cert
+openhpc
 
 [cuda]
 # Hosts to install NVIDIA CUDA on - see ansible/roles/cuda/README.md
