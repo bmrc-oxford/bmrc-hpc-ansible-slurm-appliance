@@ -20,7 +20,11 @@ In general, NVS-specific configuration is contained in the `site` environment.
 
 # Prerequisites
 
-Before a cluster can be created the Manila shares must be created. E.g. for a `dev` environment use:
+The following resources must be manually created before a cluster can be provisioned. This is usually
+a one-off action.
+
+## Manila shares
+For a `dev` environment use:
 
 ```shell
 openstack share create --share-type cephfstype --name $USER-home CephFS 2
@@ -33,6 +37,16 @@ openstack share access create $USER-data cephx slurm
 ```
 
 For the `production` environment use `nvs-` instead of `$USER-` as a prefix and use sizes (in GiB) of 200, 1024 (= 1TiB) and 163840 (= 160 TiB) respectively.
+
+## State volume
+
+For the `production` environment *only*, a state volume must be manually created:
+
+```shell
+openstack volume create --size 200 nvs-state
+```
+
+For `dev` environments this volume is automatically managed with the cluster.
 
 # Image build
 
