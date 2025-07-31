@@ -20,7 +20,7 @@ module "cluster" {
 
   login = {
     interactive = {
-        nodes = ["login-0"]
+        nodes = ["login-00"]
         flavor = "m1.highmem"
         fip_addresses = [openstack_networking_floatingip_v2.login.address]
     }
@@ -28,7 +28,7 @@ module "cluster" {
 
   compute = {
     general = {
-      nodes = ["compute-0", "compute-1"]
+      nodes = ["compute-00", "compute-01"]
       flavor = "m2.large"
     }
   }

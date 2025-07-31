@@ -38,9 +38,8 @@ login
 [block_devices:children]
 # Environment-specific so not defined here
 
-[basic_users:children]
+[basic_users]
 # Add `openhpc` group to add Slurm users via creation of users on each node.
-openhpc
 
 [openondemand:children]
 # Host to run Open Ondemand server on - subset of login
