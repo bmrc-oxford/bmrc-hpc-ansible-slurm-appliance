@@ -50,13 +50,23 @@ For `dev` environments this volume is automatically managed with the cluster.
 
 # Image build
 
-Use this packer command (NB in the `packer/` directory):
+There are 3x image builds used here, referenced by their packer variables file name:
 
-    PACKER_LOG=1 /usr/local/bin/packer build -on-error=ask -var-file=../environments/site/builder.pkrvars.hcl openstack.pkr.hcl
+- `base`: This starts from the upstream StackHPC RockyLinux 9 image, and adds the `freeipa` client packages.
+  It produces an image `openhpc-freeipa-...`.
+- `opengpu`: This starts from the `base` image and adds the `nvidia-open` drivers and `cuda`. It produces an
+  image `openhpc-cuda-...`.
+
+To build these run the following command in the `packer/` directory:
+
+    PACKER_LOG=1 /usr/local/bin/packer build -on-error=ask -var-file=../environments/site/$NAME.pkrvars.hcl openstack.pkr.hcl
+
+where `$NAME` should be replaced with the variable file name as above, e.g. `base`.
+
+Once the `base` image has built, the `cuda` file should be updated to reference the new image.
 
 To debug failing builds it can be useful to ssh into the build VM. The key file Packer generates will be shown in the connection
 string in the logs. Alternatively you can force a specific key using something like:
-
 
 ```yaml
 # environments/site/builder.pkrvars.hcl:
