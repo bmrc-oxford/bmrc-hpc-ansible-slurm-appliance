@@ -55,7 +55,8 @@ There are 3x image builds used here, referenced by their packer variables file n
 - `base`: This starts from the upstream StackHPC RockyLinux 9 image, and adds the `freeipa` client packages.
   It produces an image `openhpc-freeipa-...`.
 - `opengpu`: This starts from the `base` image and adds the `nvidia-open` drivers and `cuda`. It produces an
-  image `openhpc-cuda-...`.
+  image `openhpc-cuda-...`. It is suitable for A100 nodes only. It should support GRES autodetection via the
+  `nvidia` (not `nvml`) mechanism.
 
 To build these run the following command in the `packer/` directory:
 

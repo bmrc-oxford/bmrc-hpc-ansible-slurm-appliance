@@ -3,6 +3,11 @@ variable "environment_root" {
     description = "Path to environment root, automatically set by activate script"
 }
 
+data "openstack_images_image_v2" "opengpu" {
+  # Image for A100 (nvidia-open drivers) - just allows referencing by name
+  name = "openhpc-opengpu-250731-1343-99f406e9"
+}
+
 module "cluster" {
   source = "../../site/tofu/"
 
@@ -25,6 +30,11 @@ module "cluster" {
     legacy = {
       nodes = ["legacy-00", "legacy-01"]
       flavor = "m3.medium"
+    }
+    a100 = {
+      nodes = [] # a100-00 to -03
+      flavor = "a100.4cpu.3gpu.435gb"
+      image_id = data.openstack_images_image_v2.opengpu.id
     }
   }
 
