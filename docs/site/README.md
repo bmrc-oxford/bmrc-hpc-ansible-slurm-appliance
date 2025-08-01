@@ -5,14 +5,14 @@ This document notes changes from the generic docs, and should be read with them.
 # Clusters and Environments
 
 This repository defines:
-- a `site` environment, used as the basis for all other NVS environments
-- TODO: A `production` environment, with cluster name 'nvs' and hostnames "$NODE.in.nvs.bmrc.ox.ac.uk"
+- A `site` environment, used as the basis for all other NVS environments
+- A `production` environment, with cluster name 'nvs' and hostnames "$NODE.in.nvs.bmrc.ox.ac.uk"
 - A per-user `dev` environment, with cluster name $USER (for the deploy-host user) and hostnames "$USER-$NODE.in.nvs.bmrc.ox.ac.uk"
 
 The key differences from the default appliance configuration are:
 - Use of Manila CephFS shares for/home, and also for /data and /apps shared directories.
-- WIP: Use of FreeIPA, with a pre-hook to automatically enrol nodes. This is built into the image.
-- TODO: EESSI configuration
+- Use of FreeIPA, with a pre-hook to automatically enrol nodes. This is built into the image.
+- TODO: Currently EESSI is not available due to the network configuration.
 
 Note these clusters operate without outbound internet access, as described in docs/experimental/isolated-clusters.md.
 
@@ -76,5 +76,4 @@ string in the logs. Alternatively you can force a specific key using something l
 ssh_keypair_name = "nvs-analytics-2025"
 ssh_private_key_file = "/home/ff28d9/.ssh/nvs-analytics-2025" # or wherever ...
 ```
-
 
