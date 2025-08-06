@@ -48,6 +48,49 @@ openstack volume create --size 200 nvs-state
 
 For `dev` environments this volume is automatically managed with the cluster.
 
+# Creating a new checkout
+
+This section describes how to modify the deployed cluster(s) using a new git
+checkout.
+
+First clone the repo and change to the `nvs` branch:
+```shell
+git clone git@github.com:bmrc-oxford/ansible-slurm-appliance.git
+cd ansible-slurm-appliance
+git checkout nvs
+```
+
+Create a file holding the Ansible Vault secret. Usually it is best to do this
+outside the repo (so multiple repos can use it and there is no chance of
+committing it), e.g. `~/.vault_pass`.
+
+Ensure you have a `clouds.yaml` for the `analytic` project available, either
+in the default `~/.config/openstack/` or else set `OS_CLIENT_CONFIG_FILE`.
+
+Now setup the venv and dependencies for the first time:
+```
+dev/setup-env.sh
+```
+
+**IMPORTANT: The above must be re-run when the requirements.{yml,txt} change -
+in general it is best to re-run it when changing branches. It is always save to
+rerun.**
+
+
+Now configure your checkout - you need to do this every time you start a shell:
+
+```
+export OS_CLOUD=analytics # assuming this is the first key inside `openstack:` in clouds.yaml
+export ANSIBLE_VAULT_PASSWORD_FILE=~/.vault_pass
+. venv/bin/activate
+. environments/production/activate # or whichever environment
+```
+
+**IMPORTANT: Currently the OpenTofu state is NOT remote, hence must be copied
+from e.g /home/ff28d9/nvs-slurm-appliance/environments/production/tofu/terraform.tfstate or
+wherever the latest change was made.***
+
+
 # Image build
 
 There are 3x image builds used here, referenced by their packer variables file name:
