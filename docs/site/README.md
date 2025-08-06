@@ -88,8 +88,40 @@ export ANSIBLE_VAULT_PASSWORD_FILE=~/.vault_pass
 
 **IMPORTANT: Currently the OpenTofu state is NOT remote, hence must be copied
 from e.g /home/ff28d9/nvs-slurm-appliance/environments/production/tofu/terraform.tfstate or
-wherever the latest change was made.***
+wherever the latest change was made.**
 
+# Workflow
+
+In general, the preferred workflow is to use branches to test things on a `dev`
+cluster and then merge to `nvs` and deploy to `production` once happy. However
+for smaller changes or when the cluster is not in active use you may wish to
+use the `nvs` branch and `production` cluster directly.
+
+The full workflow is generally:
+- Checkout and pull `nvs` branch to ensure that is up to date
+
+	git checkout nvs
+        git pull --prune
+
+- Checkout a new branch
+
+	git checkout feat/foo
+
+- Develop on a `dev` cluster:
+
+	. environments/dev/activate
+	vi ...
+        # tofu/ansible commands
+        git add ...
+        git commit -m ...i
+        git push
+
+- Create, review and merge a PR to the `nvs` branch.
+
+- In a new terminal, deploy to production:
+
+	. environments/production/activate
+        # tofu/ansible commands
 
 # Image build
 
