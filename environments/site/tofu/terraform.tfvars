@@ -12,7 +12,7 @@ cluster_networks = [
 key_pair = "nvs-analytics-2025"
 control_node_flavor = "m1.highmem"
 
-cluster_image_id = "0ca4e683-c670-489f-b9b0-ab028d10bbbd" # openhpc-RL9-250704-1445-ff88ca4e, upstream @PR717
+cluster_image_id = "57baae64-b01d-48bc-8066-c9e36354e958"# openhpc-freeipa-250819-1008-472f60c4
 
 login = {
     # Arbitrary group name for these login nodes
