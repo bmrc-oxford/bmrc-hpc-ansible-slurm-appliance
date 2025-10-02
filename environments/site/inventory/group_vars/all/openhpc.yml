@@ -19,4 +19,5 @@ openhpc_partitions:
 openhpc_config_extra:
   GresTypes:
     - gpu
+  MaxArraySize: 100000
 
