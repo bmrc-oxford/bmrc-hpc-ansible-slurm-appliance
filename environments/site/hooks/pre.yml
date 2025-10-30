@@ -1,3 +1,17 @@
+- hosts: builder
+  gather_facts: no
+  become: yes
+  tags: ondemand
+  tasks:
+    - name: Enable upstream ondemand repos
+      # Required because these are not in Ark
+      # Can be removed once https://github.com/stackhpc/ansible-slurm-appliance/pull/832 in use
+      community.general.ini_file:
+       path: /etc/yum.repos.d/ondemand-web.repo
+       section: ondemand-web
+       option: enabled
+       value: 1
+
 # Modified from ansible/iam.yml
 - hosts: freeipa_client:!builder
   gather_facts: no
