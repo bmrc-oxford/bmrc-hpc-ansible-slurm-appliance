@@ -1,4 +1,5 @@
-openondemand_servername: "{{ hostvars[groups['openondemand'].0].node_fip if groups['openondemand'] else '' }}"
+# Use fqhn without '.in' for external name - in NVS IpA:
+openondemand_servername: "{{ hostvars[groups['openondemand'] | first].node_fqdn | split('.') | reject('eq', 'in') | join('.') }}"
 
 # Install ondemand's DEX package:
 install_ondemand_dex: true
