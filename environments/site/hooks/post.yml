@@ -1,0 +1,11 @@
+- hosts: openondemand:!builder
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Ensure changes to DEX configuration are loaded
+      # Can be dropped once on a version including https://github.com/OSC/ood-ansible/pull/272
+      # This will always restart DEX
+      ansible.builtin.systemd:
+        name: ondemand-dex
+        state: restarted
+
