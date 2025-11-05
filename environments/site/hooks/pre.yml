@@ -55,3 +55,19 @@
       set_fact:
         freeipa_host_password: "{{ _ipa_host_add.host.randompassword }}"
       when: _ipa_host_add.changed
+
+- hosts: openondemand:!builder
+  become: yes
+  gather_facts: no
+  tags:
+    - openondemand_server
+    - openondemand
+  tasks:
+    - name: Install ondemand SSL cert/key
+      ansible.builtin.copy:
+        src: "{{ appliances_environment_root }}/files/openondemand/{{ item | basename }}"
+        dest: "{{ item }}"
+        mode: u=rw,go=
+      loop:
+        - "{{ openondemand_ssl_cert }}"
+        - "{{ openondemand_ssl_cert_key }}"
