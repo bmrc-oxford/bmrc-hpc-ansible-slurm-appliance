@@ -18,6 +18,10 @@ module "cluster" {
 
   login = {
     interactive = {
+        # NB: login nodes use image with ondemand-dex package
+        # Only deployed to these nodes to minimise cluster disruption
+        # but could be used for all nodes at a future upgrade
+        image_id = "c3ae586b-48c5-4f92-8c84-9187ebdf63cc" # openhpc-freeipa-251030-1621-727d972
         nodes = ["login-00"]
         flavor = "m1.highmem"
         fip_addresses = ["10.167.2.160"]
