@@ -9,10 +9,10 @@ openondemand_ssl_cert: /etc/pki/tls/certs/ood.crt
 openondemand_ssl_cert_key: /etc/pki/tls/private/ood.key
 
 # WIP: Use DEX with LDAP adaptor pointing to NVS IpA:
+openondemand_auth: dex
 # **NB**: This is a *text* block of yaml, not actual yaml!
 dex_settings: |
   dex:
-    ssl: false # doesn't appear to work with self-signed
     connectors:
       - type: ldap
         id: ldap
@@ -37,18 +37,6 @@ dex_settings: |
             - userAttr: DN
               groupAttr: member
             nameAttr: cn
-#    oauth2:
-#     skipApprovalScreen: true
-#     enablePasswordDB: false
-#    frontend:
-#      dir: "/usr/share/ondemand-dex/web"
-#      theme: ondemand
 
-openondemand_auth: oidc
-
-# WIP - Configure mapping from DEX OIDC to system users
-# see https://osc.github.io/ood-documentation/latest/authentication/overview/map-user.html
-## openondemand_mapping_users: [] # disable ansible/roles/openondemand default of a fixed list if users
-## user_map_cmd: # null - disable (outdated) ansible/roles/openondemand default
-# user_map_match: '.*' # TODO: maybe?
+# NB: default `user_map_match: '.*'` is fine
 
