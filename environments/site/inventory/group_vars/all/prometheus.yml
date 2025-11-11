@@ -1,0 +1,3 @@
+# Grafana metrics aren't scrapeable behind OIDC. No dashboard anyway, so just disable:
+prometheus_scrape_configs_site: "{{ prometheus_scrape_configs_default | rejectattr('job_name', 'eq', 'grafana') }}"
+prometheus_scrape_configs: "{{ prometheus_scrape_configs_site + (openondemand_scrape_configs if groups['openondemand'] | count > 0 else []) }}"
