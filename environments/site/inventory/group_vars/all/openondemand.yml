@@ -8,7 +8,7 @@ install_ondemand_dex: true
 openondemand_ssl_cert: /etc/pki/tls/certs/ood.crt
 openondemand_ssl_cert_key: /etc/pki/tls/private/ood.key
 
-# WIP: Use DEX with LDAP adaptor pointing to NVS IpA:
+# Use DEX with LDAP adaptor pointing to NVS IpA:
 openondemand_auth: dex
 # **NB**: This is a *text* block of yaml, not actual yaml!
 dex_settings: |
