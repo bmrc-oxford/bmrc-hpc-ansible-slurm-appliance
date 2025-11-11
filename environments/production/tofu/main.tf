@@ -5,7 +5,7 @@ variable "environment_root" {
 
 data "openstack_images_image_v2" "opengpu" {
   # Image for A100 (nvidia-open drivers) - just allows referencing by name
-  name = "openhpc-opengpu-250731-1343-99f406e9"
+  name = "openhpc-opengpu-250818-1049-472f60c4"
 }
 
 module "cluster" {
@@ -13,6 +13,8 @@ module "cluster" {
 
   cluster_name = "ms"
   cluster_nodename_template = "ms-$${node}.$${cluster_domain_suffix}"
+
+  cluster_image_id = "57baae64-b01d-48bc-8066-c9e36354e958"# openhpc-freeipa-250819-1008-472f60c4
 
   login = {
     interactive = {
@@ -24,15 +26,17 @@ module "cluster" {
 
   compute = {
     general = {
-      nodes = ["general-00", "general-01"]
-      flavor = "m2.xlarge.highmem_200disk"
+      nodes = ["general-00", "general-01", "general-02", "general-03",
+               "general-04", "general-05", "general-06", "general-07",
+               "general-08"]
+      flavor = "m3.large"
     }
     legacy = {
       nodes = ["legacy-00", "legacy-01"]
       flavor = "m3.medium"
     }
     a100 = {
-      nodes = ["a100-00"] # a100-00 to -03 when available
+      nodes = ["a100-00", "a100-01", "a100-02", "a100-03"]
       flavor = "a100.4cpu_3gpu_435gb"
       image_id = data.openstack_images_image_v2.opengpu.id
     }
