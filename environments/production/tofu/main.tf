@@ -14,8 +14,6 @@ module "cluster" {
   cluster_name = "ms"
   cluster_nodename_template = "ms-$${node}.$${cluster_domain_suffix}"
 
-  cluster_image_id = "57baae64-b01d-48bc-8066-c9e36354e958"# openhpc-freeipa-250819-1008-472f60c4
-
   login = {
     interactive = {
         nodes = ["login-00"]
