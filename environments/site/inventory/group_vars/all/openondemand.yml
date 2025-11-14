@@ -1,1 +1,42 @@
-openondemand_servername: "{{ hostvars[groups['openondemand'].0].node_fip if groups['openondemand'] else '' }}"
+# Use fqhn without '.in' for external name - in NVS IpA:
+openondemand_servername: "{{ hostvars[groups['openondemand'] | first].node_fqdn | split('.') | reject('eq', 'in') | join('.') }}"
+
+# Install ondemand's DEX package:
+install_ondemand_dex: true
+
+# Use custom SSL cert - deployed by pre-hook
+openondemand_ssl_cert: /etc/pki/tls/certs/ood.crt
+openondemand_ssl_cert_key: /etc/pki/tls/private/ood.key
+
+# Use DEX with LDAP adaptor pointing to NVS IpA:
+openondemand_auth: dex
+# **NB**: This is a *text* block of yaml, not actual yaml!
+dex_settings: |
+  dex:
+    connectors:
+      - type: ldap
+        id: ldap
+        name: LDAP
+        config:
+          host: ipa-a.nvs.bmrc.ox.ac.uk:636
+          insecureSkipVerify: false
+          bindDN: uid=svc-openondemand-dex,cn=users,cn=accounts,dc=nvs,dc=bmrc,dc=ox,dc=ac,dc=uk
+          bindPW: "{{ vault_ondemand_oidc_ldap_bindpw }}" # site secret
+          userSearch:
+            baseDN: cn=users,cn=accounts,dc=nvs,dc=bmrc,dc=ox,dc=ac,dc=uk
+            filter: "(objectClass=posixAccount)"
+            username: uid
+            idAttr: uid
+            emailAttr: mail
+            nameAttr: gecos
+            preferredUsernameAttr: uid
+          groupSearch:
+            baseDN: cn=groups,cn=accounts,dc=nvs,dc=bmrc,dc=ox,dc=ac,dc=uk
+            filter: "(objectClass=posixGroup)"
+            userMatchers:
+            - userAttr: DN
+              groupAttr: member
+            nameAttr: cn
+
+# NB: default `user_map_match: '.*'` is fine
+

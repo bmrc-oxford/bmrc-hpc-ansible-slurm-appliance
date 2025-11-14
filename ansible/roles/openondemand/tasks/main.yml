@@ -1,6 +1,7 @@
 ---
 
 - name: Set osc.ood variables from this role's defaults if no overriding inventory var
+  # NB: When condition is important - some configurations require undefined vars
   set_fact:
     "{{ item.key }}": "{{ lookup('vars', item.key, default=item.value) }}"
   loop: "{{ openondemand_osc_ood_defaults | dict2items }}"
@@ -91,24 +92,6 @@
     src: missing_home_directory.html
     dest: /etc/ood/config/pun/html/missing_home_directory.html
 
-- name: Create mapping directory
-  file:
-    path: /etc/grid-security
-    state: directory
-    owner: root
-    group: apache
-    mode: u=rwX,g=rX,o=
-  when: openondemand_mapping_users
-
-- name: Create mapping file
-  template:
-    dest: /etc/grid-security/grid-mapfile
-    src: grid-mapfile.j2
-    owner: root
-    group: apache
-    mode: u=rw,g=r,o=
-  when: openondemand_mapping_users
-
 - name: Create app directories for dashboard links
   file:
     path: /var/www/ood/apps/sys/{{ item.app_name | default(item.name) }}
@@ -121,12 +104,13 @@
     dest: /var/www/ood/apps/sys/{{ item.app_name | default(item.name) }}/manifest.yml
   loop: "{{ openondemand_dashboard_links }}"
 
-# - name: Ensure ondemand-dex is running and active
-#   service:
-#     name: ondemand-dex
-#     enabled: yes
-#     state: stopped
-#   when: false
+- name: Ensure ondemand-dex is running/enabled/restarted for config changes
+  # Can be dropped once on a version including https://github.com/OSC/ood-ansible/pull/272
+  ansible.builtin.systemd:
+    name: ondemand-dex
+    enabled: yes
+    state: restarted
+  when: openondemand_auth | lower == "dex"
 
 # - name: Copy site images
 #   copy:
