@@ -104,18 +104,24 @@ openondemand_apps_desktop_default:
     - bc_num_hours
     - num_cores
     - node
+    - gres_param
   attributes:
     desktop: xfce
     # bc_account: # i.e. slurm account
     #   value: root
     bc_queue:
       value: "{{ openondemand_desktop_partition | default(none) }}"
+      help: 'If GPUs are needed enter a100 and see GRES Resources below'
     num_cores:
       label: Number of cores
       value: 1
     node:
       label: Node name
       help: Select a particular node or leave empty to let Slurm pick the next available
+      value: ""
+    gres_param:
+      label: GRES Resources
+      help:  Required GPU resources, e.g. use gpu:A100:3 for 3x A100 GPUs
       value: ""
   submit: |
     ---
@@ -125,6 +131,9 @@ openondemand_apps_desktop_default:
         - <%= "--nodes=1" %>
         - <%= "--ntasks=#{num_cores}" %>
         - <%= "--nodelist=#{node}" %>
+        <% if gres_param != '' %>
+        - <%= "--gres=#{gres_param}" %>
+        <% end %>
 openondemand_apps_desktop: "{{ {'bc_desktop':openondemand_apps_desktop_default} if openondemand_desktop_partition | default(none) else {} }}"
 
 # See https://osc.github.io/ood-documentation/latest/app-development/tutorials-interactive-apps/add-jupyter.html#app-development-tutorials-interactive-apps-add-jupyter
@@ -139,15 +148,24 @@ openondemand_apps_jupyter_default:
     - bc_num_hours
     - num_cores
     - node
-  attributes: # TODO
+    - gres_param
+  attributes:
     num_cores:
-      label: Number of cores FOO
+      label: Number of cores
       value: 1
     modules: ""
     extra_jupyter_args: ""
     bc_queue:
       value: "{{ openondemand_jupyter_partition | default(none) }}"
-    node: ""
+      help: 'If GPUs are needed enter a100 and see GRES Resources below'
+    node:
+      label: Node name
+      help: Select a particular node or leave empty to let Slurm pick the next available
+      value: ""
+    gres_param:
+      label: GRES Resources
+      help:  Required GPU resources, e.g. use gpu:A100:3 for 3x A100 GPUs
+      value: ""
   submit: |
     ---
     batch_connect:
@@ -158,6 +176,9 @@ openondemand_apps_jupyter_default:
         - <%= "--nodes=1" %>
         - <%= "--ntasks=#{num_cores}" %>
         - <%= "--nodelist=#{node}" %>
+        <% if gres_param != '' %>
+        - <%= "--gres=#{gres_param}" %>
+        <% end %>
 openondemand_apps_jupyter: "{{ {'jupyter':openondemand_apps_jupyter_default} if openondemand_jupyter_partition | default(none) else {} }}"
 
 # osc.ood:ood_apps - see https://github.com/OSC/ood-ansible#ood_apps
