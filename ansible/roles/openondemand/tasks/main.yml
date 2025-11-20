@@ -1,7 +1,7 @@
 ---
 - name: Set osc.ood variables from this role's defaults if no overriding inventory var
   # NB: When condition is important - some configurations require undefined vars
-  ansible.builtin.set_fact::
+  ansible.builtin.set_fact:
     "{{ item.key }}": "{{ lookup('vars', item.key, default=item.value) }}"
   loop: "{{ openondemand_osc_ood_defaults | dict2items }}"
   when: (item.key in hostvars[inventory_hostname]) or (item.value)
