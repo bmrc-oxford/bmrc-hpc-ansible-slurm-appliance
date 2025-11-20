@@ -15,7 +15,7 @@ Key differences from the default appliance configuration:
 - Manila CephFS shares for `/home`, `/data` and `/apps` shared directories.
 - Use of the NVS FreeIPA server. A pre-hook and encrypted admin creds are used
   to ensure the hosts exist in IPA but otherwise clusters use the default
-  approach of enrolling hosts via OTP and re-enroling them using persisted
+  approach of enrolling hosts via OTP and re-enrolling them using persisted
   keytabs.
 - Currently EESSI is not available due to the network configuration although
   there is a draft [upstream PR](https://github.com/stackhpc/ansible-slurm-appliance/pull/753)
@@ -32,7 +32,7 @@ For Open Ondemand, sshuttle in using dns, e.g. using the nvs-admin host:
 sshuttle --dns -r USER@10.161.0.2 10.56.0.0/22 10.167.2.163 10.167.2.160
 ```
 
-where the final addresses are the the login FIPs for the dev `ff28d9` and
+where the final addresses are the login FIPs for the dev `ff28d9` and
 production cluster respectively.
 
 Login nodes and Open Ondemand can then be accessed at:
