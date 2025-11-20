@@ -209,10 +209,6 @@ openondemand_apps_jupyter_default:
     bc_queue:
       value: "{{ openondemand_jupyter_partition | default(none) }}"
       help: 'If GPUs are needed enter a100 and see GRES options'
-    node:
-      label: Node name
-      help: Select a particular node or leave empty to let Slurm pick the next available
-      value: ""
   submit: |
     ---
     batch_connect:
