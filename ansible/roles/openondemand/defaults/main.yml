@@ -18,22 +18,24 @@ openondemand_ssl_cert_key: /etc/pki/tls/private/localhost.key
 # Dashboard and application config:
 openondemand_dashboard_docs_url: (undefined)
 openondemand_dashboard_support_url: (undefined)
-openondemand_desktop_partition: ''
+openondemand_desktop_partition: ""
 openondemand_desktop_screensaver: false
 openondemand_filesapp_paths: []
-openondemand_jupyter_partition: ''
+openondemand_jupyter_partition: ""
 openondemand_dashboard_links: []
+openondemand_rstudio_partition: ''
+openondemand_matlab_partition: ''
+openondemand_codeserver_partition: ''
 
 # Monitoring:
 openondemand_exporter: true
 
 # Synonyms for osc:ood role vars:
 openondemand_clusters: {} # synonym for osc.ood:clusters
-openondemand_servername: ''
+openondemand_servername: ""
 openondemand_host_regex:
-
 # Other:
-openondemand_node_proxy_directives: '' # Added to Apache directives for `node_uri` forwarding.
+openondemand_node_proxy_directives: "" # Added to Apache directives for `node_uri` forwarding.
 
 openondemand_auth_defaults:
   # Defaults for OIDC auth - keys are osc.ood vars & can be overriden using the osc.ood var name in inventory
@@ -66,7 +68,7 @@ openondemand_auth_defaults:
   # Defaults for basic/PAM auth - see https://osc.github.io/ood-documentation/latest/authentication/pam.html
   basic_pam:
     httpd_auth: # ood_portal.yml.j2
-      - 'AuthType Basic'
+      - "AuthType Basic"
       - 'AuthName "Open OnDemand"'
       - 'AuthBasicProvider PAM'
       - 'AuthPAMService ood'
@@ -100,3 +102,13 @@ openondemand_osc_ood_defaults:
   oidc_uri: "{{ openondemand_auth_defaults.oidc.oidc_uri if (openondemand_auth | lower) in ['oidc', 'dex'] else none }}"
   ood_auth_openidc: "{{ openondemand_auth_defaults.oidc.ood_auth_openidc if (openondemand_auth | lower) == 'oidc' else none }}"
   httpd_auth: "{{ openondemand_auth_defaults[openondemand_auth | lower].httpd_auth }}"
+
+  # Use repo file provided by dnf_repos by default
+  ood_use_existing_repo_file: true
+
+# Apps:
+openondemand_code_server_version: 4.102.2
+openondemand_rstudio_version: 2025.05.1-513
+openondemand_matlab_version: ''
+# Below is automatically calculated during role run:
+openondemand_gres_options: "{{ _openondemand_sinfo_gres.stdout | to_gres_options }}"
