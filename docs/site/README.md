@@ -235,22 +235,13 @@ To build these run the following command in the `packer/` directory:
 
 where `$NAME` should be replaced with the variable file name as above, e.g. `base`.
 
-Once the `base` image has built, the `cuda` Packer variables file must be
+Once the `base` image has built, the `opengpu` Packer variables file must be
 updated to reference the new `base` image.
 
-After build, the properties should be set:
+After each build, the properties should be set using:
 
 ```shell
-openstack image set \
---property hw_architecture='x86_64' \
---property hw_disk_bus='scsi' \
---property hw_firmware_type='uefi' \
---property hw_machine_type='q35' \
---property hw_scsi_model='virtio-scsi' \
---property hw_vif_multiqueue_enabled=true \
---property os_admin_user='rocky' \
---property os_type='linux' \
-<image_name_or_id>
+dev/image-set-properties.sh <image_name_or_id>
 ```
 
 To debug failing builds it can be useful to ssh into the build VM. The key file
