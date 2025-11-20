@@ -129,6 +129,7 @@ fatimage
 [tuned:children]
 # Hosts to run TuneD configuration
 fatimage
+cluster
 
 [ansible_init:children]
 # Hosts to run linux-ansible-init
