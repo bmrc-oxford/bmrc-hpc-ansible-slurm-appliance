@@ -12,7 +12,8 @@ This repository defines:
 
 In general, NVS-specific configuration is contained in the `site` environment.
 Key differences from the default appliance configuration:
-- Manila CephFS shares for `/home`, `/data` and `/apps` shared directories.
+- Manila CephFS shares for `/home`, `/data` and `/apps` shared directories -
+  the `/apps` one is shared between all environments.
 - Use of the NVS FreeIPA server. A pre-hook and encrypted admin creds are used
   to ensure the hosts exist in IPA but otherwise clusters use the default
   approach of enrolling hosts via OTP and re-enrolling them using persisted
@@ -77,16 +78,16 @@ For a `dev` environment use:
 
 ```shell
 openstack share create --share-type cephfstype --name $USER-home CephFS 2
-openstack share create --share-type cephfstype --name $USER-apps CephFS 10
 openstack share create --share-type cephfstype --name $USER-data CephFS 16
 
 openstack share access create $USER-home cephx slurm
-openstack share access create $USER-apps cephx slurm
 openstack share access create $USER-data cephx slurm
 ```
 
-For the `production` environment use `nvs-` instead of `$USER-` as a prefix and
+For the `production` environment use `mss-` instead of `$USER-` as a prefix and
 use sizes (in GiB) of 200, 1024 (= 1TiB) and 163840 (= 160 TiB) respectively.
+
+Note the `production` `ms-apps` share must exist for the `dev` cluster too.
 
 ## State volume
 
