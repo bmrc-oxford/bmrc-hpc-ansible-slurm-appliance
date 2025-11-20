@@ -29,7 +29,7 @@ module "cluster" {
 
   compute = {
     general = {
-      nodes = ["compute-00"]
+      nodes = ["compute-00", "compute-01"]
       flavor = "m2.large"
     }
   }
