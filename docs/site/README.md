@@ -74,20 +74,20 @@ provisioned. This is usually a one-off action, i.e. will only be required for
 new environments.
 
 ## Manila shares
-For a `dev` environment use:
+Each environment mounts shares `home`, `apps and `data`. All clusters mount the
+same `home` and `apps` shares, whereas the `data` share is environment-specific.
+Example of `data` share creation for the `dev` environment:
 
 ```shell
-openstack share create --share-type cephfstype --name $USER-home CephFS 2
 openstack share create --share-type cephfstype --name $USER-data CephFS 16
-
-openstack share access create $USER-home cephx slurm
 openstack share access create $USER-data cephx slurm
 ```
 
-For the `production` environment use `mss-` instead of `$USER-` as a prefix and
-use sizes (in GiB) of 200, 1024 (= 1TiB) and 163840 (= 160 TiB) respectively.
-
-Note the `production` `ms-apps` share must exist for the `dev` cluster too.
+For the home and apps shares and the `production` environment's `data` share use
+the prefix `ms-` instead of `$USER-`. These shares have sizes (in GB) as follows:
+- `ms-home`: 200
+- `ms-apps`: 1024
+- `ms-data`: 163840
 
 ## State volume
 
