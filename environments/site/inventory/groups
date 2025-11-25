@@ -103,9 +103,8 @@ openhpc
 [vgpu]
 # Hosts where vGPU/MIG should be configured - see docs/mig.md
 
-[eessi:children]
+[eessi]
 # Hosts on which EESSI stack should be configured
-openhpc
 
 [resolv_conf]
 # Allows defining nameservers in /etc/resolv.conf - see ansible/roles/resolv_conf/README.md
