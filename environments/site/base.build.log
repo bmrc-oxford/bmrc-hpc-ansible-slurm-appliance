@@ -3,15 +3,15 @@
 [1;32m==> openstack.openhpc: Loading flavor: m1.medium[0m
 [1;32m==> openstack.openhpc: Verified flavor. ID: 60d48050-a498-4ff5-9ed1-67cf3ec99ae9[0m
 [1;32m==> openstack.openhpc: Creating temporary RSA SSH key for instance...[0m
-[1;32m==> openstack.openhpc: Creating temporary keypair: packer_691f1b0f-0b53-5002-31d7-a41084c617be ...[0m
-[1;32m==> openstack.openhpc: Created temporary keypair: packer_691f1b0f-0b53-5002-31d7-a41084c617be[0m
+[1;32m==> openstack.openhpc: Creating temporary keypair: packer_69258c29-120c-2d3b-dc76-e485d78ddb9e ...[0m
+[1;32m==> openstack.openhpc: Created temporary keypair: packer_69258c29-120c-2d3b-dc76-e485d78ddb9e[0m
 [1;32m==> openstack.openhpc: Found Image ID: b9ea18db-4c6c-4135-8235-52a7e28d1d08[0m
 [1;32m==> openstack.openhpc: Creating volume...[0m
-[1;32m==> openstack.openhpc: Waiting for volume openhpc-freeipa-251120-1343-c2511939 (volume id: 858839be-d6db-452b-a2dc-27eb50466e55) to become available...[0m
-[1;32m==> openstack.openhpc: Volume ID: 858839be-d6db-452b-a2dc-27eb50466e55[0m
+[1;32m==> openstack.openhpc: Waiting for volume openhpc-freeipa-251125-1059-ec225487 (volume id: 7faf9472-a6be-4360-bcd8-2560b2df722a) to become available...[0m
+[1;32m==> openstack.openhpc: Volume ID: 7faf9472-a6be-4360-bcd8-2560b2df722a[0m
 [1;32m==> openstack.openhpc: Launching server...[0m
 [1;32m==> openstack.openhpc: Launching server...[0m
-[1;32m==> openstack.openhpc: Server ID: f54ba495-3f3f-4d6b-924e-b1335de3aa81[0m
+[1;32m==> openstack.openhpc: Server ID: f9897248-92f2-4e95-98f9-cb1c6ca68fdd[0m
 [1;32m==> openstack.openhpc: Waiting for server to become ready...[0m
 [1;32m==> openstack.openhpc: Selected floating IP: '980eb247-7ccb-4d51-af7e-1bc5cc949ff7' (10.167.2.61)[0m
 [1;32m==> openstack.openhpc: Associating floating IP '980eb247-7ccb-4d51-af7e-1bc5cc949ff7' (10.167.2.61) with instance port...[0m
@@ -22,7 +22,7 @@
 [1;32m==> openstack.openhpc: Provisioning with Ansible...[0m
 [1;32m==> openstack.openhpc: Not using Proxy adapter for Ansible run:
 ==> openstack.openhpc: 	Using ssh keys from Packer communicator...[0m
-[1;32m==> openstack.openhpc: Executing Ansible: ansible-playbook -e packer_build_name="openhpc" -e packer_builder_type=openstack --ssh-extra-args '-o IdentitiesOnly=yes' --limit builder -i /home/ff28d9/nvs-slurm-appliance/packer/ansible-inventory.sh -vv -e @/home/ff28d9/nvs-slurm-appliance/packer/openhpc_extravars.yml -e ansible_ssh_private_key_file=/tmp/ansible-key2176044102 -i /tmp/packer-provisioner-ansible4287413622 /home/ff28d9/nvs-slurm-appliance/ansible/fatimage.yml[0m
+[1;32m==> openstack.openhpc: Executing Ansible: ansible-playbook -e packer_build_name="openhpc" -e packer_builder_type=openstack --ssh-extra-args '-o IdentitiesOnly=yes' --limit builder -i /home/ff28d9/nvs-slurm-appliance/packer/ansible-inventory.sh -vv -e @/home/ff28d9/nvs-slurm-appliance/packer/openhpc_extravars.yml -e ansible_ssh_private_key_file=/tmp/ansible-key4056442721 -i /tmp/packer-provisioner-ansible1957386916 /home/ff28d9/nvs-slurm-appliance/ansible/fatimage.yml[0m
 [1;32m==> openstack.openhpc: ansible-playbook [core 2.13.13][0m
 [1;32m==> openstack.openhpc:   config file = /home/ff28d9/nvs-slurm-appliance/environments/dev/ansible.cfg[0m
 [1;32m==> openstack.openhpc:   configured module search path = ['/home/ff28d9/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules'][0m
@@ -65,15 +65,15 @@
 [1;32m==> openstack.openhpc:     "cmd": [[0m
 [1;32m==> openstack.openhpc:         "hostname"[0m
 [1;32m==> openstack.openhpc:     ],[0m
-[1;32m==> openstack.openhpc:     "delta": "0:00:00.002730",[0m
-[1;32m==> openstack.openhpc:     "end": "2025-11-20 13:44:33.620993",[0m
+[1;32m==> openstack.openhpc:     "delta": "0:00:00.005380",[0m
+[1;32m==> openstack.openhpc:     "end": "2025-11-25 11:00:42.914628",[0m
 [1;32m==> openstack.openhpc:     "rc": 0,[0m
-[1;32m==> openstack.openhpc:     "start": "2025-11-20 13:44:33.618263"[0m
+[1;32m==> openstack.openhpc:     "start": "2025-11-25 11:00:42.909248"[0m
 [1;32m==> openstack.openhpc: }[0m
 [1;32m==> openstack.openhpc:[0m
 [1;32m==> openstack.openhpc: STDOUT:[0m
 [1;32m==> openstack.openhpc:[0m
-[1;32m==> openstack.openhpc: openhpc-freeipa-251120-1343-c2511939.novalocal[0m
+[1;32m==> openstack.openhpc: openhpc-freeipa-251125-1059-ec225487.novalocal[0m
 [1;32m==> openstack.openhpc:[0m
 [1;32m==> openstack.openhpc: TASK [Report inventory groups] *************************************************[0m
 [1;32m==> openstack.openhpc: task path: /home/ff28d9/nvs-slurm-appliance/ansible/fatimage.yml:10[0m
@@ -176,13 +176,13 @@
 [1;32m==> openstack.openhpc: MSG:[0m
 [1;32m==> openstack.openhpc:[0m
 [1;32m==> openstack.openhpc: line added[0m
-[1;32m==> openstack.openhpc: changed: [default] => (item={'key': 'no_proxy', 'value': '10.167.2.61,10.56.0.49,10.56.0.70,10.56.1.231,127.0.0.1,169.254.169.254,default,ff28d9-compute-00,ff28d9-control,ff28d9-login-00,ipa-a.nvs.bmrc.ox.ac.uk,localhost'}) => {[0m
+[1;32m==> openstack.openhpc: changed: [default] => (item={'key': 'no_proxy', 'value': '10.167.2.61,10.56.0.49,10.56.0.70,10.56.1.18,10.56.1.231,127.0.0.1,169.254.169.254,default,ff28d9-compute-00,ff28d9-compute-01,ff28d9-control,ff28d9-login-00,ipa-a.nvs.bmrc.ox.ac.uk,localhost'}) => {[0m
 [1;32m==> openstack.openhpc:     "ansible_loop_var": "item",[0m
 [1;32m==> openstack.openhpc:     "backup": "",[0m
 [1;32m==> openstack.openhpc:     "changed": true,[0m
 [1;32m==> openstack.openhpc:     "item": {[0m
 [1;32m==> openstack.openhpc:         "key": "no_proxy",[0m
-[1;32m==> openstack.openhpc:         "value": "10.167.2.61,10.56.0.49,10.56.0.70,10.56.1.231,127.0.0.1,169.254.169.254,default,ff28d9-compute-00,ff28d9-control,ff28d9-login-00,ipa-a.nvs.bmrc.ox.ac.uk,localhost"[0m
+[1;32m==> openstack.openhpc:         "value": "10.167.2.61,10.56.0.49,10.56.0.70,10.56.1.18,10.56.1.231,127.0.0.1,169.254.169.254,default,ff28d9-compute-00,ff28d9-compute-01,ff28d9-control,ff28d9-login-00,ipa-a.nvs.bmrc.ox.ac.uk,localhost"[0m
 [1;32m==> openstack.openhpc:     }[0m
 [1;32m==> openstack.openhpc: }[0m
 [1;32m==> openstack.openhpc:[0m
@@ -231,7 +231,7 @@
 [1;32m==> openstack.openhpc:     "mode": "0664",[0m
 [1;32m==> openstack.openhpc:     "owner": "root",[0m
 [1;32m==> openstack.openhpc:     "path": "/etc/systemd/system.conf.d/90-proxy.conf",[0m
-[1;32m==> openstack.openhpc:     "size": 371,[0m
+[1;32m==> openstack.openhpc:     "size": 400,[0m
 [1;32m==> openstack.openhpc:     "state": "file",[0m
 [1;32m==> openstack.openhpc:     "uid": 0[0m
 [1;32m==> openstack.openhpc: }[0m
@@ -248,10 +248,10 @@
 [1;32m==> openstack.openhpc:         "systemctl",[0m
 [1;32m==> openstack.openhpc:         "daemon-reexec"[0m
 [1;32m==> openstack.openhpc:     ],[0m
-[1;32m==> openstack.openhpc:     "delta": "0:00:00.202660",[0m
-[1;32m==> openstack.openhpc:     "end": "2025-11-20 13:44:37.810442",[0m
+[1;32m==> openstack.openhpc:     "delta": "0:00:00.197608",[0m
+[1;32m==> openstack.openhpc:     "end": "2025-11-25 11:00:46.983671",[0m
 [1;32m==> openstack.openhpc:     "rc": 0,[0m
-[1;32m==> openstack.openhpc:     "start": "2025-11-20 13:44:37.607782"[0m
+[1;32m==> openstack.openhpc:     "start": "2025-11-25 11:00:46.786063"[0m
 [1;32m==> openstack.openhpc: }[0m
 [1;32m==> openstack.openhpc:[0m
 [1;32m==> openstack.openhpc: TASK [proxy : Reset connection to get new /etc/environment] ********************[0m
@@ -1232,6 +1232,7 @@
 [1;32m==> openstack.openhpc:[0m
 [1;32m==> openstack.openhpc: PLAY [firewalld] ***************************************************************[0m
 [1;32m==> openstack.openhpc: skipping: no hosts matched[0m
+[1;32m==> openstack.openhpc: [WARNING]: Could not match supplied host pattern, ignoring: ofed[0m
 [1;32m==> openstack.openhpc:[0m
 [1;32m==> openstack.openhpc: PLAY [fail2ban] ****************************************************************[0m
 [1;32m==> openstack.openhpc: skipping: no hosts matched[0m
@@ -1244,7 +1245,6 @@
 [1;32m==> openstack.openhpc:[0m
 [1;32m==> openstack.openhpc: PLAY [selinux,update] **********************************************************[0m
 [1;32m==> openstack.openhpc: skipping: no hosts matched[0m
-[1;32m==> openstack.openhpc: [WARNING]: Could not match supplied host pattern, ignoring: ofed[0m
 [1;32m==> openstack.openhpc:[0m
 [1;32m==> openstack.openhpc: PLAY [ofed] ********************************************************************[0m
 [1;32m==> openstack.openhpc: skipping: no hosts matched[0m
@@ -1490,7 +1490,7 @@
 [1;32m==> openstack.openhpc: STDOUT:[0m
 [1;32m==> openstack.openhpc:[0m
 [1;32m==> openstack.openhpc: Collecting slurm_openstack_tools[0m
-[1;32m==> openstack.openhpc:   Cloning https://github.com/stackhpc/slurm-openstack-tools.git (to revision v2.0) to ./pip-install-5h62g1su/slurm-openstack-tools_1c00574b65c74020951b20116ea1a6e8[0m
+[1;32m==> openstack.openhpc:   Cloning https://github.com/stackhpc/slurm-openstack-tools.git (to revision v2.0) to ./pip-install-i6_zj53w/slurm-openstack-tools_26e40376e63447db9942f2072a597e1b[0m
 [1;32m==> openstack.openhpc:   Resolved https://github.com/stackhpc/slurm-openstack-tools.git to commit 69c5bdfae47058e7a555ecf3e2a4174a95cbff71[0m
 [1;32m==> openstack.openhpc:   Installing build dependencies: started[0m
 [1;32m==> openstack.openhpc:   Installing build dependencies: finished with status 'done'[0m
@@ -1531,7 +1531,7 @@
 [1;32m==> openstack.openhpc:[0m
 [1;32m==> openstack.openhpc: STDERR:[0m
 [1;32m==> openstack.openhpc:[0m
-[1;32m==> openstack.openhpc:   Running command git clone --filter=blob:none --quiet https://github.com/stackhpc/slurm-openstack-tools.git /tmp/pip-install-5h62g1su/slurm-openstack-tools_1c00574b65c74020951b20116ea1a6e8[0m
+[1;32m==> openstack.openhpc:   Running command git clone --filter=blob:none --quiet https://github.com/stackhpc/slurm-openstack-tools.git /tmp/pip-install-i6_zj53w/slurm-openstack-tools_26e40376e63447db9942f2072a597e1b[0m
 [1;32m==> openstack.openhpc:[0m
 [1;32m==> openstack.openhpc: META: role_complete for default[0m
 [1;32m==> openstack.openhpc: META: role_complete for default[0m
@@ -1684,7 +1684,7 @@
 [1;32m==> openstack.openhpc:     "changed": false,[0m
 [1;32m==> openstack.openhpc:     "rc": 0,[0m
 [1;32m==> openstack.openhpc:     "results": [[0m
-[1;32m==> openstack.openhpc:         "Installed /root/.ansible/tmp/ansible-moduletmp-1763646434.7450643-rx7iolk8/ondemand-release-web-4.0-1.el9.noarcho_cxs7je.rpm"[0m
+[1;32m==> openstack.openhpc:         "Installed /root/.ansible/tmp/ansible-moduletmp-1764068599.051716-2w4o8237/ondemand-release-web-4.0-1.el9.noarch7okzkyax.rpm"[0m
 [1;32m==> openstack.openhpc:     ][0m
 [1;32m==> openstack.openhpc: }[0m
 [1;32m==> openstack.openhpc:[0m
@@ -1849,7 +1849,7 @@
 [1;32m==> openstack.openhpc: ok: [default] => {[0m
 [1;32m==> openstack.openhpc:     "changed": false,[0m
 [1;32m==> openstack.openhpc:     "stat": {[0m
-[1;32m==> openstack.openhpc:         "atime": 1763646424.0171971,[0m
+[1;32m==> openstack.openhpc:         "atime": 1764068588.3206482,[0m
 [1;32m==> openstack.openhpc:         "attr_flags": "",[0m
 [1;32m==> openstack.openhpc:         "attributes": [],[0m
 [1;32m==> openstack.openhpc:         "block_size": 4096,[0m
@@ -1927,7 +1927,7 @@
 [1;32m==> openstack.openhpc:         "ActiveEnterTimestampMonotonic": "0",[0m
 [1;32m==> openstack.openhpc:         "ActiveExitTimestampMonotonic": "0",[0m
 [1;32m==> openstack.openhpc:         "ActiveState": "inactive",[0m
-[1;32m==> openstack.openhpc:         "After": "systemd-journald.socket basic.target sysinit.target system.slice",[0m
+[1;32m==> openstack.openhpc:         "After": "basic.target sysinit.target system.slice systemd-journald.socket",[0m
 [1;32m==> openstack.openhpc:         "AllowIsolate": "no",[0m
 [1;32m==> openstack.openhpc:         "AssertResult": "no",[0m
 [1;32m==> openstack.openhpc:         "AssertTimestampMonotonic": "0",[0m
@@ -3191,7 +3191,7 @@
 [1;32m==> openstack.openhpc:     "examined": 17,[0m
 [1;32m==> openstack.openhpc:     "files": [[0m
 [1;32m==> openstack.openhpc:         {[0m
-[1;32m==> openstack.openhpc:             "atime": 1763646293.9682987,[0m
+[1;32m==> openstack.openhpc:             "atime": 1764068463.7878726,[0m
 [1;32m==> openstack.openhpc:             "ctime": 1748667921.102792,[0m
 [1;32m==> openstack.openhpc:             "dev": 2052,[0m
 [1;32m==> openstack.openhpc:             "gid": 0,[0m
@@ -3224,7 +3224,7 @@
 [1;32m==> openstack.openhpc:             "xusr": false[0m
 [1;32m==> openstack.openhpc:         },[0m
 [1;32m==> openstack.openhpc:         {[0m
-[1;32m==> openstack.openhpc:             "atime": 1763646293.9932992,[0m
+[1;32m==> openstack.openhpc:             "atime": 1764068463.7958727,[0m
 [1;32m==> openstack.openhpc:             "ctime": 1748667921.102792,[0m
 [1;32m==> openstack.openhpc:             "dev": 2052,[0m
 [1;32m==> openstack.openhpc:             "gid": 0,[0m
@@ -3257,8 +3257,8 @@
 [1;32m==> openstack.openhpc:             "xusr": false[0m
 [1;32m==> openstack.openhpc:         },[0m
 [1;32m==> openstack.openhpc:         {[0m
-[1;32m==> openstack.openhpc:             "atime": 1763646489.8936656,[0m
-[1;32m==> openstack.openhpc:             "ctime": 1763646489.8936656,[0m
+[1;32m==> openstack.openhpc:             "atime": 1764068656.8061748,[0m
+[1;32m==> openstack.openhpc:             "ctime": 1764068656.8061748,[0m
 [1;32m==> openstack.openhpc:             "dev": 2052,[0m
 [1;32m==> openstack.openhpc:             "gid": 0,[0m
 [1;32m==> openstack.openhpc:             "gr_name": "root",[0m
@@ -3273,7 +3273,7 @@
 [1;32m==> openstack.openhpc:             "issock": false,[0m
 [1;32m==> openstack.openhpc:             "isuid": false,[0m
 [1;32m==> openstack.openhpc:             "mode": "0644",[0m
-[1;32m==> openstack.openhpc:             "mtime": 1763646489.8936656,[0m
+[1;32m==> openstack.openhpc:             "mtime": 1764068656.8061748,[0m
 [1;32m==> openstack.openhpc:             "nlink": 1,[0m
 [1;32m==> openstack.openhpc:             "path": "/etc/yum.repos.d/rocky-extras.repo",[0m
 [1;32m==> openstack.openhpc:             "pw_name": "root",[0m
@@ -3290,8 +3290,8 @@
 [1;32m==> openstack.openhpc:             "xusr": false[0m
 [1;32m==> openstack.openhpc:         },[0m
 [1;32m==> openstack.openhpc:         {[0m
-[1;32m==> openstack.openhpc:             "atime": 1763646488.3326306,[0m
-[1;32m==> openstack.openhpc:             "ctime": 1763646488.3336308,[0m
+[1;32m==> openstack.openhpc:             "atime": 1764068655.24414,[0m
+[1;32m==> openstack.openhpc:             "ctime": 1764068655.2451398,[0m
 [1;32m==> openstack.openhpc:             "dev": 2052,[0m
 [1;32m==> openstack.openhpc:             "gid": 0,[0m
 [1;32m==> openstack.openhpc:             "gr_name": "root",[0m
@@ -3306,7 +3306,7 @@
 [1;32m==> openstack.openhpc:             "issock": false,[0m
 [1;32m==> openstack.openhpc:             "isuid": false,[0m
 [1;32m==> openstack.openhpc:             "mode": "0644",[0m
-[1;32m==> openstack.openhpc:             "mtime": 1763646488.3336308,[0m
+[1;32m==> openstack.openhpc:             "mtime": 1764068655.2451398,[0m
 [1;32m==> openstack.openhpc:             "nlink": 1,[0m
 [1;32m==> openstack.openhpc:             "path": "/etc/yum.repos.d/rocky.repo",[0m
 [1;32m==> openstack.openhpc:             "pw_name": "root",[0m
@@ -3323,8 +3323,8 @@
 [1;32m==> openstack.openhpc:             "xusr": false[0m
 [1;32m==> openstack.openhpc:         },[0m
 [1;32m==> openstack.openhpc:         {[0m
-[1;32m==> openstack.openhpc:             "atime": 1763646293.9292977,[0m
-[1;32m==> openstack.openhpc:             "ctime": 1763646484.5985475,[0m
+[1;32m==> openstack.openhpc:             "atime": 1764068463.7288713,[0m
+[1;32m==> openstack.openhpc:             "ctime": 1764068651.532057,[0m
 [1;32m==> openstack.openhpc:             "dev": 2052,[0m
 [1;32m==> openstack.openhpc:             "gid": 0,[0m
 [1;32m==> openstack.openhpc:             "gr_name": "root",[0m
@@ -3339,7 +3339,7 @@
 [1;32m==> openstack.openhpc:             "issock": false,[0m
 [1;32m==> openstack.openhpc:             "isuid": false,[0m
 [1;32m==> openstack.openhpc:             "mode": "0644",[0m
-[1;32m==> openstack.openhpc:             "mtime": 1763646484.5985475,[0m
+[1;32m==> openstack.openhpc:             "mtime": 1764068651.532057,[0m
 [1;32m==> openstack.openhpc:             "nlink": 1,[0m
 [1;32m==> openstack.openhpc:             "path": "/etc/yum.repos.d/ceph.repo",[0m
 [1;32m==> openstack.openhpc:             "pw_name": "root",[0m
@@ -3356,8 +3356,8 @@
 [1;32m==> openstack.openhpc:             "xusr": false[0m
 [1;32m==> openstack.openhpc:         },[0m
 [1;32m==> openstack.openhpc:         {[0m
-[1;32m==> openstack.openhpc:             "atime": 1763646485.2235615,[0m
-[1;32m==> openstack.openhpc:             "ctime": 1763646485.2235615,[0m
+[1;32m==> openstack.openhpc:             "atime": 1764068652.1600711,[0m
+[1;32m==> openstack.openhpc:             "ctime": 1764068652.1600711,[0m
 [1;32m==> openstack.openhpc:             "dev": 2052,[0m
 [1;32m==> openstack.openhpc:             "gid": 0,[0m
 [1;32m==> openstack.openhpc:             "gr_name": "root",[0m
@@ -3372,7 +3372,7 @@
 [1;32m==> openstack.openhpc:             "issock": false,[0m
 [1;32m==> openstack.openhpc:             "isuid": false,[0m
 [1;32m==> openstack.openhpc:             "mode": "0644",[0m
-[1;32m==> openstack.openhpc:             "mtime": 1763646485.2235615,[0m
+[1;32m==> openstack.openhpc:             "mtime": 1764068652.1600711,[0m
 [1;32m==> openstack.openhpc:             "nlink": 1,[0m
 [1;32m==> openstack.openhpc:             "path": "/etc/yum.repos.d/OpenHPC.repo",[0m
 [1;32m==> openstack.openhpc:             "pw_name": "root",[0m
@@ -3389,8 +3389,8 @@
 [1;32m==> openstack.openhpc:             "xusr": false[0m
 [1;32m==> openstack.openhpc:         },[0m
 [1;32m==> openstack.openhpc:         {[0m
-[1;32m==> openstack.openhpc:             "atime": 1763646485.835575,[0m
-[1;32m==> openstack.openhpc:             "ctime": 1763646485.835575,[0m
+[1;32m==> openstack.openhpc:             "atime": 1764068652.781085,[0m
+[1;32m==> openstack.openhpc:             "ctime": 1764068652.782085,[0m
 [1;32m==> openstack.openhpc:             "dev": 2052,[0m
 [1;32m==> openstack.openhpc:             "gid": 0,[0m
 [1;32m==> openstack.openhpc:             "gr_name": "root",[0m
@@ -3405,7 +3405,7 @@
 [1;32m==> openstack.openhpc:             "issock": false,[0m
 [1;32m==> openstack.openhpc:             "isuid": false,[0m
 [1;32m==> openstack.openhpc:             "mode": "0644",[0m
-[1;32m==> openstack.openhpc:             "mtime": 1763646485.835575,[0m
+[1;32m==> openstack.openhpc:             "mtime": 1764068652.782085,[0m
 [1;32m==> openstack.openhpc:             "nlink": 1,[0m
 [1;32m==> openstack.openhpc:             "path": "/etc/yum.repos.d/TurboVNC.repo",[0m
 [1;32m==> openstack.openhpc:             "pw_name": "root",[0m
@@ -3422,8 +3422,8 @@
 [1;32m==> openstack.openhpc:             "xusr": false[0m
 [1;32m==> openstack.openhpc:         },[0m
 [1;32m==> openstack.openhpc:         {[0m
-[1;32m==> openstack.openhpc:             "atime": 1763646487.714617,[0m
-[1;32m==> openstack.openhpc:             "ctime": 1763646487.715617,[0m
+[1;32m==> openstack.openhpc:             "atime": 1764068654.6191258,[0m
+[1;32m==> openstack.openhpc:             "ctime": 1764068654.6191258,[0m
 [1;32m==> openstack.openhpc:             "dev": 2052,[0m
 [1;32m==> openstack.openhpc:             "gid": 0,[0m
 [1;32m==> openstack.openhpc:             "gr_name": "root",[0m
@@ -3438,7 +3438,7 @@
 [1;32m==> openstack.openhpc:             "issock": false,[0m
 [1;32m==> openstack.openhpc:             "isuid": false,[0m
 [1;32m==> openstack.openhpc:             "mode": "0644",[0m
-[1;32m==> openstack.openhpc:             "mtime": 1763646487.715617,[0m
+[1;32m==> openstack.openhpc:             "mtime": 1764068654.6191258,[0m
 [1;32m==> openstack.openhpc:             "nlink": 1,[0m
 [1;32m==> openstack.openhpc:             "path": "/etc/yum.repos.d/cvmfs.repo",[0m
 [1;32m==> openstack.openhpc:             "pw_name": "root",[0m
@@ -3455,8 +3455,8 @@
 [1;32m==> openstack.openhpc:             "xusr": false[0m
 [1;32m==> openstack.openhpc:         },[0m
 [1;32m==> openstack.openhpc:         {[0m
-[1;32m==> openstack.openhpc:             "atime": 1763646293.9332979,[0m
-[1;32m==> openstack.openhpc:             "ctime": 1763646488.9626448,[0m
+[1;32m==> openstack.openhpc:             "atime": 1764068463.7338715,[0m
+[1;32m==> openstack.openhpc:             "ctime": 1764068655.8741539,[0m
 [1;32m==> openstack.openhpc:             "dev": 2052,[0m
 [1;32m==> openstack.openhpc:             "gid": 0,[0m
 [1;32m==> openstack.openhpc:             "gr_name": "root",[0m
@@ -3471,7 +3471,7 @@
 [1;32m==> openstack.openhpc:             "issock": false,[0m
 [1;32m==> openstack.openhpc:             "isuid": false,[0m
 [1;32m==> openstack.openhpc:             "mode": "0644",[0m
-[1;32m==> openstack.openhpc:             "mtime": 1763646488.9626448,[0m
+[1;32m==> openstack.openhpc:             "mtime": 1764068655.8741539,[0m
 [1;32m==> openstack.openhpc:             "nlink": 1,[0m
 [1;32m==> openstack.openhpc:             "path": "/etc/yum.repos.d/epel-cisco-openh264.repo",[0m
 [1;32m==> openstack.openhpc:             "pw_name": "root",[0m
@@ -3488,8 +3488,8 @@
 [1;32m==> openstack.openhpc:             "xusr": false[0m
 [1;32m==> openstack.openhpc:         },[0m
 [1;32m==> openstack.openhpc:         {[0m
-[1;32m==> openstack.openhpc:             "atime": 1763646489.2716517,[0m
-[1;32m==> openstack.openhpc:             "ctime": 1763646489.2726517,[0m
+[1;32m==> openstack.openhpc:             "atime": 1764068656.1791606,[0m
+[1;32m==> openstack.openhpc:             "ctime": 1764068656.1801608,[0m
 [1;32m==> openstack.openhpc:             "dev": 2052,[0m
 [1;32m==> openstack.openhpc:             "gid": 0,[0m
 [1;32m==> openstack.openhpc:             "gr_name": "root",[0m
@@ -3504,7 +3504,7 @@
 [1;32m==> openstack.openhpc:             "issock": false,[0m
 [1;32m==> openstack.openhpc:             "isuid": false,[0m
 [1;32m==> openstack.openhpc:             "mode": "0644",[0m
-[1;32m==> openstack.openhpc:             "mtime": 1763646489.2726517,[0m
+[1;32m==> openstack.openhpc:             "mtime": 1764068656.1801608,[0m
 [1;32m==> openstack.openhpc:             "nlink": 1,[0m
 [1;32m==> openstack.openhpc:             "path": "/etc/yum.repos.d/epel.repo",[0m
 [1;32m==> openstack.openhpc:             "pw_name": "root",[0m
@@ -3521,8 +3521,8 @@
 [1;32m==> openstack.openhpc:             "xusr": false[0m
 [1;32m==> openstack.openhpc:         },[0m
 [1;32m==> openstack.openhpc:         {[0m
-[1;32m==> openstack.openhpc:             "atime": 1763646293.9512982,[0m
-[1;32m==> openstack.openhpc:             "ctime": 1763646490.2086725,[0m
+[1;32m==> openstack.openhpc:             "atime": 1764068463.758872,[0m
+[1;32m==> openstack.openhpc:             "ctime": 1764068657.1201816,[0m
 [1;32m==> openstack.openhpc:             "dev": 2052,[0m
 [1;32m==> openstack.openhpc:             "gid": 0,[0m
 [1;32m==> openstack.openhpc:             "gr_name": "root",[0m
@@ -3537,7 +3537,7 @@
 [1;32m==> openstack.openhpc:             "issock": false,[0m
 [1;32m==> openstack.openhpc:             "isuid": false,[0m
 [1;32m==> openstack.openhpc:             "mode": "0644",[0m
-[1;32m==> openstack.openhpc:             "mtime": 1763646490.2086725,[0m
+[1;32m==> openstack.openhpc:             "mtime": 1764068657.1201816,[0m
 [1;32m==> openstack.openhpc:             "nlink": 1,[0m
 [1;32m==> openstack.openhpc:             "path": "/etc/yum.repos.d/grafana.repo",[0m
 [1;32m==> openstack.openhpc:             "pw_name": "root",[0m
@@ -3554,7 +3554,7 @@
 [1;32m==> openstack.openhpc:             "xusr": false[0m
 [1;32m==> openstack.openhpc:         },[0m
 [1;32m==> openstack.openhpc:         {[0m
-[1;32m==> openstack.openhpc:             "atime": 1763646293.9502983,[0m
+[1;32m==> openstack.openhpc:             "atime": 1764068463.7578719,[0m
 [1;32m==> openstack.openhpc:             "ctime": 1763554146.1730304,[0m
 [1;32m==> openstack.openhpc:             "dev": 2052,[0m
 [1;32m==> openstack.openhpc:             "gid": 0,[0m
@@ -3587,12 +3587,12 @@
 [1;32m==> openstack.openhpc:             "xusr": false[0m
 [1;32m==> openstack.openhpc:         },[0m
 [1;32m==> openstack.openhpc:         {[0m
-[1;32m==> openstack.openhpc:             "atime": 1763646293.9522982,[0m
-[1;32m==> openstack.openhpc:             "ctime": 1763646490.5196795,[0m
+[1;32m==> openstack.openhpc:             "atime": 1764068463.759872,[0m
+[1;32m==> openstack.openhpc:             "ctime": 1764068657.4471889,[0m
 [1;32m==> openstack.openhpc:             "dev": 2052,[0m
 [1;32m==> openstack.openhpc:             "gid": 0,[0m
 [1;32m==> openstack.openhpc:             "gr_name": "root",[0m
-[1;32m==> openstack.openhpc:             "inode": 41950858,[0m
+[1;32m==> openstack.openhpc:             "inode": 41950854,[0m
 [1;32m==> openstack.openhpc:             "isblk": false,[0m
 [1;32m==> openstack.openhpc:             "ischr": false,[0m
 [1;32m==> openstack.openhpc:             "isdir": false,[0m
@@ -3603,7 +3603,7 @@
 [1;32m==> openstack.openhpc:             "issock": false,[0m
 [1;32m==> openstack.openhpc:             "isuid": false,[0m
 [1;32m==> openstack.openhpc:             "mode": "0644",[0m
-[1;32m==> openstack.openhpc:             "mtime": 1763646490.5196795,[0m
+[1;32m==> openstack.openhpc:             "mtime": 1764068657.4471889,[0m
 [1;32m==> openstack.openhpc:             "nlink": 1,[0m
 [1;32m==> openstack.openhpc:             "path": "/etc/yum.repos.d/ondemand-web.repo",[0m
 [1;32m==> openstack.openhpc:             "pw_name": "root",[0m
@@ -3630,11 +3630,11 @@
 [1;32m==> openstack.openhpc:[0m
 [1;32m==> openstack.openhpc: TASK [dnf_repos : Disable every repo] ******************************************[0m
 [1;32m==> openstack.openhpc: task path: /home/ff28d9/nvs-slurm-appliance/ansible/roles/dnf_repos/tasks/disable_repos.yml:26[0m
-[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/rocky-addons.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 6610, 'inode': 16911725, 'dev': 2052, 'nlink': 1, 'atime': 1763646293.9682987, 'mtime': 1747451251.0, 'ctime': 1748667921.102792, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
+[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/rocky-addons.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 6610, 'inode': 16911725, 'dev': 2052, 'nlink': 1, 'atime': 1764068463.7878726, 'mtime': 1747451251.0, 'ctime': 1748667921.102792, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
 [1;32m==> openstack.openhpc:     "ansible_loop_var": "item",[0m
 [1;32m==> openstack.openhpc:     "changed": false,[0m
 [1;32m==> openstack.openhpc:     "item": {[0m
-[1;32m==> openstack.openhpc:         "atime": 1763646293.9682987,[0m
+[1;32m==> openstack.openhpc:         "atime": 1764068463.7878726,[0m
 [1;32m==> openstack.openhpc:         "ctime": 1748667921.102792,[0m
 [1;32m==> openstack.openhpc:         "dev": 2052,[0m
 [1;32m==> openstack.openhpc:         "gid": 0,[0m
@@ -3668,11 +3668,11 @@
 [1;32m==> openstack.openhpc:     },[0m
 [1;32m==> openstack.openhpc:     "rc": 0[0m
 [1;32m==> openstack.openhpc: }[0m
-[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/rocky-devel.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 1165, 'inode': 16911726, 'dev': 2052, 'nlink': 1, 'atime': 1763646293.9932992, 'mtime': 1747451251.0, 'ctime': 1748667921.102792, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
+[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/rocky-devel.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 1165, 'inode': 16911726, 'dev': 2052, 'nlink': 1, 'atime': 1764068463.7958727, 'mtime': 1747451251.0, 'ctime': 1748667921.102792, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
 [1;32m==> openstack.openhpc:     "ansible_loop_var": "item",[0m
 [1;32m==> openstack.openhpc:     "changed": false,[0m
 [1;32m==> openstack.openhpc:     "item": {[0m
-[1;32m==> openstack.openhpc:         "atime": 1763646293.9932992,[0m
+[1;32m==> openstack.openhpc:         "atime": 1764068463.7958727,[0m
 [1;32m==> openstack.openhpc:         "ctime": 1748667921.102792,[0m
 [1;32m==> openstack.openhpc:         "dev": 2052,[0m
 [1;32m==> openstack.openhpc:         "gid": 0,[0m
@@ -3706,12 +3706,12 @@
 [1;32m==> openstack.openhpc:     },[0m
 [1;32m==> openstack.openhpc:     "rc": 0[0m
 [1;32m==> openstack.openhpc: }[0m
-[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/rocky-extras.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 1374, 'inode': 16911727, 'dev': 2052, 'nlink': 1, 'atime': 1763646489.8936656, 'mtime': 1763646489.8936656, 'ctime': 1763646489.8936656, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
+[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/rocky-extras.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 1374, 'inode': 16911727, 'dev': 2052, 'nlink': 1, 'atime': 1764068656.8061748, 'mtime': 1764068656.8061748, 'ctime': 1764068656.8061748, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
 [1;32m==> openstack.openhpc:     "ansible_loop_var": "item",[0m
 [1;32m==> openstack.openhpc:     "changed": false,[0m
 [1;32m==> openstack.openhpc:     "item": {[0m
-[1;32m==> openstack.openhpc:         "atime": 1763646489.8936656,[0m
-[1;32m==> openstack.openhpc:         "ctime": 1763646489.8936656,[0m
+[1;32m==> openstack.openhpc:         "atime": 1764068656.8061748,[0m
+[1;32m==> openstack.openhpc:         "ctime": 1764068656.8061748,[0m
 [1;32m==> openstack.openhpc:         "dev": 2052,[0m
 [1;32m==> openstack.openhpc:         "gid": 0,[0m
 [1;32m==> openstack.openhpc:         "gr_name": "root",[0m
@@ -3726,7 +3726,7 @@
 [1;32m==> openstack.openhpc:         "issock": false,[0m
 [1;32m==> openstack.openhpc:         "isuid": false,[0m
 [1;32m==> openstack.openhpc:         "mode": "0644",[0m
-[1;32m==> openstack.openhpc:         "mtime": 1763646489.8936656,[0m
+[1;32m==> openstack.openhpc:         "mtime": 1764068656.8061748,[0m
 [1;32m==> openstack.openhpc:         "nlink": 1,[0m
 [1;32m==> openstack.openhpc:         "path": "/etc/yum.repos.d/rocky-extras.repo",[0m
 [1;32m==> openstack.openhpc:         "pw_name": "root",[0m
@@ -3744,12 +3744,12 @@
 [1;32m==> openstack.openhpc:     },[0m
 [1;32m==> openstack.openhpc:     "rc": 0[0m
 [1;32m==> openstack.openhpc: }[0m
-[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/rocky.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 1764, 'inode': 67323826, 'dev': 2052, 'nlink': 1, 'atime': 1763646488.3326306, 'mtime': 1763646488.3336308, 'ctime': 1763646488.3336308, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
+[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/rocky.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 1764, 'inode': 67323826, 'dev': 2052, 'nlink': 1, 'atime': 1764068655.24414, 'mtime': 1764068655.2451398, 'ctime': 1764068655.2451398, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
 [1;32m==> openstack.openhpc:     "ansible_loop_var": "item",[0m
 [1;32m==> openstack.openhpc:     "changed": false,[0m
 [1;32m==> openstack.openhpc:     "item": {[0m
-[1;32m==> openstack.openhpc:         "atime": 1763646488.3326306,[0m
-[1;32m==> openstack.openhpc:         "ctime": 1763646488.3336308,[0m
+[1;32m==> openstack.openhpc:         "atime": 1764068655.24414,[0m
+[1;32m==> openstack.openhpc:         "ctime": 1764068655.2451398,[0m
 [1;32m==> openstack.openhpc:         "dev": 2052,[0m
 [1;32m==> openstack.openhpc:         "gid": 0,[0m
 [1;32m==> openstack.openhpc:         "gr_name": "root",[0m
@@ -3764,7 +3764,7 @@
 [1;32m==> openstack.openhpc:         "issock": false,[0m
 [1;32m==> openstack.openhpc:         "isuid": false,[0m
 [1;32m==> openstack.openhpc:         "mode": "0644",[0m
-[1;32m==> openstack.openhpc:         "mtime": 1763646488.3336308,[0m
+[1;32m==> openstack.openhpc:         "mtime": 1764068655.2451398,[0m
 [1;32m==> openstack.openhpc:         "nlink": 1,[0m
 [1;32m==> openstack.openhpc:         "path": "/etc/yum.repos.d/rocky.repo",[0m
 [1;32m==> openstack.openhpc:         "pw_name": "root",[0m
@@ -3782,12 +3782,12 @@
 [1;32m==> openstack.openhpc:     },[0m
 [1;32m==> openstack.openhpc:     "rc": 0[0m
 [1;32m==> openstack.openhpc: }[0m
-[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/ceph.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 160, 'inode': 16908885, 'dev': 2052, 'nlink': 1, 'atime': 1763646293.9292977, 'mtime': 1763646484.5985475, 'ctime': 1763646484.5985475, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
+[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/ceph.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 160, 'inode': 16908885, 'dev': 2052, 'nlink': 1, 'atime': 1764068463.7288713, 'mtime': 1764068651.532057, 'ctime': 1764068651.532057, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
 [1;32m==> openstack.openhpc:     "ansible_loop_var": "item",[0m
 [1;32m==> openstack.openhpc:     "changed": false,[0m
 [1;32m==> openstack.openhpc:     "item": {[0m
-[1;32m==> openstack.openhpc:         "atime": 1763646293.9292977,[0m
-[1;32m==> openstack.openhpc:         "ctime": 1763646484.5985475,[0m
+[1;32m==> openstack.openhpc:         "atime": 1764068463.7288713,[0m
+[1;32m==> openstack.openhpc:         "ctime": 1764068651.532057,[0m
 [1;32m==> openstack.openhpc:         "dev": 2052,[0m
 [1;32m==> openstack.openhpc:         "gid": 0,[0m
 [1;32m==> openstack.openhpc:         "gr_name": "root",[0m
@@ -3802,7 +3802,7 @@
 [1;32m==> openstack.openhpc:         "issock": false,[0m
 [1;32m==> openstack.openhpc:         "isuid": false,[0m
 [1;32m==> openstack.openhpc:         "mode": "0644",[0m
-[1;32m==> openstack.openhpc:         "mtime": 1763646484.5985475,[0m
+[1;32m==> openstack.openhpc:         "mtime": 1764068651.532057,[0m
 [1;32m==> openstack.openhpc:         "nlink": 1,[0m
 [1;32m==> openstack.openhpc:         "path": "/etc/yum.repos.d/ceph.repo",[0m
 [1;32m==> openstack.openhpc:         "pw_name": "root",[0m
@@ -3820,12 +3820,12 @@
 [1;32m==> openstack.openhpc:     },[0m
 [1;32m==> openstack.openhpc:     "rc": 0[0m
 [1;32m==> openstack.openhpc: }[0m
-[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/OpenHPC.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 304, 'inode': 17882464, 'dev': 2052, 'nlink': 1, 'atime': 1763646485.2235615, 'mtime': 1763646485.2235615, 'ctime': 1763646485.2235615, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
+[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/OpenHPC.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 304, 'inode': 17882464, 'dev': 2052, 'nlink': 1, 'atime': 1764068652.1600711, 'mtime': 1764068652.1600711, 'ctime': 1764068652.1600711, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
 [1;32m==> openstack.openhpc:     "ansible_loop_var": "item",[0m
 [1;32m==> openstack.openhpc:     "changed": false,[0m
 [1;32m==> openstack.openhpc:     "item": {[0m
-[1;32m==> openstack.openhpc:         "atime": 1763646485.2235615,[0m
-[1;32m==> openstack.openhpc:         "ctime": 1763646485.2235615,[0m
+[1;32m==> openstack.openhpc:         "atime": 1764068652.1600711,[0m
+[1;32m==> openstack.openhpc:         "ctime": 1764068652.1600711,[0m
 [1;32m==> openstack.openhpc:         "dev": 2052,[0m
 [1;32m==> openstack.openhpc:         "gid": 0,[0m
 [1;32m==> openstack.openhpc:         "gr_name": "root",[0m
@@ -3840,7 +3840,7 @@
 [1;32m==> openstack.openhpc:         "issock": false,[0m
 [1;32m==> openstack.openhpc:         "isuid": false,[0m
 [1;32m==> openstack.openhpc:         "mode": "0644",[0m
-[1;32m==> openstack.openhpc:         "mtime": 1763646485.2235615,[0m
+[1;32m==> openstack.openhpc:         "mtime": 1764068652.1600711,[0m
 [1;32m==> openstack.openhpc:         "nlink": 1,[0m
 [1;32m==> openstack.openhpc:         "path": "/etc/yum.repos.d/OpenHPC.repo",[0m
 [1;32m==> openstack.openhpc:         "pw_name": "root",[0m
@@ -3858,12 +3858,12 @@
 [1;32m==> openstack.openhpc:     },[0m
 [1;32m==> openstack.openhpc:     "rc": 0[0m
 [1;32m==> openstack.openhpc: }[0m
-[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/TurboVNC.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 299, 'inode': 17882465, 'dev': 2052, 'nlink': 1, 'atime': 1763646485.835575, 'mtime': 1763646485.835575, 'ctime': 1763646485.835575, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
+[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/TurboVNC.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 299, 'inode': 17882465, 'dev': 2052, 'nlink': 1, 'atime': 1764068652.781085, 'mtime': 1764068652.782085, 'ctime': 1764068652.782085, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
 [1;32m==> openstack.openhpc:     "ansible_loop_var": "item",[0m
 [1;32m==> openstack.openhpc:     "changed": false,[0m
 [1;32m==> openstack.openhpc:     "item": {[0m
-[1;32m==> openstack.openhpc:         "atime": 1763646485.835575,[0m
-[1;32m==> openstack.openhpc:         "ctime": 1763646485.835575,[0m
+[1;32m==> openstack.openhpc:         "atime": 1764068652.781085,[0m
+[1;32m==> openstack.openhpc:         "ctime": 1764068652.782085,[0m
 [1;32m==> openstack.openhpc:         "dev": 2052,[0m
 [1;32m==> openstack.openhpc:         "gid": 0,[0m
 [1;32m==> openstack.openhpc:         "gr_name": "root",[0m
@@ -3878,7 +3878,7 @@
 [1;32m==> openstack.openhpc:         "issock": false,[0m
 [1;32m==> openstack.openhpc:         "isuid": false,[0m
 [1;32m==> openstack.openhpc:         "mode": "0644",[0m
-[1;32m==> openstack.openhpc:         "mtime": 1763646485.835575,[0m
+[1;32m==> openstack.openhpc:         "mtime": 1764068652.782085,[0m
 [1;32m==> openstack.openhpc:         "nlink": 1,[0m
 [1;32m==> openstack.openhpc:         "path": "/etc/yum.repos.d/TurboVNC.repo",[0m
 [1;32m==> openstack.openhpc:         "pw_name": "root",[0m
@@ -3896,12 +3896,12 @@
 [1;32m==> openstack.openhpc:     },[0m
 [1;32m==> openstack.openhpc:     "rc": 0[0m
 [1;32m==> openstack.openhpc: }[0m
-[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/cvmfs.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 315, 'inode': 17882466, 'dev': 2052, 'nlink': 1, 'atime': 1763646487.714617, 'mtime': 1763646487.715617, 'ctime': 1763646487.715617, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
+[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/cvmfs.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 315, 'inode': 17882466, 'dev': 2052, 'nlink': 1, 'atime': 1764068654.6191258, 'mtime': 1764068654.6191258, 'ctime': 1764068654.6191258, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
 [1;32m==> openstack.openhpc:     "ansible_loop_var": "item",[0m
 [1;32m==> openstack.openhpc:     "changed": false,[0m
 [1;32m==> openstack.openhpc:     "item": {[0m
-[1;32m==> openstack.openhpc:         "atime": 1763646487.714617,[0m
-[1;32m==> openstack.openhpc:         "ctime": 1763646487.715617,[0m
+[1;32m==> openstack.openhpc:         "atime": 1764068654.6191258,[0m
+[1;32m==> openstack.openhpc:         "ctime": 1764068654.6191258,[0m
 [1;32m==> openstack.openhpc:         "dev": 2052,[0m
 [1;32m==> openstack.openhpc:         "gid": 0,[0m
 [1;32m==> openstack.openhpc:         "gr_name": "root",[0m
@@ -3916,7 +3916,7 @@
 [1;32m==> openstack.openhpc:         "issock": false,[0m
 [1;32m==> openstack.openhpc:         "isuid": false,[0m
 [1;32m==> openstack.openhpc:         "mode": "0644",[0m
-[1;32m==> openstack.openhpc:         "mtime": 1763646487.715617,[0m
+[1;32m==> openstack.openhpc:         "mtime": 1764068654.6191258,[0m
 [1;32m==> openstack.openhpc:         "nlink": 1,[0m
 [1;32m==> openstack.openhpc:         "path": "/etc/yum.repos.d/cvmfs.repo",[0m
 [1;32m==> openstack.openhpc:         "pw_name": "root",[0m
@@ -3934,12 +3934,12 @@
 [1;32m==> openstack.openhpc:     },[0m
 [1;32m==> openstack.openhpc:     "rc": 0[0m
 [1;32m==> openstack.openhpc: }[0m
-[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/epel-cisco-openh264.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 175, 'inode': 17882467, 'dev': 2052, 'nlink': 1, 'atime': 1763646293.9332979, 'mtime': 1763646488.9626448, 'ctime': 1763646488.9626448, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
+[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/epel-cisco-openh264.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 175, 'inode': 17882467, 'dev': 2052, 'nlink': 1, 'atime': 1764068463.7338715, 'mtime': 1764068655.8741539, 'ctime': 1764068655.8741539, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
 [1;32m==> openstack.openhpc:     "ansible_loop_var": "item",[0m
 [1;32m==> openstack.openhpc:     "changed": false,[0m
 [1;32m==> openstack.openhpc:     "item": {[0m
-[1;32m==> openstack.openhpc:         "atime": 1763646293.9332979,[0m
-[1;32m==> openstack.openhpc:         "ctime": 1763646488.9626448,[0m
+[1;32m==> openstack.openhpc:         "atime": 1764068463.7338715,[0m
+[1;32m==> openstack.openhpc:         "ctime": 1764068655.8741539,[0m
 [1;32m==> openstack.openhpc:         "dev": 2052,[0m
 [1;32m==> openstack.openhpc:         "gid": 0,[0m
 [1;32m==> openstack.openhpc:         "gr_name": "root",[0m
@@ -3954,7 +3954,7 @@
 [1;32m==> openstack.openhpc:         "issock": false,[0m
 [1;32m==> openstack.openhpc:         "isuid": false,[0m
 [1;32m==> openstack.openhpc:         "mode": "0644",[0m
-[1;32m==> openstack.openhpc:         "mtime": 1763646488.9626448,[0m
+[1;32m==> openstack.openhpc:         "mtime": 1764068655.8741539,[0m
 [1;32m==> openstack.openhpc:         "nlink": 1,[0m
 [1;32m==> openstack.openhpc:         "path": "/etc/yum.repos.d/epel-cisco-openh264.repo",[0m
 [1;32m==> openstack.openhpc:         "pw_name": "root",[0m
@@ -3972,12 +3972,12 @@
 [1;32m==> openstack.openhpc:     },[0m
 [1;32m==> openstack.openhpc:     "rc": 0[0m
 [1;32m==> openstack.openhpc: }[0m
-[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/epel.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 302, 'inode': 17882468, 'dev': 2052, 'nlink': 1, 'atime': 1763646489.2716517, 'mtime': 1763646489.2726517, 'ctime': 1763646489.2726517, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
+[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/epel.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 302, 'inode': 17882468, 'dev': 2052, 'nlink': 1, 'atime': 1764068656.1791606, 'mtime': 1764068656.1801608, 'ctime': 1764068656.1801608, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
 [1;32m==> openstack.openhpc:     "ansible_loop_var": "item",[0m
 [1;32m==> openstack.openhpc:     "changed": false,[0m
 [1;32m==> openstack.openhpc:     "item": {[0m
-[1;32m==> openstack.openhpc:         "atime": 1763646489.2716517,[0m
-[1;32m==> openstack.openhpc:         "ctime": 1763646489.2726517,[0m
+[1;32m==> openstack.openhpc:         "atime": 1764068656.1791606,[0m
+[1;32m==> openstack.openhpc:         "ctime": 1764068656.1801608,[0m
 [1;32m==> openstack.openhpc:         "dev": 2052,[0m
 [1;32m==> openstack.openhpc:         "gid": 0,[0m
 [1;32m==> openstack.openhpc:         "gr_name": "root",[0m
@@ -3992,7 +3992,7 @@
 [1;32m==> openstack.openhpc:         "issock": false,[0m
 [1;32m==> openstack.openhpc:         "isuid": false,[0m
 [1;32m==> openstack.openhpc:         "mode": "0644",[0m
-[1;32m==> openstack.openhpc:         "mtime": 1763646489.2726517,[0m
+[1;32m==> openstack.openhpc:         "mtime": 1764068656.1801608,[0m
 [1;32m==> openstack.openhpc:         "nlink": 1,[0m
 [1;32m==> openstack.openhpc:         "path": "/etc/yum.repos.d/epel.repo",[0m
 [1;32m==> openstack.openhpc:         "pw_name": "root",[0m
@@ -4010,12 +4010,12 @@
 [1;32m==> openstack.openhpc:     },[0m
 [1;32m==> openstack.openhpc:     "rc": 0[0m
 [1;32m==> openstack.openhpc: }[0m
-[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/grafana.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 141, 'inode': 44178873, 'dev': 2052, 'nlink': 1, 'atime': 1763646293.9512982, 'mtime': 1763646490.2086725, 'ctime': 1763646490.2086725, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
+[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/grafana.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 141, 'inode': 44178873, 'dev': 2052, 'nlink': 1, 'atime': 1764068463.758872, 'mtime': 1764068657.1201816, 'ctime': 1764068657.1201816, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
 [1;32m==> openstack.openhpc:     "ansible_loop_var": "item",[0m
 [1;32m==> openstack.openhpc:     "changed": false,[0m
 [1;32m==> openstack.openhpc:     "item": {[0m
-[1;32m==> openstack.openhpc:         "atime": 1763646293.9512982,[0m
-[1;32m==> openstack.openhpc:         "ctime": 1763646490.2086725,[0m
+[1;32m==> openstack.openhpc:         "atime": 1764068463.758872,[0m
+[1;32m==> openstack.openhpc:         "ctime": 1764068657.1201816,[0m
 [1;32m==> openstack.openhpc:         "dev": 2052,[0m
 [1;32m==> openstack.openhpc:         "gid": 0,[0m
 [1;32m==> openstack.openhpc:         "gr_name": "root",[0m
@@ -4030,7 +4030,7 @@
 [1;32m==> openstack.openhpc:         "issock": false,[0m
 [1;32m==> openstack.openhpc:         "isuid": false,[0m
 [1;32m==> openstack.openhpc:         "mode": "0644",[0m
-[1;32m==> openstack.openhpc:         "mtime": 1763646490.2086725,[0m
+[1;32m==> openstack.openhpc:         "mtime": 1764068657.1201816,[0m
 [1;32m==> openstack.openhpc:         "nlink": 1,[0m
 [1;32m==> openstack.openhpc:         "path": "/etc/yum.repos.d/grafana.repo",[0m
 [1;32m==> openstack.openhpc:         "pw_name": "root",[0m
@@ -4048,11 +4048,11 @@
 [1;32m==> openstack.openhpc:     },[0m
 [1;32m==> openstack.openhpc:     "rc": 0[0m
 [1;32m==> openstack.openhpc: }[0m
-[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/epel-testing.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 1432, 'inode': 17652815, 'dev': 2052, 'nlink': 1, 'atime': 1763646293.9502983, 'mtime': 1745342281.0, 'ctime': 1763554146.1730304, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
+[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/epel-testing.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 1432, 'inode': 17652815, 'dev': 2052, 'nlink': 1, 'atime': 1764068463.7578719, 'mtime': 1745342281.0, 'ctime': 1763554146.1730304, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
 [1;32m==> openstack.openhpc:     "ansible_loop_var": "item",[0m
 [1;32m==> openstack.openhpc:     "changed": false,[0m
 [1;32m==> openstack.openhpc:     "item": {[0m
-[1;32m==> openstack.openhpc:         "atime": 1763646293.9502983,[0m
+[1;32m==> openstack.openhpc:         "atime": 1764068463.7578719,[0m
 [1;32m==> openstack.openhpc:         "ctime": 1763554146.1730304,[0m
 [1;32m==> openstack.openhpc:         "dev": 2052,[0m
 [1;32m==> openstack.openhpc:         "gid": 0,[0m
@@ -4086,16 +4086,16 @@
 [1;32m==> openstack.openhpc:     },[0m
 [1;32m==> openstack.openhpc:     "rc": 0[0m
 [1;32m==> openstack.openhpc: }[0m
-[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/ondemand-web.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 371, 'inode': 41950858, 'dev': 2052, 'nlink': 1, 'atime': 1763646293.9522982, 'mtime': 1763646490.5196795, 'ctime': 1763646490.5196795, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
+[1;32m==> openstack.openhpc: ok: [default] => (item={'path': '/etc/yum.repos.d/ondemand-web.repo', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 371, 'inode': 41950854, 'dev': 2052, 'nlink': 1, 'atime': 1764068463.759872, 'mtime': 1764068657.4471889, 'ctime': 1764068657.4471889, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False}) => {[0m
 [1;32m==> openstack.openhpc:     "ansible_loop_var": "item",[0m
 [1;32m==> openstack.openhpc:     "changed": false,[0m
 [1;32m==> openstack.openhpc:     "item": {[0m
-[1;32m==> openstack.openhpc:         "atime": 1763646293.9522982,[0m
-[1;32m==> openstack.openhpc:         "ctime": 1763646490.5196795,[0m
+[1;32m==> openstack.openhpc:         "atime": 1764068463.759872,[0m
+[1;32m==> openstack.openhpc:         "ctime": 1764068657.4471889,[0m
 [1;32m==> openstack.openhpc:         "dev": 2052,[0m
 [1;32m==> openstack.openhpc:         "gid": 0,[0m
 [1;32m==> openstack.openhpc:         "gr_name": "root",[0m
-[1;32m==> openstack.openhpc:         "inode": 41950858,[0m
+[1;32m==> openstack.openhpc:         "inode": 41950854,[0m
 [1;32m==> openstack.openhpc:         "isblk": false,[0m
 [1;32m==> openstack.openhpc:         "ischr": false,[0m
 [1;32m==> openstack.openhpc:         "isdir": false,[0m
@@ -4106,7 +4106,7 @@
 [1;32m==> openstack.openhpc:         "issock": false,[0m
 [1;32m==> openstack.openhpc:         "isuid": false,[0m
 [1;32m==> openstack.openhpc:         "mode": "0644",[0m
-[1;32m==> openstack.openhpc:         "mtime": 1763646490.5196795,[0m
+[1;32m==> openstack.openhpc:         "mtime": 1764068657.4471889,[0m
 [1;32m==> openstack.openhpc:         "nlink": 1,[0m
 [1;32m==> openstack.openhpc:         "path": "/etc/yum.repos.d/ondemand-web.repo",[0m
 [1;32m==> openstack.openhpc:         "pw_name": "root",[0m
@@ -4177,14 +4177,14 @@
 [1;32m==> openstack.openhpc: MSG:[0m
 [1;32m==> openstack.openhpc:[0m
 [1;32m==> openstack.openhpc: 1 line(s) removed[0m
-[1;32m==> openstack.openhpc: changed: [default] => (item={'key': 'no_proxy', 'value': '10.167.2.61,10.56.0.49,10.56.0.70,10.56.1.231,127.0.0.1,169.254.169.254,default,ff28d9-compute-00,ff28d9-control,ff28d9-login-00,ipa-a.nvs.bmrc.ox.ac.uk,localhost'}) => {[0m
+[1;32m==> openstack.openhpc: changed: [default] => (item={'key': 'no_proxy', 'value': '10.167.2.61,10.56.0.49,10.56.0.70,10.56.1.18,10.56.1.231,127.0.0.1,169.254.169.254,default,ff28d9-compute-00,ff28d9-compute-01,ff28d9-control,ff28d9-login-00,ipa-a.nvs.bmrc.ox.ac.uk,localhost'}) => {[0m
 [1;32m==> openstack.openhpc:     "ansible_loop_var": "item",[0m
 [1;32m==> openstack.openhpc:     "backup": "",[0m
 [1;32m==> openstack.openhpc:     "changed": true,[0m
 [1;32m==> openstack.openhpc:     "found": 1,[0m
 [1;32m==> openstack.openhpc:     "item": {[0m
 [1;32m==> openstack.openhpc:         "key": "no_proxy",[0m
-[1;32m==> openstack.openhpc:         "value": "10.167.2.61,10.56.0.49,10.56.0.70,10.56.1.231,127.0.0.1,169.254.169.254,default,ff28d9-compute-00,ff28d9-control,ff28d9-login-00,ipa-a.nvs.bmrc.ox.ac.uk,localhost"[0m
+[1;32m==> openstack.openhpc:         "value": "10.167.2.61,10.56.0.49,10.56.0.70,10.56.1.18,10.56.1.231,127.0.0.1,169.254.169.254,default,ff28d9-compute-00,ff28d9-compute-01,ff28d9-control,ff28d9-login-00,ipa-a.nvs.bmrc.ox.ac.uk,localhost"[0m
 [1;32m==> openstack.openhpc:     }[0m
 [1;32m==> openstack.openhpc: }[0m
 [1;32m==> openstack.openhpc:[0m
@@ -4250,10 +4250,10 @@
 [1;32m==> openstack.openhpc:         "systemctl",[0m
 [1;32m==> openstack.openhpc:         "daemon-reexec"[0m
 [1;32m==> openstack.openhpc:     ],[0m
-[1;32m==> openstack.openhpc:     "delta": "0:00:00.191121",[0m
-[1;32m==> openstack.openhpc:     "end": "2025-11-20 13:48:17.656268",[0m
+[1;32m==> openstack.openhpc:     "delta": "0:00:00.202294",[0m
+[1;32m==> openstack.openhpc:     "end": "2025-11-25 11:04:25.079986",[0m
 [1;32m==> openstack.openhpc:     "rc": 0,[0m
-[1;32m==> openstack.openhpc:     "start": "2025-11-20 13:48:17.465147"[0m
+[1;32m==> openstack.openhpc:     "start": "2025-11-25 11:04:24.877692"[0m
 [1;32m==> openstack.openhpc: }[0m
 [1;32m==> openstack.openhpc:[0m
 [1;32m==> openstack.openhpc: TASK [proxy : Reset connection to get new /etc/environment] ********************[0m
@@ -4279,10 +4279,10 @@
 [1;32m==> openstack.openhpc:         "clean",[0m
 [1;32m==> openstack.openhpc:         "all"[0m
 [1;32m==> openstack.openhpc:     ],[0m
-[1;32m==> openstack.openhpc:     "delta": "0:00:00.269048",[0m
-[1;32m==> openstack.openhpc:     "end": "2025-11-20 13:48:18.550099",[0m
+[1;32m==> openstack.openhpc:     "delta": "0:00:00.247304",[0m
+[1;32m==> openstack.openhpc:     "end": "2025-11-25 11:04:25.914443",[0m
 [1;32m==> openstack.openhpc:     "rc": 0,[0m
-[1;32m==> openstack.openhpc:     "start": "2025-11-20 13:48:18.281051"[0m
+[1;32m==> openstack.openhpc:     "start": "2025-11-25 11:04:25.667139"[0m
 [1;32m==> openstack.openhpc: }[0m
 [1;32m==> openstack.openhpc:[0m
 [1;32m==> openstack.openhpc: STDOUT:[0m
@@ -4327,10 +4327,10 @@
 [1;32m==> openstack.openhpc:         "--logs",[0m
 [1;32m==> openstack.openhpc:         "--seed"[0m
 [1;32m==> openstack.openhpc:     ],[0m
-[1;32m==> openstack.openhpc:     "delta": "0:00:00.337225",[0m
-[1;32m==> openstack.openhpc:     "end": "2025-11-20 13:48:20.560491",[0m
+[1;32m==> openstack.openhpc:     "delta": "0:00:00.271196",[0m
+[1;32m==> openstack.openhpc:     "end": "2025-11-25 11:04:27.854478",[0m
 [1;32m==> openstack.openhpc:     "rc": 0,[0m
-[1;32m==> openstack.openhpc:     "start": "2025-11-20 13:48:20.223266"[0m
+[1;32m==> openstack.openhpc:     "start": "2025-11-25 11:04:27.583282"[0m
 [1;32m==> openstack.openhpc: }[0m
 [1;32m==> openstack.openhpc:[0m
 [1;32m==> openstack.openhpc: TASK [Cleanup /tmp] ************************************************************[0m
@@ -4342,10 +4342,10 @@
 [1;32m==> openstack.openhpc:         "-rf",[0m
 [1;32m==> openstack.openhpc:         "/tmp/*"[0m
 [1;32m==> openstack.openhpc:     ],[0m
-[1;32m==> openstack.openhpc:     "delta": "0:00:00.005560",[0m
-[1;32m==> openstack.openhpc:     "end": "2025-11-20 13:48:20.884409",[0m
+[1;32m==> openstack.openhpc:     "delta": "0:00:00.005726",[0m
+[1;32m==> openstack.openhpc:     "end": "2025-11-25 11:04:28.179438",[0m
 [1;32m==> openstack.openhpc:     "rc": 0,[0m
-[1;32m==> openstack.openhpc:     "start": "2025-11-20 13:48:20.878849"[0m
+[1;32m==> openstack.openhpc:     "start": "2025-11-25 11:04:28.173712"[0m
 [1;32m==> openstack.openhpc: }[0m
 [1;32m==> openstack.openhpc:[0m
 [1;32m==> openstack.openhpc: TASK [Delete files triggering vulnerability scans] *****************************[0m
@@ -21500,15 +21500,15 @@
 [1;32m==> openstack.openhpc: task path: /home/ff28d9/nvs-slurm-appliance/ansible/cleanup.yml:68[0m
 [1;32m==> openstack.openhpc: changed: [default] => {[0m
 [1;32m==> openstack.openhpc:     "changed": true,[0m
-[1;32m==> openstack.openhpc:     "checksum": "8e29c421019ad0df761a0c8efd8cd89413a48a38",[0m
+[1;32m==> openstack.openhpc:     "checksum": "f01e13baedf89c2e18e67a754112b2613bc6424f",[0m
 [1;32m==> openstack.openhpc:     "dest": "/var/lib/image/image.json",[0m
 [1;32m==> openstack.openhpc:     "gid": 0,[0m
 [1;32m==> openstack.openhpc:     "group": "root",[0m
-[1;32m==> openstack.openhpc:     "md5sum": "6892d002fb2d01289f71deef0864a0cc",[0m
+[1;32m==> openstack.openhpc:     "md5sum": "92e158f4f1bac20a689d8dc6e76dccd6",[0m
 [1;32m==> openstack.openhpc:     "mode": "0644",[0m
 [1;32m==> openstack.openhpc:     "owner": "root",[0m
 [1;32m==> openstack.openhpc:     "size": 240,[0m
-[1;32m==> openstack.openhpc:     "src": "/var/lib/rocky/.ansible/tmp/ansible-tmp-1763646510.7916608-2210920-192331561048914/source",[0m
+[1;32m==> openstack.openhpc:     "src": "/var/lib/rocky/.ansible/tmp/ansible-tmp-1764068679.36457-2252285-140169211833595/source",[0m
 [1;32m==> openstack.openhpc:     "state": "file",[0m
 [1;32m==> openstack.openhpc:     "uid": 0[0m
 [1;32m==> openstack.openhpc: }[0m
@@ -21521,17 +21521,17 @@
 [1;32m==> openstack.openhpc:         "cat",[0m
 [1;32m==> openstack.openhpc:         "/var/lib/image/image.json"[0m
 [1;32m==> openstack.openhpc:     ],[0m
-[1;32m==> openstack.openhpc:     "delta": "0:00:00.005181",[0m
-[1;32m==> openstack.openhpc:     "end": "2025-11-20 13:48:32.015863",[0m
+[1;32m==> openstack.openhpc:     "delta": "0:00:00.005522",[0m
+[1;32m==> openstack.openhpc:     "end": "2025-11-25 11:04:39.594501",[0m
 [1;32m==> openstack.openhpc:     "rc": 0,[0m
-[1;32m==> openstack.openhpc:     "start": "2025-11-20 13:48:32.010682"[0m
+[1;32m==> openstack.openhpc:     "start": "2025-11-25 11:04:39.588979"[0m
 [1;32m==> openstack.openhpc: }[0m
 [1;32m==> openstack.openhpc:[0m
 [1;32m==> openstack.openhpc: STDOUT:[0m
 [1;32m==> openstack.openhpc:[0m
 [1;32m==> openstack.openhpc: {[0m
 [1;32m==> openstack.openhpc:     "branch": "update/v2.8.1-site",[0m
-[1;32m==> openstack.openhpc:     "build": "openhpc-freeipa-251120-1343-c2511939",[0m
+[1;32m==> openstack.openhpc:     "build": "openhpc-freeipa-251125-1059-ec225487",[0m
 [1;32m==> openstack.openhpc:     "cuda": "-",[0m
 [1;32m==> openstack.openhpc:     "doca": "-",[0m
 [1;32m==> openstack.openhpc:     "kernel": "5.14.0-570.42.2.el9_6.x86_64",[0m
@@ -21553,22 +21553,22 @@
 [1;32m==> openstack.openhpc: PLAY RECAP *********************************************************************[0m
 [1;32m==> openstack.openhpc: default                    : ok=58   changed=27   unreachable=0    failed=0    skipped=80   rescued=0    ignored=0[0m
 [1;32m==> openstack.openhpc:[0m
-[1;32m==> openstack.openhpc: Stopping server: f54ba495-3f3f-4d6b-924e-b1335de3aa81 ...[0m
-[1;32m==> openstack.openhpc: Waiting for server to stop: f54ba495-3f3f-4d6b-924e-b1335de3aa81 ...[0m
-[1;32m==> openstack.openhpc: Terminating the source server: f54ba495-3f3f-4d6b-924e-b1335de3aa81 ...[0m
-[1;32m==> openstack.openhpc: Creating the image: openhpc-freeipa-251120-1343-c2511939[0m
-[1;32m==> openstack.openhpc: Image: 06d91dc3-7f47-43d7-9b7b-a50e8e964050[0m
-[1;32m==> openstack.openhpc: Waiting for image openhpc-freeipa-251120-1343-c2511939 (image id: 06d91dc3-7f47-43d7-9b7b-a50e8e964050) to become ready...[0m
+[1;32m==> openstack.openhpc: Stopping server: f9897248-92f2-4e95-98f9-cb1c6ca68fdd ...[0m
+[1;32m==> openstack.openhpc: Waiting for server to stop: f9897248-92f2-4e95-98f9-cb1c6ca68fdd ...[0m
+[1;32m==> openstack.openhpc: Terminating the source server: f9897248-92f2-4e95-98f9-cb1c6ca68fdd ...[0m
+[1;32m==> openstack.openhpc: Creating the image: openhpc-freeipa-251125-1059-ec225487[0m
+[1;32m==> openstack.openhpc: Image: 50414a17-3cb7-4fdf-8abc-af1923345e74[0m
+[1;32m==> openstack.openhpc: Waiting for image openhpc-freeipa-251125-1059-ec225487 (image id: 50414a17-3cb7-4fdf-8abc-af1923345e74) to become ready...[0m
 [1;32m==> openstack.openhpc: Updating image visibility to private[0m
-[1;32m==> openstack.openhpc: Terminating the source server: f54ba495-3f3f-4d6b-924e-b1335de3aa81 ...[0m
+[1;32m==> openstack.openhpc: Terminating the source server: f9897248-92f2-4e95-98f9-cb1c6ca68fdd ...[0m
 [1;31m==> openstack.openhpc: Error terminating server, may still be around: Resource not found[0m
-[1;32m==> openstack.openhpc: Deleting volume: 858839be-d6db-452b-a2dc-27eb50466e55 ...[0m
-[1;32m==> openstack.openhpc: Deleting temporary keypair: packer_691f1b0f-0b53-5002-31d7-a41084c617be ...[0m
+[1;32m==> openstack.openhpc: Deleting volume: 7faf9472-a6be-4360-bcd8-2560b2df722a ...[0m
+[1;32m==> openstack.openhpc: Deleting temporary keypair: packer_69258c29-120c-2d3b-dc76-e485d78ddb9e ...[0m
 [1;32m==> openstack.openhpc: Running post-processor:  (type manifest)[0m
-[1;32mBuild 'openstack.openhpc' finished after 10 minutes 52 seconds.[0m
+[1;32mBuild 'openstack.openhpc' finished after 10 minutes 58 seconds.[0m
 
-==> Wait completed after 10 minutes 52 seconds
+==> Wait completed after 10 minutes 58 seconds
 
 ==> Builds finished. The artifacts of successful builds are:
---> openstack.openhpc: An image was created: 06d91dc3-7f47-43d7-9b7b-a50e8e964050
---> openstack.openhpc: An image was created: 06d91dc3-7f47-43d7-9b7b-a50e8e964050
+--> openstack.openhpc: An image was created: 50414a17-3cb7-4fdf-8abc-af1923345e74
+--> openstack.openhpc: An image was created: 50414a17-3cb7-4fdf-8abc-af1923345e74
