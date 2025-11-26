@@ -3,3 +3,4 @@ appliances_extra_packages_other:
 - bzip2
 - bc
 - pam-devel
+- patch
