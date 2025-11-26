@@ -232,7 +232,7 @@ There are 2x image builds , referenced by their Packer variables file name in
 
 To build these run the following command in the `packer/` directory:
 
-    PACKER_LOG=1 /usr/local/bin/packer build -on-error=ask -var-file=../environments/site/$NAME.pkrvars.hcl openstack.pkr.hcl
+    PACKER_LOG=1 /usr/local/bin/packer build -on-error=ask -var-file=../environments/site/$NAME.pkrvars.hcl openstack.pkr.hcl > ../environments/site/$NAME.build.log
 
 where `$NAME` should be replaced with the variable file name as above, e.g. `base`.
 
