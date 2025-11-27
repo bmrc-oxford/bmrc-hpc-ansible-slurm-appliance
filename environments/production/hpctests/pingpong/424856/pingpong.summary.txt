@@ -1,0 +1,8 @@
+Summary for pingpong using 2x scheduler-selected nodes in 'general' partition, job ID 424856, device 'all':
+
+Nodes: ms-general-[03,05]
+Zero-size msg latency: 30.1 us
+Max bandwidth: 1831.7 Mbytes/s (14.6536 Gbit/s)
+
+See plot on localhost:
+/home/ff28d9/nvs-slurm-appliance/environments/production/hpctests/pingpong/424856/pingpong.png
