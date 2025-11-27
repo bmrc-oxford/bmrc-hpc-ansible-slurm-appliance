@@ -29,6 +29,19 @@ Where noted these map to squid parameters of the same name without the `squid_` 
   - Allow access for localhost
   - Deny all other access
 
+        # Deny requests to certain unsafe ports
+        http_access deny !Safe_ports
+        # Deny CONNECT to other than secure SSL ports
+        http_access deny CONNECT !SSL_ports
+        # Only allow cachemgr access from localhost
+        http_access allow localhost manager
+        http_access deny manager
+        # Rules allowing http access
+        http_access allow anywhere
+        http_access allow localhost
+        # Finally deny all other access to this proxy
+        http_access deny all
+
   See squid parameter.
 
 - `squid_auth_param`: Optional str, can be multiline. Parameters for authentication schemes. Default empty string.

@@ -3,6 +3,11 @@ variable "environment_root" {
     description = "Path to environment root, automatically set by activate script"
 }
 
+data "openstack_images_image_v2" "opengpu" {
+    # Image for A100 (nvidia-open drivers) - just allows referencing by name
+    name = "openhpc-opengpu-251126-1419-eff83e31" # (v2.8.1)
+}
+
 locals {
  user_name = basename(pathexpand("~"))
 }
@@ -21,10 +26,6 @@ module "cluster" {
 
   login = {
     interactive = {
-	# NB: login nodes use image with ondemand-dex package
-        # Only deployed to these nodes to minimise cluster disruption
-        # but could be used for all nodes at a future upgrade
-	image_id = "c3ae586b-48c5-4f92-8c84-9187ebdf63cc" # openhpc-freeipa-251030-1621-727d972
         nodes = ["login-00"]
         flavor = "m1.highmem"
         fip_addresses = [openstack_networking_floatingip_v2.login.address]
@@ -33,8 +34,13 @@ module "cluster" {
 
   compute = {
     general = {
-      nodes = ["compute-00"]
+      nodes = ["compute-00", "compute-01"]
       flavor = "m2.large"
+    }
+  a100 = {
+      nodes = ["a100-00"]
+      flavor = "a100.4cpu_3gpu_435gb"
+      image_id = data.openstack_images_image_v2.opengpu.id
     }
   }
 
