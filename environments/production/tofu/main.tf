@@ -4,8 +4,8 @@ variable "environment_root" {
 }
 
 data "openstack_images_image_v2" "opengpu" {
-  # Image for A100 (nvidia-open drivers) - just allows referencing by name
-  name = "openhpc-opengpu-251126-1419-eff83e31" # (v2.8.1)
+    # Image for A100 (nvidia-open drivers) - just allows referencing by name
+    name = "openhpc-opengpu-251126-1419-eff83e31" # (v2.8.1)
 }
 
 module "cluster" {
