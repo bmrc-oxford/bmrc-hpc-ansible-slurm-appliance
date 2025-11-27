@@ -34,7 +34,7 @@ module "cluster" {
       flavor = "m3.medium"
     }
     a100 = {
-      nodes = ["a100-00", "a100-01", "a100-02", "a100-03"]
+      nodes = ["a100-00", "a100-01", "a100-02"] # "a100-03" moved to dev
       flavor = "a100.4cpu_3gpu_435gb"
       image_id = data.openstack_images_image_v2.opengpu.id
     }
