@@ -103,9 +103,8 @@ openhpc
 [vgpu]
 # Hosts where vGPU/MIG should be configured - see docs/mig.md
 
-[eessi:children]
+[eessi]
 # Hosts on which EESSI stack should be configured
-openhpc
 
 [resolv_conf]
 # Allows defining nameservers in /etc/resolv.conf - see ansible/roles/resolv_conf/README.md
@@ -129,6 +128,7 @@ fatimage
 [tuned:children]
 # Hosts to run TuneD configuration
 fatimage
+cluster
 
 [ansible_init:children]
 # Hosts to run linux-ansible-init
@@ -183,11 +183,12 @@ fatimage
 # Hosts to configure for node health checks
 compute
 
-[topology]
+[topology:children]
 # Compute nodes to be included in the Slurm topology plugin's topology tree. See ansible/roles/topology
 # Should be set to `compute` if enabled
 # Note that this feature currently assumes all compute nodes are VMs, enabling
 # when the cluster contains baremetal compute nodes may lead to unexpected scheduling behaviour
+compute
 
 [pulp_site]
 # Add builder to this group to automatically sync pulp during image build

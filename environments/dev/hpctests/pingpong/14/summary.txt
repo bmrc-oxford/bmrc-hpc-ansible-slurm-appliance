@@ -1,0 +1,8 @@
+Summary for pingpong using 2x scheduler-selected nodes in 'general' partition, job ID 14, device 'all':
+
+Nodes: ff28d9-compute-[00-01]
+Zero-size msg latency: 79.73 us
+Max bandwidth: 430.54 Mbytes/s (3.4443200000000003 Gbit/s)
+
+See plot on localhost:
+/home/ff28d9/nvs-slurm-appliance/environments/dev/hpctests/pingpong/14/pingpong.png

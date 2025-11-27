@@ -2,3 +2,5 @@ appliances_extra_packages_other:
 - rdma-core-devel
 - bzip2
 - bc
+- pam-devel
+- patch

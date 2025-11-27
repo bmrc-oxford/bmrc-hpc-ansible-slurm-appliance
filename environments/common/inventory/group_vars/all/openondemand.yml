@@ -6,7 +6,7 @@
 # NB: Variables prefixed ood_ are all from https://github.com/OSC/ood-ansible
 
 ondemand_package_version: "4.0.7" # used in ansible/cleanup.yml
-ondemand_package: ondemand-"{{ ondemand_package_version }}" # osc.ood role var controlling installed package
+ondemand_package: "ondemand-{{ ondemand_package_version }}" # osc.ood role var controlling installed package
 
 openondemand_servername: "{{ hostvars[groups['openondemand'].0].ansible_host if groups['openondemand'] else '' }}"
 
@@ -126,7 +126,6 @@ openondemand_apps_desktop_default:
     - gres
     - gres_count
     - node
-    - gres_param
   attributes:
     desktop: xfce
     bc_queue:
@@ -160,7 +159,9 @@ openondemand_apps_desktop_default:
       native:
         - <%= "--nodes=1" %>
         - <%= "--ntasks=#{num_cores}" %>
+        <% if node != '' %>
         - <%= "--nodelist=#{node}" %>
+        <% end %>
         <% if gres != 'none' %>
         - <%= "--gres=#{gres}:#{gres_count}" %>
         <% end %>
@@ -181,7 +182,6 @@ openondemand_apps_jupyter_default:
     - gres
     - gres_count
     - node
-    - gres_param
   attributes:
     num_cores:
       label: Number of cores
@@ -222,7 +222,9 @@ openondemand_apps_jupyter_default:
       native:
         - <%= "--nodes=1" %>
         - <%= "--ntasks=#{num_cores}" %>
+        <% if node != '' %>
         - <%= "--nodelist=#{node}" %>
+        <% end %>
         <% if gres != 'none' %>
         - <%= "--gres=#{gres}:#{gres_count}" %>
         <% end %>
