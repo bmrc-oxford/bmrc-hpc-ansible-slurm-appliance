@@ -40,3 +40,64 @@ dex_settings: |
 
 # NB: default `user_map_match: '.*'` is fine
 
+# Override default jupyter config to use module from apps/
+openondemand_apps_jupyter:
+  jupyter:
+    title: Jupyter Notebook
+    description: Request a Jupyter Notebook server
+    cluster: slurm
+    form:
+      - modules
+      - extra_jupyter_args
+      - bc_queue
+      - bc_num_hours
+      - num_cores
+      - gres
+      - gres_count
+      - node
+    attributes:
+      num_cores:
+        label: Number of cores
+        value: 1
+      modules:
+        label: Module
+        help: Choose the module to use
+        widget: select
+        options: # [label, module path]
+          - ['JupyterNotebook/7.0.2-GCCcore-12.3.0', 'JupyterNotebook/7.0.2-GCCcore-12.3.0']
+      gres:
+        label: Resources
+        help: Select GPU or other Slurm GRES resources
+        required: true
+        widget: select
+        options: "{{ openondemand_gres_options }}"
+      gres_count:
+        label: Resource count
+        help: Count of GPU or other Slurm GRES resources
+        required: false
+        widget: number_field
+        value: 1
+        min: 1
+        step: 1
+      node:
+        label: Node name
+        help: Select a particular node or leave empty to let Slurm pick the next available
+        value: ""
+      extra_jupyter_args: ""
+      bc_queue:
+        value: "{{ openondemand_jupyter_partition | default(none) }}"
+        help: 'If GPUs are needed enter a100 and see GRES options'
+    submit: |
+      ---
+      batch_connect:
+        template: "basic"
+      script:
+        job_name: "ood-jupyter"
+        native:
+          - <%= "--nodes=1" %>
+          - <%= "--ntasks=#{num_cores}" %>
+          - <%= "--nodelist=#{node}" %>
+          <% if gres != 'none' %>
+          - <%= "--gres=#{gres}:#{gres_count}" %>
+          <% end %>
+
