@@ -103,3 +103,6 @@ openondemand_apps_jupyter:
           - <%= "--gres=#{gres}:#{gres_count}" %>
           <% end %>
 
+openondemand_apps_rstudio_module_options:
+ - ['RStudio-Server/2023.09.1+494-foss-2023a-Java-11-R-4.3.2', 'RStudio-Server/2023.09.1+494-foss-2023a-Java-11-R-4.3.2']
+
