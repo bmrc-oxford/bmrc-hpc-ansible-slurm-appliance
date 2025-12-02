@@ -230,6 +230,9 @@ openondemand_apps_jupyter_default:
         <% end %>
 openondemand_apps_jupyter: "{{ {'jupyter':openondemand_apps_jupyter_default} if openondemand_jupyter_partition | default(none) else {} }}"
 
+openondemand_apps_rstudio_module_options:
+  - ["RStudio v{{ openondemand_rstudio_version }}", "rstudio-server/{{ openondemand_rstudio_version }}"]
+
 openondemand_apps_rstudio_default:
   title: RStudio
   description: Request a RStudio server
@@ -243,8 +246,7 @@ openondemand_apps_rstudio_default:
       cachable: true
       help: Choose your RStudio module
       widget: select
-      options:
-        - ["RStudio v{{ openondemand_rstudio_version }}", "rstudio-server/{{ openondemand_rstudio_version }}"]
+      options: "{{ openondemand_apps_rstudio_module_options }}"
     extra_modules_script:
       label: Extra modules script
       help: If you'd like to load additional modules alongside RStudio-Server, put the 'module load ...' commands into a text file (one 'module load...' per line) and specify its path here # noqa: yaml[line-length]
