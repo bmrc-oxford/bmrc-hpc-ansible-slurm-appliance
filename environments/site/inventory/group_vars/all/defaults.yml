@@ -4,3 +4,4 @@ appliances_extra_packages_other:
 - bc
 - pam-devel
 - patch
+- vim-enhanced
