@@ -145,8 +145,8 @@ openondemand_apps_desktop_default:
       help: Count of GPU or other Slurm GRES resources
       required: false
       widget: number_field
-      value: 1
-      min: 1
+      value: 0
+      min: 0
       step: 1
     node:
       label: Node name
@@ -198,8 +198,8 @@ openondemand_apps_jupyter_default:
       help: Count of GPU or other Slurm GRES resources
       required: false
       widget: number_field
-      value: 1
-      min: 1
+      value: 0
+      min: 0
       step: 1
     node:
       label: Node name
@@ -292,8 +292,8 @@ openondemand_apps_rstudio_default:
       help: Count of GPU or other Slurm GRES resources
       required: false
       widget: number_field
-      value: 1
-      min: 1
+      value: 0
+      min: 0
       step: 1
   form:
     - bc_queue
@@ -394,8 +394,8 @@ openondemand_apps_matlab_default:
       help: Count of GPU or other Slurm GRES resources
       required: false
       widget: number_field
-      value: 1
-      min: 1
+      value: 0
+      min: 0
       step: 1
   submit: |
     ---

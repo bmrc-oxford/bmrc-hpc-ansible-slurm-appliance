@@ -76,8 +76,8 @@ openondemand_apps_jupyter:
         help: Count of GPU or other Slurm GRES resources
         required: false
         widget: number_field
-        value: 1
-        min: 1
+        value: 0
+        min: 0
         step: 1
       node:
         label: Node name
