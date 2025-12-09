@@ -214,21 +214,22 @@ Detailed steps:
 
 # Image build
 
-There are 2x image builds , referenced by their Packer variables file name in
+There are 2x image builds, referenced by their Packer variables file name in
 `environments/site/*.pkrvars.hcl`:
 
-- `base`: This starts from the upstream StackHPC RockyLinux 9 image, and:
+- `opengpu`: This starts from the upstream StackHPC image and adds `nvidia-open`
+  drivers and `cuda` packages, and should support GRES autodetection via the
+  `nvidia` (not `nvml`) mechanism. It produces an image `openhpc-opengpu-...`.
+  This build should ONLY need updating when the upstream code/image changes, i.e.
+  on appliance upgrades.
+
+- `nvs`: This starts from the upstream StackHPC RockyLinux 9 image, and:
   - Installs `freeipa` client packages.
   - Installs `ondemand-dex` package for OIDC login to Open Ondemand via LDAP.
   - Installs a few additional packages specified in
     `environments/site/inventory/group_vars/all/defaults.yml:appliances_extra_packages_other`
   
-  This produces an image `openhpc-freeipa-...`.
-
-- `opengpu`: This starts from the `base` image and adds the `nvidia-open`
-  drivers and `cuda`. It produces an image `openhpc-cuda-...` suitable for A100
-  nodes only. It should support GRES autodetection via the `nvidia` (not `nvml`)
-  mechanism.
+  This produces an image `openhpc-nvs-...`.
 
 To build these run the following command in the `packer/` directory:
 
@@ -236,8 +237,8 @@ To build these run the following command in the `packer/` directory:
 
 where `$NAME` should be replaced with the variable file name as above, e.g. `base`.
 
-Once the `base` image has built, the `opengpu` Packer variables file must be
-updated to reference the new `base` image.
+Once the `opengpu` image has built, the `nvs` Packer variables file must be updated
+to reference the new `opengpu` image.
 
 After each build, the properties should be set using:
 
