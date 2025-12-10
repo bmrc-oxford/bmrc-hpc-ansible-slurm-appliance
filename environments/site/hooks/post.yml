@@ -1,0 +1,23 @@
+- hosts: openhpc:!builder
+  become: true
+  gather_facts: true
+  name: Set lmod modulepath
+  tasks:
+    - name: Set modulepath based on microarch
+      # Can't use /etc/lmod/.modulespath as openhpc's /etc/profile.d/lmod.sh unconditionally sets it
+      ansible.builtin.copy:
+        # docs: https://lmod.readthedocs.io/en/latest/030_installing.html#installing-lmod
+        #dest: /etc/lmod/.modulespath
+        dest: /etc/profile.d/z_site_modules.sh
+        content: |
+          export MODULEPATH={{ modulepaths[processor_model_key] }}:$MODULEPATH
+        owner: root
+        mode: u=rw,go=r
+      vars:
+        processor_info_string: "{{ ansible_processor | unique | map('lower') | join(' ') }}"
+        processor_model_key: "{{ modulepaths.keys() | select('in', processor_info_string) | list | first }}"
+        modulepaths:
+          cascadelake: /apps/eb/el9/2023a/cascadelake/modules/all
+          skylake: /apps/eb/el9/2023a/skylake/modules/all/
+          icelake: /apps/eb/el9/2023a/cascadelake/modules/all # NB: don't have icelake
+

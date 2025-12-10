@@ -1,3 +1,5 @@
+# Unless noted otherwise features enabled here are tested by CI site.yml playbook
+
 [basic_users:children]
 cluster
 
@@ -20,7 +22,7 @@ cluster
 # --- end of FreeIPA example ---
 
 [manila:children]
-# Allows demo; also installs manila client in fat image
+# Not actully tested but allows demo using this environment
 login
 compute
 
@@ -28,25 +30,7 @@ compute
 cluster
 
 [tuned:children]
-# Install tuned into fat image
-# NB: builder has tuned_enabled and tuned_started false so does not configure it
-builder
-# Also test tuned during site playbook
 cluster
-
-[squid:children]
-# Install squid into fat image
-builder
-
-[squid]
-# DO NOT MERGE:
-# configure squid on deploy host (steveb-dev) using stackhpc-dev network
-localhost ansible_host=10.20.0.121 ansible_connection=local
-# Note you could add any other connection vars e.g. ansible_user you need here
-
-[sssd:children]
-# Install sssd into fat image
-builder
 
 [rebuild:children]
 control

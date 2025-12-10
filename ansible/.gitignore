@@ -96,3 +96,7 @@ roles/*
 !roles/nhc/**
 !roles/eessi/
 !roles/eessi/**
+!roles/topology/
+!roles/topology/**
+!roles/raid/
+!roles/raid/**

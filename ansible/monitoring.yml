@@ -5,11 +5,11 @@
   hosts: opensearch
   tags: opensearch
   tasks:
-    - import_role:
+    - ansible.builtin.import_role:
         name: opensearch
         tasks_from: install.yml
       become: true
-    - import_role:
+    - ansible.builtin.import_role:
         name: opensearch
         tasks_from: runtime.yml
       become: true
@@ -17,9 +17,8 @@
 - name: Setup slurm stats
   hosts: slurm_stats
   tags: slurm_stats
-  environment: "{{ appliances_environment_vars }}"
   tasks:
-    - include_role:
+    - ansible.builtin.include_role:
         name: slurm_stats
         tasks_from: "{{ 'configure.yml' if appliances_mode == 'configure' else 'main.yml' }}"
 
@@ -27,7 +26,7 @@
   hosts: filebeat
   tags: filebeat
   tasks:
-    - include_role:
+    - ansible.builtin.include_role:
         name: filebeat
         tasks_from: "{{ 'runtime.yml' if appliances_mode == 'configure' else 'main.yml' }}"
 
@@ -35,7 +34,7 @@
   hosts: node_exporter
   tags: node_exporter
   tasks:
-    - import_role:
+    - ansible.builtin.import_role:
         name: cloudalchemy.node_exporter
 
 - name: Deploy OpenOndemand exporter
@@ -45,7 +44,7 @@
     - openondemand
     - openondemand_server
   tasks:
-    - import_role:
+    - ansible.builtin.import_role:
         name: openondemand
         tasks_from: exporter.yml
 
@@ -53,9 +52,8 @@
   hosts: slurm_exporter
   become: true
   tags: slurm_exporter
-  environment: "{{ appliances_environment_vars }}"
   tasks:
-    - include_role:
+    - ansible.builtin.include_role:
         name: slurm_exporter
         tasks_from: "{{ 'configure.yml' if appliances_mode == 'configure' else 'main.yml' }}"
 
@@ -64,7 +62,7 @@
   tags: prometheus
   tasks:
     - name: Check for existing prometheus binaries
-      stat:
+      ansible.builtin.stat:
         path: /usr/local/bin/{{ item }}
       register: prometheus_binaries
       loop:
@@ -72,16 +70,15 @@
         - promtool
     - name: Skip prometheus install if prometheus binaries exist and prometheus_version not defined
       # i.e. if prometheus_version isn't defined we don't care, so use what's already there
-      set_fact:
-        prometheus_skip_install: "{{ false if prometheus_version is defined else true }}" 
+      ansible.builtin.set_fact:
+        prometheus_skip_install: "{{ false if prometheus_version is defined else true }}"
       when: "(prometheus_binaries.results | map(attribute='stat') | map(attribute='exists')) + [prometheus_skip_install is not defined]"
-    - import_role:
+    - ansible.builtin.import_role:
         name: cloudalchemy.prometheus
 
 - name: Deploy grafana
   hosts: grafana
   tags: grafana
-  environment: "{{ appliances_environment_vars }}"
   tasks:
     - name: Skip plugin installation in configure mode
       # done during fatimage - can't do this in vars block as that is recursive
@@ -97,22 +94,22 @@
         group: root
         mode: '0755'
       become: true
-    - include_role:
+    - ansible.builtin.include_role:
         name: cloudalchemy.grafana
       vars:
         # Internal role used to install dashboards as cloudalchemy role does not support all required options:
         grafana_dashboards: []
-    - include_role: # done in same play so it can use handlers from cloudalchemy.grafana
+    - ansible.builtin.include_role: # done in same play so it can use handlers from cloudalchemy.grafana
         name: grafana-dashboards
       when: "appliances_mode != 'configure'"
 
 - name: Deploy alertmanager
   hosts: alertmanager
   tags: alertmanager
-  become: yes
+  become: true
   gather_facts: false
   tasks:
     - name: Configure alertmanager
-      include_role:
+      ansible.builtin.include_role:
         name: alertmanager
         tasks_from: configure.yml

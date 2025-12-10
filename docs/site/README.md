@@ -12,7 +12,8 @@ This repository defines:
 
 In general, NVS-specific configuration is contained in the `site` environment.
 Key differences from the default appliance configuration:
-- Manila CephFS shares for `/home`, `/data` and `/apps` shared directories.
+- Manila CephFS shares for `/home`, `/data` and `/apps` shared directories -
+  the `/apps` one is shared between all environments.
 - Use of the NVS FreeIPA server. A pre-hook and encrypted admin creds are used
   to ensure the hosts exist in IPA but otherwise clusters use the default
   approach of enrolling hosts via OTP and re-enrolling them using persisted
@@ -73,20 +74,20 @@ provisioned. This is usually a one-off action, i.e. will only be required for
 new environments.
 
 ## Manila shares
-For a `dev` environment use:
+Each environment mounts shares `home`, `apps and `data`. All clusters mount the
+same `home` and `apps` shares, whereas the `data` share is environment-specific.
+Example of `data` share creation for the `dev` environment:
 
 ```shell
-openstack share create --share-type cephfstype --name $USER-home CephFS 2
-openstack share create --share-type cephfstype --name $USER-apps CephFS 10
 openstack share create --share-type cephfstype --name $USER-data CephFS 16
-
-openstack share access create $USER-home cephx slurm
-openstack share access create $USER-apps cephx slurm
 openstack share access create $USER-data cephx slurm
 ```
 
-For the `production` environment use `nvs-` instead of `$USER-` as a prefix and
-use sizes (in GiB) of 200, 1024 (= 1TiB) and 163840 (= 160 TiB) respectively.
+For the home and apps shares and the `production` environment's `data` share use
+the prefix `ms-` instead of `$USER-`. These shares have sizes (in GB) as follows:
+- `ms-home`: 200
+- `ms-apps`: 1024
+- `ms-data`: 163840
 
 ## State volume
 
@@ -213,44 +214,36 @@ Detailed steps:
 
 # Image build
 
-There are 2x image builds , referenced by their Packer variables file name in
+There are 2x image builds, referenced by their Packer variables file name in
 `environments/site/*.pkrvars.hcl`:
 
-- `base`: This starts from the upstream StackHPC RockyLinux 9 image, and:
+- `opengpu`: This starts from the upstream StackHPC image and adds `nvidia-open`
+  drivers and `cuda` packages, and should support GRES autodetection via the
+  `nvidia` (not `nvml`) mechanism. It produces an image `openhpc-opengpu-...`.
+  This build should ONLY need updating when the upstream code/image changes, i.e.
+  on appliance upgrades.
+
+- `nvs`: This starts from the upstream StackHPC RockyLinux 9 image, and:
   - Installs `freeipa` client packages.
   - Installs `ondemand-dex` package for OIDC login to Open Ondemand via LDAP.
   - Installs a few additional packages specified in
     `environments/site/inventory/group_vars/all/defaults.yml:appliances_extra_packages_other`
   
-  This produces an image `openhpc-freeipa-...`.
-
-- `opengpu`: This starts from the `base` image and adds the `nvidia-open`
-  drivers and `cuda`. It produces an image `openhpc-cuda-...` suitable for A100
-  nodes only. It should support GRES autodetection via the `nvidia` (not `nvml`)
-  mechanism.
+  This produces an image `openhpc-nvs-...`.
 
 To build these run the following command in the `packer/` directory:
 
-    PACKER_LOG=1 /usr/local/bin/packer build -on-error=ask -var-file=../environments/site/$NAME.pkrvars.hcl openstack.pkr.hcl
+    PACKER_LOG=1 /usr/local/bin/packer build -on-error=ask -var-file=../environments/site/$NAME.pkrvars.hcl openstack.pkr.hcl > ../environments/site/$NAME.build.log
 
 where `$NAME` should be replaced with the variable file name as above, e.g. `base`.
 
-Once the `base` image has built, the `cuda` Packer variables file must be
-updated to reference the new `base` image.
+Once the `opengpu` image has built, the `nvs` Packer variables file must be updated
+to reference the new `opengpu` image.
 
-After build, the properties should be set:
+After each build, the properties should be set using:
 
 ```shell
-openstack image set \
---property hw_architecture='x86_64' \
---property hw_disk_bus='scsi' \
---property hw_firmware_type='uefi' \
---property hw_machine_type='q35' \
---property hw_scsi_model='virtio-scsi' \
---property hw_vif_multiqueue_enabled=true \
---property os_admin_user='rocky' \
---property os_type='linux' \
-<image_name_or_id>
+dev/image-set-properties.sh <image_name_or_id>
 ```
 
 To debug failing builds it can be useful to ssh into the build VM. The key file
