@@ -20,4 +20,5 @@ openhpc_config_extra:
   GresTypes:
     - gpu
   MaxArraySize: 100000
+  MaxJobCount: 100000
 
