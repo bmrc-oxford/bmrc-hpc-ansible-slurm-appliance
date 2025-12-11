@@ -33,7 +33,7 @@ module "cluster" {
       flavor = "m2.large"
     }
   a100 = {
-      nodes = ["a100-00"]
+      nodes = [] # ["a100-00"] # for testing
       flavor = "a100.4cpu_3gpu_435gb"
     }
   }

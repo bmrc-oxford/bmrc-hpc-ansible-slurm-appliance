@@ -29,7 +29,7 @@ module "cluster" {
       flavor = "m3.medium"
     }
     a100 = {
-      nodes = ["a100-00", "a100-01", "a100-02"] # "a100-03" moved to dev
+      nodes = ["a100-00", "a100-01", "a100-02", "a100-03"]
       flavor = "a100.4cpu_3gpu_435gb"
     }
   }
