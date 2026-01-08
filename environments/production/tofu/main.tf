@@ -21,7 +21,7 @@ module "cluster" {
     general = {
       nodes = ["general-00", "general-01", "general-02", "general-03",
                "general-04", "general-05", "general-06", "general-07",
-               "general-08"]
+               "general-08", "general-09", "general-10"]
       flavor = "m3.large"
     }
     legacy = {
@@ -31,6 +31,10 @@ module "cluster" {
     a100 = {
       nodes = ["a100-00", "a100-01", "a100-02", "a100-03"]
       flavor = "a100.4cpu_3gpu_435gb"
+    }
+    ood = {
+      nodes = ["ood-00"]
+      flavor = "m3.large"
     }
   }
 

@@ -1,10 +1,11 @@
 openhpc_nodegroups:
-  - name: general # m2.xlarge.highmem_200disk
+  - name: general # m3.large
   - name: legacy  # m3.medium
   - name: a100
     gres_autodetect: nvidia # can't use nvml b/c disabling slurm package recompile for speed
     gres:
       - conf: "gpu:A100:3"
+  - name: ood # m3.large
 
 openhpc_partitions:
   # TODO: add maxtime, partition_params etc here
@@ -15,6 +16,12 @@ openhpc_partitions:
     default: 'NO'
   - name: a100
     default: 'NO'
+  - name: ood
+    default: 'NO'
+    maxtime: '5-0' # 5 days
+    partition_params:
+      DefMemPerNode: 7600
+      MaxMemPerNode: 30400
 
 openhpc_config_extra:
   GresTypes:
