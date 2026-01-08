@@ -39,6 +39,7 @@ module "cluster" {
   ood = {
     nodes = []
     flavor = "m3.large"
+    }
   }
 
   environment_root = var.environment_root
