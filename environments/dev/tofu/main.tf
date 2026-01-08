@@ -36,6 +36,9 @@ module "cluster" {
       nodes = [] # ["a100-00"] # for testing
       flavor = "a100.4cpu_3gpu_435gb"
     }
+  ood = {
+    nodes = []
+    flavor = "m3.large"
   }
 
   environment_root = var.environment_root
