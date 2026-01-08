@@ -106,3 +106,6 @@ openondemand_apps_jupyter:
 openondemand_apps_rstudio_module_options:
  - ['RStudio-Server/2023.09.1+494-foss-2023a-Java-11-R-4.3.2', 'RStudio-Server/2023.09.1+494-foss-2023a-Java-11-R-4.3.2']
 
+openondemand_desktop_partition: ood
+openondemand_jupyter_partition: ood
+openondemand_rstudio_partition: ood
