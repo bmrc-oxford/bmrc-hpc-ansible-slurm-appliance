@@ -1,16 +1,18 @@
 openhpc_nodegroups:
   - name: general # m3.large
+  - name: general-100disk # m3.large.100disk
   - name: legacy  # m3.medium
   - name: a100
     gres_autodetect: nvidia # can't use nvml b/c disabling slurm package recompile for speed
     gres:
       - conf: "gpu:A100:3"
-  - name: ood # m3.large
+  - name: ood # m3.large.100disk
 
 openhpc_partitions:
   # TODO: add maxtime, partition_params etc here
   # See https://github.com/stackhpc/ansible-role-openhpc/README.md
   - name: general
+    nodegroups: general,general-100disk
     default: 'YES'
   - name: legacy
     default: 'NO'
