@@ -32,13 +32,17 @@ module "cluster" {
       nodes = ["compute-00", "compute-01"]
       flavor = "m2.large"
     }
-  a100 = {
+    general-100disk = {
+      nodes = []
+      flavor = "m3.large.100disk"
+    }
+    a100 = {
       nodes = [] # ["a100-00"] # for testing
       flavor = "a100.4cpu_3gpu_435gb"
     }
-  ood = {
-    nodes = []
-    flavor = "m3.large"
+    ood = {
+      nodes = []
+      flavor = "m3.large"
     }
   }
 
