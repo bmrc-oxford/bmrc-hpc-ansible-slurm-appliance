@@ -25,7 +25,7 @@ module "cluster" {
       flavor = "m3.large"
     }
     general-100disk = {
-      nodes = ["general-09", "general-10"]
+      nodes = ["general-09", "general-10", "general-11", "general-12"]
       flavor = "m3.large.100disk"
     }
     legacy = {
