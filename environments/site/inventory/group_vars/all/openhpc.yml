@@ -32,4 +32,21 @@ openhpc_config_extra:
     - gpu
   MaxArraySize: 100000
   MaxJobCount: 100000
+  AccountingStorageEnforce: # same as BMRC
+    - associations
+    - limits
+    - qos
+    - safe
+  AccountingStorageTRES: # same as BMRC
+    - cpu
+    - mem
+    - energy
+    - node
+    - billing
+    - fs/disk
+    - vmem
+    - pages
+    - gres/gpu
+    - gres/gpumem
+    - gres/gpuutil
 
