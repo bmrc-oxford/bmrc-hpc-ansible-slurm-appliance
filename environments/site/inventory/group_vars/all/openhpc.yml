@@ -7,6 +7,14 @@ openhpc_nodegroups:
     gres:
       - conf: "gpu:A100:3"
   - name: ood # m3.large.100disk
+  - name: v100
+    gres_autodetect: nvidia
+    gres:
+      - conf: "gpu:V100:1"
+  - name: v100-full
+    gres_autodetect: nvidia
+    gres:
+      - conf: "gpu:V100:3"
 
 openhpc_partitions:
   # TODO: add maxtime, partition_params etc here
@@ -26,6 +34,10 @@ openhpc_partitions:
     partition_params:
       DefMemPerNode: 7600
       MaxMemPerNode: 30400
+  - name: v100
+    default: 'NO'
+  - name: v100-full
+    default: 'NO'
 
 openhpc_config_extra:
   GresTypes:
