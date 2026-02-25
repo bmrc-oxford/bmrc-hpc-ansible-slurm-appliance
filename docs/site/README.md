@@ -126,7 +126,7 @@ ssh-keygen -t ed25519
 openstack keypair create --type ssh --public-key ~/.ssh/id_ed25519.pub nvs-analytics-2025
 ```
 
-## Alow your ssh key on the ipa server
+## Allow your ssh key on the ipa server
 
 Connection to the IPA server API is only possible from itself.
 So you need to be authorized for centos@ipa-a.nvs.bmrc.ox.ac.uk
