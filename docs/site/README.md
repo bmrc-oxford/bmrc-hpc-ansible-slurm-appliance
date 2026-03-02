@@ -119,6 +119,27 @@ For `dev` environments the FIP is automatically managed with the cluster.
 - The build VM FIP must be allowed to access the squid proxy.
 - User credentials must be created for the squid proxy.
 
+## Create a keypair
+
+```shell
+ssh-keygen -t ed25519
+openstack keypair create --type ssh --public-key ~/.ssh/id_ed25519.pub nvs-analytics-2025
+```
+
+## Allow your ssh key on the ipa server
+
+Connection to the IPA server API is only possible from itself.
+So you need to be authorized for centos@ipa-a.nvs.bmrc.ox.ac.uk
+
+```shell
+# ansible-vault view environments/site/inventory/group_vars/all/secrets.yml
+ (copy vault_freeipa_admin_password)
+# ssh admin@ipa-a.nvs.bmrc.ox.ac.uk
+# sudo su -
+# vi ~centos/.ssh/authorized_keys
+ (add your public key)
+```
+
 # Creating a new checkout
 
 This section describes how to modify the deployed cluster(s) using a new git
