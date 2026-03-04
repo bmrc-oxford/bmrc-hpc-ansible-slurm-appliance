@@ -41,6 +41,14 @@ module "cluster" {
       nodes = ["ood-00"]
       flavor = "m3.large.100disk"
     }
+    v100 = {
+      nodes = ["v100-00", "v100-01", "v100-02"]
+      flavor = "v100s.xlarge"
+    }
+    v100-full = {
+      nodes = ["v100-03"]
+      flavor = "v100s.full"
+    }
   }
 
   state_volume_provisioning = "attach"

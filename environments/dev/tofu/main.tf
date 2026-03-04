@@ -44,6 +44,10 @@ module "cluster" {
       nodes = []
       flavor = "m3.large"
     }
+    v100 = {
+      nodes = []
+      flavor = "v100s.xlarge"
+    }
   }
 
   environment_root = var.environment_root
