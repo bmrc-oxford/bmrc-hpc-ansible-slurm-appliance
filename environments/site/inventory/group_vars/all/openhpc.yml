@@ -61,4 +61,5 @@ openhpc_config_extra:
     - gres/gpu
     - gres/gpumem
     - gres/gpuutil
-
+  PriorityWeightFairShare: 10000000
+  PriorityWeightAge: 1000000
