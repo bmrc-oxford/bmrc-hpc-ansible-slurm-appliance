@@ -235,7 +235,7 @@ Detailed steps:
 
 # Image build
 
-There are 2x image builds, referenced by their Packer variables file name in
+There are 4x image builds, referenced by their Packer variables file name in
 `environments/site/*.pkrvars.hcl`:
 
 - `opengpu`: This starts from the upstream StackHPC image and adds `nvidia-open`
@@ -243,6 +243,11 @@ There are 2x image builds, referenced by their Packer variables file name in
   `nvidia` (not `nvml`) mechanism. It produces an image `openhpc-opengpu-...`.
   This build should ONLY need updating when the upstream code/image changes, i.e.
   on appliance upgrades.
+
+- `proprietarygpu`: Almost the same as opengpu.
+  It overrides the nvidia driver module stream to install proprietary drivers,
+  for the sake of the ms-v100-xx VMs (nvidia open kernel modules don't support
+  it)
 
 - `nvs`: This starts from the upstream StackHPC RockyLinux 9 image, and:
   - Installs `freeipa` client packages.
@@ -252,14 +257,21 @@ There are 2x image builds, referenced by their Packer variables file name in
   
   This produces an image `openhpc-nvs-...`.
 
+- `nvs-v100`: The same as nvs but starting from openhpc-nvs-proprietarygpu
+  This produces an image `openhpc-nvs-v100-...`.
+
+
 To build these run the following command in the `packer/` directory:
 
-    PACKER_LOG=1 /usr/local/bin/packer build -on-error=ask -var-file=../environments/site/$NAME.pkrvars.hcl openstack.pkr.hcl > ../environments/site/$NAME.build.log
+    PACKER_LOG=1 /usr/local/bin/packer build -on-error=ask -var-file=../environments/site/$NAME.pkrvars.hcl openstack.pkr.hcl | tee ../environments/site/$NAME.build.log
 
 where `$NAME` should be replaced with the variable file name as above, e.g. `base`.
 
 Once the `opengpu` image has built, the `nvs` Packer variables file must be updated
 to reference the new `opengpu` image.
+
+Once the `proprietarygpu` image has built, the `nvs-v100` Packer variables file must be updated
+to reference the new `proprietarygpu` image.
 
 After each build, the properties should be set using:
 
