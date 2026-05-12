@@ -10,6 +10,7 @@ cuda_packages_default:
   - "cuda-toolkit-{{ cuda_package_version }}"
   - nvidia-gds
   - cmake
+  - pciutils
 cuda_packages_fabricmanager:
   - "nvidia-fabricmanager-{{ cuda_nvidia_driver_version }}"
 cuda_packages: "{{ cuda_packages_default + ( cuda_packages_fabricmanager if cuda_install_nvidiafabricmanger | bool else [] ) }}"

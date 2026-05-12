@@ -1,0 +1,11 @@
+---
+# override the driver stream from 580-open
+cuda_nvidia_driver_stream: 580-dkms
+cuda_nvidia_driver_version: '580.159.03-1'
+cuda_nvidia_driver_pkg: "cuda-drivers-3:{{ cuda_nvidia_driver_version }}.el{{ ansible_distribution_major_version }}"
+cuda_packages_default:
+  - "cuda-toolkit-{{ cuda_package_version }}"
+# nvidia-gds is not compatible with proprietary drivers
+#  - nvidia-gds
+  - cmake
+  - pciutils

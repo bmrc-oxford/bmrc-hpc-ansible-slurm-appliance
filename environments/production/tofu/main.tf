@@ -44,10 +44,12 @@ module "cluster" {
     v100 = {
       nodes = ["v100-00", "v100-01", "v100-02"]
       flavor = "v100s.xlarge"
+      image_id = "67b2320a-7fc1-4b09-a0d8-148eff779ffa" # openhpc-nvs-v100-260507-0911-345e5697
     }
     v100-full = {
       nodes = ["v100-03"]
       flavor = "v100s.full"
+      image_id = "67b2320a-7fc1-4b09-a0d8-148eff779ffa" # openhpc-nvs-v100-260507-0911-345e5697
     }
   }
 

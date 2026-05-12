@@ -35,6 +35,7 @@
       register: _ipa_host_check
       check_mode: yes
       changed_when: false
+      throttle: 10
 
     - name: Add host to IPA
       # Using random_password=true this unenroles an enroled host, hence the check above
