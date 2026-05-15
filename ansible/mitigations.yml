@@ -1,0 +1,55 @@
+- name: Apply dirtyfrag mitigation
+  hosts: mitigate_dirtyfrag
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Prevent modules loading
+      ansible.builtin.copy:
+        dest: /etc/modprobe.d/dirtyfrag.conf
+        owner: root
+        group: root
+        mode: u=rw,go=r
+        content: |
+          install esp4 /bin/false
+          install esp6 /bin/false
+          install rxrpc /bin/false
+    # below probably is not needed but is safer
+    - name: Unload modules
+      ansible.builtin.command:
+        cmd: rmmod esp4 esp6 rxrpc
+      failed_when: false
+      changed_when: true
+    - name: Clear page cache
+      ansible.builtin.command:
+        cmd: echo 3 > /proc/sys/vm/drop_caches
+      changed_when: true
+
+- name: Apply ssh-keysign-pwn mitigation
+  hosts: mitigate_ssh_keysign_pwn
+  become: true
+  gather_facts: false
+  tasks:
+    # See https://docs.kernel.org/admin-guide/LSM/Yama.html for explanation
+    - name: Apply ssh-keysign-pwn mitigation to live system
+      ansible.builtin.command: sysctl kernel.yama.ptrace_scope=2
+      changed_when: true
+    - name: Get current ptrace_scope value
+      ansible.builtin.slurp:
+        src: /proc/sys/kernel/yama/ptrace_scope
+      check_mode: false
+      changed_when: false
+      register: ptrace_scope
+    - name: Show ptrace_scope after fix
+      ansible.builtin.debug:
+        msg: "/proc/sys/kernel/yama/ptrace_scope={{ ptrace_scope.content|b64decode }}"
+    - name: Prepare sysctl.d file to apply mitigation upon reboot
+      ansible.builtin.copy:
+        dest: /etc/sysctl.d/99-prevent-ptrace_scope.conf
+        content: |
+          # this is a mitigation for ssh-keysign-pwn
+          # See https://seclists.org/oss-sec/2026/q2/529 for the announcement
+          kernel.yama.ptrace_scope=2
+        owner: root
+        group: root
+        mode: "0644"
+
