@@ -5,3 +5,7 @@ appliances_extra_packages_other:
 - pam-devel
 - patch
 - vim-enhanced
+
+appliances_admin_user_groups:
+- admins  # nvs administrators
+- adm  # rocky
