@@ -207,6 +207,6 @@ fatimage
 
 ## Vulnerability mitigation groups
 [mitigate_dirtyfrag:children]
-builder
+cluster
 [mitigate_ssh_keysign_pwn:children]
 cluster
