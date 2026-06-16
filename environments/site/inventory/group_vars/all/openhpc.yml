@@ -1,6 +1,7 @@
 openhpc_nodegroups:
-  - name: general # m3.large
+  - name: general # m3.large.cascadelake
   - name: general-100disk # m3.large.100disk
+  - name: general_skylake # m3.large.skylake
   - name: legacy  # m3.medium
   - name: a100
     gres_autodetect: nvidia # can't use nvml b/c disabling slurm package recompile for speed
@@ -23,6 +24,7 @@ openhpc_partitions:
     nodegroups:
       - general
       - general-100disk
+      - general_skylake
     default: 'YES'
   - name: legacy
     default: 'NO'
