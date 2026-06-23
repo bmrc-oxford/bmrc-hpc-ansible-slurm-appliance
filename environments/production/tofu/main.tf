@@ -18,16 +18,20 @@ module "cluster" {
   }
 
   compute = {
+    general_skylake = {
+      nodes = ["general-03", "general-05"]
+      flavor = "m3.large.skylake"
+    }
     general = {
-      nodes = ["general-00", "general-01", "general-02", "general-03",
-               "general-04", "general-05", "general-06", "general-07",
+      nodes = ["general-00", "general-01", "general-02",
+               "general-04", "general-06", "general-07",
                "general-08"]
-      flavor = "m3.large"
+      flavor = "m3.large.cascadelake"
     }
     general-100disk = {
       nodes = ["general-09", "general-10", "general-11", "general-12",
                "general-13", "general-14", "general-15"]
-      flavor = "m3.large.100disk"
+      flavor = "m3.large.icelake.100disk"
     }
     legacy = {
       nodes = ["legacy-00", "legacy-01"]
