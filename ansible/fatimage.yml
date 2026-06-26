@@ -10,6 +10,16 @@
     - name: Report inventory groups
       ansible.builtin.debug:
         var: group_names
+    - name: Report ssh command to connect
+      ansible.builtin.debug:
+        msg: >
+          connect to builder machine using:
+          ssh {% if ansible_ssh_port | default(false) %}-p {{ ansible_ssh_port }}{% endif %}
+          {% if ansible_ssh_private_key_file | default(false) %} -i {{ ansible_ssh_private_key_file }}{% endif %}
+          {{ ansible_ssh_common_args | default('') }}
+          {{ ansible_ssh_extra_args | default('') }}
+          -o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null
+          {{ ansible_user }}@{{ ansible_host }}
 
 - name: Run pre.yml hook
   vars:
@@ -18,14 +28,21 @@
   import_playbook: "{{ hook_path if hook_path | exists else 'noop.yml' }}"
   when: hook_path | exists
 
+- ansible.builtin.import_playbook: validate-galaxy.yml
+
+- ansible.builtin.import_playbook: mitigations.yml
+
 - name: Sync pulp repos with upstream
   hosts: pulp_site
+  gather_facts: true
   tasks:
     - ansible.builtin.include_role:
         name: pulp_site
         tasks_from: sync.yml
         apply:
           delegate_to: localhost
+      vars:
+        pulp_site_target_distribution_version: "{{ hostvars[groups['pulp_site'][0]]['ansible_facts']['distribution_version'] }}"
       when: appliances_mode != 'configure'
 
 - import_playbook: bootstrap.yml
@@ -60,6 +77,11 @@
         name: sssd
         tasks_from: install.yml
       when: "'sssd' in group_names"
+    - name: Install opkssh
+      ansible.builtin.import_role:
+        name: opkssh
+        tasks_from: install.yml
+      when: "'opkssh' in group_names"
 
     # - import_playbook: filesystems.yml:
     - name: Install nfs packages
@@ -76,6 +98,13 @@
         name: lustre
         tasks_from: install.yml
       when: "'lustre' in group_names"
+
+- name: Run post-filesystems.yml hook
+  vars:
+    appliances_environment_root: "{{ lookup('env', 'APPLIANCES_ENVIRONMENT_ROOT') }}"
+    hook_path: "{{ appliances_environment_root }}/hooks/post-filesystems.yml"
+  ansible.builtin.import_playbook: "{{ hook_path if hook_path | exists else 'noop.yml' }}"
+  when: hook_path | exists
 
 - import_playbook: extras.yml
 
@@ -121,40 +150,31 @@
       when: "'openhpc' in group_names"
 
     # - import_playbook: portal.yml
-    - name: Open OnDemand server (packages)
+    - name: Install Open OnDemand server and apps
       ansible.builtin.include_role:
-        name: osc.ood
-        tasks_from: install-package.yml
-        vars_from: "Rocky/{{ ansible_distribution_major_version }}.yml"
-      when: "'openondemand' in group_names"
-
-    - name: Open OnDemand server (apps)
-      ansible.builtin.include_role:
-        name: osc.ood
-        tasks_from: install-apps.yml
-        vars_from: "Rocky/{{ ansible_distribution_major_version }}.yml"
+        name: openondemand
       when: "'openondemand' in group_names"
 
     - name: Open OnDemand remote desktop # Used for plain desktop and matlab
-      ansible.builtin.import_role:
+      ansible.builtin.include_role:
         name: openondemand
         tasks_from: vnc_compute.yml
-      when: "'openondemand_desktop' or 'openondemand_matlab' in group_names"
+      when: "'openondemand_desktop' in group_names or 'openondemand_matlab' in group_names"
 
     - name: Open OnDemand Jupyter node
-      ansible.builtin.import_role:
+      ansible.builtin.include_role:
         name: openondemand
         tasks_from: jupyter_compute.yml
       when: "'openondemand_jupyter' in group_names"
 
     - name: Open OnDemand RStudio node
-      ansible.builtin.import_role:
+      ansible.builtin.include_role:
         name: openondemand
         tasks_from: rstudio_compute.yml
       when: "'openondemand_rstudio' in group_names"
 
     - name: Open OnDemand Code Server node
-      ansible.builtin.import_role:
+      ansible.builtin.include_role:
         name: openondemand
         tasks_from: codeserver_compute.yml
       when: "'openondemand_codeserver' in group_names"
@@ -180,12 +200,12 @@
       when: "'filebeat' in group_names"
 
     - ansible.builtin.import_role:
-        # can't only run cloudalchemy.node_exporter/tasks/install.yml as needs vars from preflight.yml and triggers service start
+        # no prometheus.prometheus.node_exporter/tasks/install.yml
         # however starting node exporter is ok
-        name: cloudalchemy.node_exporter
+        name: prometheus.prometheus.node_exporter
       when: "'node_exporter' in group_names"
 
-    - name: Openondemand exporter
+    - name: Open Ondemand exporter
       ansible.builtin.dnf:
         name: ondemand_exporter
       when: "'openondemand' in group_names"
@@ -198,8 +218,15 @@
 
     - name: Install alertmanager
       ansible.builtin.include_role:
-        name: alertmanager
-        tasks_from: install.yml
+        name: prometheus.prometheus.alertmanager
+      vars:
+        alertmanager_skip_configure: true
+        # must be overridden because the alertmanager password is undefined at this staged
+        # so it won't pass "Validating arguments against arg spec 'main'"
+        alertmanager_web_config:
+          basic_auth_users: {}
+          http_server_config: {}
+          tls_server_config: {}
       when: "'alertmanager' in group_names"
 
     - name: Download HPL source
@@ -213,58 +240,12 @@
   gather_facts: true
   tasks:
     - ansible.builtin.import_role:
-        name: cloudalchemy.prometheus
-        tasks_from: preflight.yml
-
-    # can't run cloudalchemy.prometheus/tasks/install.yml as it triggers a unit start
-    # so below is a partial extraction of this:
-    - name: Create prometheus system group
-      ansible.builtin.group:
-        name: prometheus
-        system: true
-        state: present
-
-    - name: Create prometheus system user
-      ansible.builtin.user:
-        name: prometheus
-        system: true
-        shell: "/usr/sbin/nologin"
-        group: prometheus
-        createhome: false
-        home: "{{ prometheus_db_dir }}"
-
-    - name: Download prometheus binary to local folder
-      become: false
-      ansible.builtin.get_url:
-        # yamllint disable-line rule:line-length
-        url: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-{{ go_arch }}.tar.gz"
-        dest: "/tmp/prometheus-{{ prometheus_version }}.linux-{{ go_arch }}.tar.gz"
-        checksum: "sha256:{{ __prometheus_checksum }}"
-        mode: "0644"
-      register: _download_archive
-      until: _download_archive is succeeded
-      retries: 5
-      delay: 2
-
-    - name: Unpack prometheus binaries
-      become: false
-      ansible.builtin.unarchive:
-        remote_src: true
-        src: "/tmp/prometheus-{{ prometheus_version }}.linux-{{ go_arch }}.tar.gz"
-        dest: "/tmp"
-        creates: "/tmp/prometheus-{{ prometheus_version }}.linux-{{ go_arch }}/prometheus"
-
-    - name: Propagate official prometheus and promtool binaries
-      ansible.builtin.copy:
-        remote_src: true
-        src: "/tmp/prometheus-{{ prometheus_version }}.linux-{{ go_arch }}/{{ item }}"
-        dest: "{{ _prometheus_binary_install_dir }}/{{ item }}"
-        mode: "0755"
-        owner: root
-        group: root
-      with_items:
-        - prometheus
-        - promtool
+        name: prometheus.prometheus.prometheus
+      vars:
+        prometheus_skip_configure: true
+        # prometheus_alert_rules contain undefined variables at this time, causing
+        # an assertion failure in arg check
+        prometheus_alert_rules: []
 
 - hosts: grafana
   become: true

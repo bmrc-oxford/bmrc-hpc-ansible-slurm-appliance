@@ -103,7 +103,15 @@ openhpc
 [vgpu]
 # Hosts where vGPU/MIG should be configured - see docs/mig.md
 
+<<<<<<< HEAD
 [eessi]
+=======
+[journald:children]
+# Hosts where journald should be configured. See ansible/roles/journald/README.md.
+cluster
+
+[eessi:children]
+>>>>>>> stackhpc/main
 # Hosts on which EESSI stack should be configured
 
 [resolv_conf]
@@ -124,6 +132,7 @@ openondemand
 [squid:children]
 # Hosts to run squid proxy
 fatimage
+control
 
 [tuned:children]
 # Hosts to run TuneD configuration
@@ -160,8 +169,9 @@ fatimage
 [lustre]
 # Hosts to run lustre client
 
-[extra_packages]
-# Hosts to install specified additional packages on
+[extra_packages:children]
+# Groups to install specified additional packages on
+fatimage
 
 [dnf_repos:children]
 # Hosts to replace system repos with Pulp repos
@@ -203,10 +213,21 @@ compute
 # Add `builder` to configure image for software raid
 fatimage
 
-[proprietarygpu]
+[mounts:children]
+# Hosts with custom mounts
+login
+compute
+
+[opkssh]
+# Hosts to run opkssh to allow SSH via OIDC
 
 ## Vulnerability mitigation groups
+## apply to cluster until new image
 [mitigate_dirtyfrag:children]
 cluster
 [mitigate_ssh_keysign_pwn:children]
 cluster
+[mitigate_cve_2026_43037:children]
+cluster
+
+[proprietarygpu]

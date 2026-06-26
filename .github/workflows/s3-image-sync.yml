@@ -1,5 +1,5 @@
 name: Upload CI-tested images to Leafcloud S3 and sync clouds
-on:
+'on':
   workflow_dispatch:
   push:
     branches:
@@ -11,37 +11,37 @@ env:
   IMAGE_PATH: environments/.stackhpc/tofu/cluster_image.auto.tfvars.json
   RUNNER_IMAGE_DIR: /mnt/images
 
-permissions:
-  contents: read
-  packages: write
-  # To report GitHub Actions status checks
-  statuses: write
+permissions: {}
 
 jobs:
   s3_cleanup:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     concurrency: ${{ github.workflow }}-${{ github.ref }}
     strategy:
       fail-fast: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
 
       - name: Write s3cmd configuration
         run: |
-          echo "${{ secrets['LEAFCLOUD_S3_CFG'] }}" > ~/.s3cfg
+          echo "$SECRETS_LEAFCLOUD_S3_CFG" > ~/.s3cfg
         shell: bash
+        env:
+          SECRETS_LEAFCLOUD_S3_CFG: ${{ secrets.LEAFCLOUD_S3_CFG }}
 
       - name: Install s3cmd
         run: |
           sudo apt-get update
           sudo apt-get --yes install s3cmd
-      
+
       - name: Cleanup S3 bucket
         run: |
-          s3cmd rm s3://${{ env.S3_BUCKET }} --recursive --force
+          s3cmd rm "s3://$S3_BUCKET" --recursive --force
 
   image_upload:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: s3_cleanup
     concurrency: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.build }}
     strategy:
@@ -51,18 +51,20 @@ jobs:
           - RL8
           - RL9
     env:
-      ANSIBLE_FORCE_COLOR: True
+      ANSIBLE_FORCE_COLOR: 'true'
       OS_CLOUD: openstack
       CI_CLOUD: ${{ vars.CI_CLOUD }}
     outputs:
       ci_cloud: ${{ steps.ci.outputs.CI_CLOUD }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
 
       - name: Record which cloud CI is running on
         id: ci
         run: |
-          echo "CI_CLOUD=${{ env.CI_CLOUD }}" >> "$GITHUB_OUTPUT"
+          echo "CI_CLOUD=${CI_CLOUD}" >> "$GITHUB_OUTPUT"
 
       - name: Setup environment
         run: |
@@ -75,13 +77,17 @@ jobs:
       - name: Write clouds.yaml
         run: |
           mkdir -p ~/.config/openstack/
-          echo "${{ secrets[format('{0}_CLOUDS_YAML', env.CI_CLOUD)] }}" > ~/.config/openstack/clouds.yaml
+          echo "$SECRETS_CLOUD" > ~/.config/openstack/clouds.yaml
         shell: bash
+        env:
+          SECRETS_CLOUD: ${{ secrets[format('{0}_CLOUDS_YAML', env.CI_CLOUD)] }} # zizmor: ignore[overprovisioned-secrets]
 
       - name: Write s3cmd configuration
         run: |
-          echo "${{ secrets['LEAFCLOUD_S3_CFG'] }}" > ~/.s3cfg
+          echo "$SECRETS_LEAFCLOUD_S3_CFG" > ~/.s3cfg
         shell: bash
+        env:
+          SECRETS_LEAFCLOUD_S3_CFG: ${{ secrets.LEAFCLOUD_S3_CFG }}
 
       - name: Install s3cmd and qemu-utils
         run: |
@@ -90,35 +96,37 @@ jobs:
 
       - name: Retrieve image name
         run: |
-          TARGET_IMAGE=$(jq --arg version "${{ matrix.build }}" -r '.cluster_image[$version]' "${{ env.IMAGE_PATH }}")
+          TARGET_IMAGE=$(jq --arg version "$MATRIX_BUILD" -r '.cluster_image[$version]' "$IMAGE_PATH")
           echo "TARGET_IMAGE=${TARGET_IMAGE}" >> "$GITHUB_ENV"
         shell: bash
+        env:
+          MATRIX_BUILD: ${{ matrix.build }}
 
       - name: Download image to runner
         run: |
           . venv/bin/activate
           df -h
-          sudo mkdir ${{ env.RUNNER_IMAGE_DIR }}
-          sudo chmod ugo=rwX ${{ env.RUNNER_IMAGE_DIR }}
-          openstack image save --file "${{ env.RUNNER_IMAGE_DIR }}/${{ env.TARGET_IMAGE }}.raw" "${{ env.TARGET_IMAGE }}"
+          sudo mkdir "$RUNNER_IMAGE_DIR"
+          sudo chmod ugo=rwX "$RUNNER_IMAGE_DIR"
+          openstack image save --file "${RUNNER_IMAGE_DIR}/${TARGET_IMAGE}.raw" "${TARGET_IMAGE}"
           df -h
         shell: bash
 
       - name: Convert image to QCOW2
         run: |
           . venv/bin/activate
-          qemu-img convert -f raw -O qcow2 -c "${{ env.RUNNER_IMAGE_DIR }}/${{ env.TARGET_IMAGE }}.raw" "${{ env.RUNNER_IMAGE_DIR }}/${{ env.TARGET_IMAGE }}"
+          qemu-img convert -f raw -O qcow2 -c "${RUNNER_IMAGE_DIR}/${TARGET_IMAGE}.raw" "${RUNNER_IMAGE_DIR}/${TARGET_IMAGE}"
         shell: bash
 
       - name: Upload Image to S3
         run: |
-          echo "Uploading Image: ${{ env.TARGET_IMAGE }} to S3..."
-          s3cmd --multipart-chunk-size-mb=150 put "${{ env.RUNNER_IMAGE_DIR }}/${{ env.TARGET_IMAGE }}" s3://${{ env.S3_BUCKET }}
+          echo "Uploading Image: ${TARGET_IMAGE} to S3..."
+          s3cmd --multipart-chunk-size-mb=150 put "${RUNNER_IMAGE_DIR}/${TARGET_IMAGE}" "s3://${S3_BUCKET}"
         shell: bash
 
   image_sync:
     needs: image_upload
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     concurrency: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.cloud }}-${{ matrix.build }}
     strategy:
       fail-fast: false
@@ -126,23 +134,24 @@ jobs:
         cloud:
           - LEAFCLOUD
           - SMS
-          - ARCUS
         build:
           - RL8
           - RL9
-        exclude: 
+        exclude:
           - cloud: ${{ needs.image_upload.outputs.ci_cloud }}
 
     env:
-      ANSIBLE_FORCE_COLOR: True
+      ANSIBLE_FORCE_COLOR: 'true'
       OS_CLOUD: openstack
       CI_CLOUD: ${{ matrix.cloud }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
 
       - name: Record which cloud CI is running on
         run: |
-          echo CI_CLOUD: ${{ env.CI_CLOUD }}
+          echo "CI_CLOUD: ${CI_CLOUD}"
 
       - name: Setup environment
         run: |
@@ -155,29 +164,33 @@ jobs:
       - name: Write clouds.yaml
         run: |
           mkdir -p ~/.config/openstack/
-          echo "${{ secrets[format('{0}_CLOUDS_YAML', env.CI_CLOUD)] }}" > ~/.config/openstack/clouds.yaml
+          echo "$SECRETS_CLOUD" > ~/.config/openstack/clouds.yaml
         shell: bash
+        env:
+          SECRETS_CLOUD: ${{ secrets[format('{0}_CLOUDS_YAML', env.CI_CLOUD)] }} # zizmor: ignore[overprovisioned-secrets]
 
       - name: Retrieve image name
         run: |
-          TARGET_IMAGE=$(jq --arg version "${{ matrix.build }}" -r '.cluster_image[$version]' "${{ env.IMAGE_PATH }}")
+          TARGET_IMAGE=$(jq --arg version "$MATRIX_BUILD" -r '.cluster_image[$version]' "${IMAGE_PATH}")
           echo "TARGET_IMAGE=${TARGET_IMAGE}" >> "$GITHUB_ENV"
+        env:
+          MATRIX_BUILD: ${{ matrix.build }}
 
       - name: Download latest image if missing
         run: |
           . venv/bin/activate
-          bash .github/bin/get-s3-image.sh ${{ env.TARGET_IMAGE }} ${{ env.S3_BUCKET }}
+          bash .github/bin/get-s3-image.sh "${TARGET_IMAGE}" "${S3_BUCKET}"
 
       - name: Set Glance image properties correctly for Slurm images
         run: |
           . venv/bin/activate
-          . dev/image-set-properties.sh "${{ env.TARGET_IMAGE }}"
+          . dev/image-set-properties.sh "${TARGET_IMAGE}"
 
       - name: Cleanup OpenStack Image (on error or cancellation)
         if: cancelled() || failure()
         run: |
           . venv/bin/activate
-          image_hanging=$(openstack image list --name ${{ env.TARGET_IMAGE }} -f value -c ID -c Status | grep -v ' active$' | awk '{print $1}')
+          image_hanging=$(openstack image list --name "${TARGET_IMAGE}" -f value -c ID -c Status | grep -v ' active$' | awk '{print $1}')
           if [ -n "$image_hanging" ]; then
             echo "Cleaning up OpenStack image with ID: $image_hanging"
             openstack image delete "$image_hanging"

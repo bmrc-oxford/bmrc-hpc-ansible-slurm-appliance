@@ -12,7 +12,7 @@ DOCUMENTATION = """
 module: map_hosts
 short_description: Creates map of OpenStack VM network topology
 description:
-    - Creates map representing the network topology tree of an OpenStack project with a heirarchy
+    - Creates map representing the network topology tree of an OpenStack project with a hierarchy
       of: Availability Zone -> Hypervisors -> VMs/Baremetal instances
 options:
     compute_vms:
@@ -81,6 +81,11 @@ def run_module():  # pylint: disable=missing-function-docstring
             if host_id not in topo[az]:
                 topo[az][host_id] = []
             topo[az][host_id].append(s["name"])
+
+    if len(all_host_ids) == 0:
+        module.fail_json(
+            msg="No host_ids retrieved for servers - are OpenStack credentials correct?"
+        )
 
     uuid_len = min_prefix(list(set(all_host_ids)))
 

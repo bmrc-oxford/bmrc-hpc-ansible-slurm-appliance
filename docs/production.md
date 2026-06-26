@@ -163,33 +163,39 @@ will have been generated for you already under
 
 ## Define and deploy infrastructure
 
-Create an OpenTofu variables file to define the required infrastructure, e.g.:
+Modify the cookiecutter-templated OpenTofu configuration to define the required
+infrastructure, e.g.:
 
-```text
-# environments/$ENV/tofu/terraform.tfvars
-cluster_name = "mycluster"
-cluster_networks = [
-  {
-    network = "some_network" # *
-    subnet = "some_subnet" # *
-  }
-]
-key_pair = "my_key" # *
-control_node_flavor = "some_flavor_name"
-login = {
-    # Arbitrary group name for these login nodes
-    interactive = {
-        nodes: ["login-0"]
-        flavor: "login_flavor_name" # *
+```hcl
+# environments/$ENV/tofu/main.tf
+module "cluster" {
+  source           = "../../site/tofu/"
+  environment_root = var.environment_root
+
+  cluster_name = "mycluster"
+  cluster_networks = [
+    {
+      network = "some_network" # *
+      subnet = "some_subnet" # *
     }
-}
-cluster_image_id = "rocky_linux_9_image_uuid"
-compute = {
+  ]
+  key_pair = "my_key" # *
+  control_node_flavor = "some_flavor_name"
+  login = {
+      # Arbitrary group name for these login nodes
+      head = {
+        nodes = ["login-0"]
+        flavor = "login_flavor_name" # *
+      }
+  }
+  cluster_image_id = "rocky_linux_9_image_uuid"
+  compute = {
     # Group name used for compute node partition definition
     general = {
-        nodes: ["compute-0", "compute-1"]
-        flavor: "compute_flavor_name" # *
+      nodes = ["compute-0", "compute-1"]
+      flavor = "compute_flavor_name" # *
     }
+  }
 }
 ```
 
@@ -203,7 +209,7 @@ Note that:
 - Environment-specific variables (`cluster_name`) should be hardcoded into
   the cluster module block.
 
-- Environment-independent variables (e.g. maybe `cluster_net` if the same
+- Environment-independent variables (e.g. maybe `cluster_networks` if the same
   is used for staging and production) should be set as _defaults_ in
   `environments/site/tofu/variables.tf`, and then don't need to be passed
   in to the module.
@@ -241,7 +247,7 @@ either for a specific environment within the cluster module block in
 default in `environments/site/tofu/variables.tf`.
 
 For a development environment allowing OpenTofu to manage the volumes using the
-default value of `"manage"` for those varibles is usually appropriate, as it
+default value of `"manage"` for those variables is usually appropriate, as it
 allows for multiple clusters to be created with this environment.
 
 If no home volume at all is required because the home directories are provided
@@ -286,6 +292,24 @@ if your cluster does not include any baremetal nodes. This can be enabled by:
 
 Consider whether mapping of baremetal nodes to ironic nodes is required. See
 [PR 485](https://github.com/stackhpc/ansible-slurm-appliance/pull/485).
+
+Consider whether any Open Ondemand server (by default, the first login node)
+will use Let's Encrypt for certificates. If so the OpenTofu variable
+`login_security_groups` must be modified to include a pre-existing security
+group allowing inbound access to port 80, e.g.:
+
+```hcl
+# environments/site/tofu/variables.tf:
+variable "login_security_groups" {
+  ...
+  default = [
+    "default", # allow all in-cluster services
+    "SSH",     # access via ssh
+    "HTTP",    # HTTP-01 challenge for Let's Encrypt
+    "HTTPS",   # access OpenOndemand
+  ]
+}
+```
 
 To deploy this infrastructure, ensure the venv and the environment are
 [activated](#cookiecutter-instructions) and run:
@@ -333,8 +357,26 @@ environments which should be unique, e.g. production and staging.
   this is usually provided by the hypervisor, but if not (or for bare metal
   instances) it may be necessary to [configure chrony](./chrony.md).
 
-- Consider whether Prometheus storage configuration is required. By default:
+- Consider the appropriate configuration for `/tmp`. By default nodes in `login` and
+  `compute` groups will use a tmpfs with 10% of total memory. This can be modified
+  by overriding `mounts_tmp_size` with either a size in bytes or a percentage
+  of memory (as for 'size' parameter in `man tmpfs`), e.g.:
 
+  ```yaml
+  # environments/site/inventory/group_vars/all/mounts.yml:
+  mounts_tmp_size: "50%"
+  ```
+
+  The use of a tmpfs can be disabled for all nodes using:
+
+  ```yaml
+  # environments/site/inventory/group_vars/all/mounts.yml:
+  mounts_tmp_enabled: false
+  ```
+
+  or the nodes using the `mount` role can be modified in `environments/site/inventory/groups`.
+
+- Consider whether Prometheus storage configuration is required. By default:
   - A 200GB state volume is provisioned (but see above)
   - The common environment
     [sets](../environments/common/inventory/group_vars/all/prometheus.yml) a
@@ -355,6 +397,9 @@ environments which should be unique, e.g. production and staging.
 - Consider whether having (read-only) access to Grafana without login is OK. If
   not, remove `grafana_auth_anonymous` in
   `environments/$ENV/inventory/group_vars/all/grafana.yml`
+
+- Consider if the [default proxy deployment and configuration](./eessi.md#eessi-proxy-configuration)
+  for EESSI is appropriate.
 
 - See the [hpctests docs](../ansible/roles/hpctests/README.md) for advice on
   raising `hpctests_hpl_mem_frac` during tests.
@@ -378,7 +423,6 @@ environments which should be unique, e.g. production and staging.
 - By default, the appliance uses a built-in NFS share backed by an OpenStack
   volume for the cluster home directories. You may find that you want to change
   this. The following alternatives are supported:
-
   - [CephFS via OpenStack Manila](./filesystems.md)
   - [Lustre](../roles/lustre/README.md)
 
@@ -386,6 +430,24 @@ environments which should be unique, e.g. production and staging.
   [CUDA](../roles/cuda/README.md), you will need to build a custom image. It is
   recommended that you build this on top of the latest existing openhpc image.
   See the [image-build docs](image-build.md) for details.
+
+- On systems with a large number of nodes, the default sshd configuration may
+  not be sufficient for the control node (e.g. issues have been seen with
+  ~300 nodes). Consider adding `control` to the `sshd` group to [mitigate these
+  issues](../environments/site/inventory/group_vars/all/sshd.yml).
+
+- Consider using the [pam_slurm_adopt.so](https://slurm.schedmd.com/pam_slurm_adopt.html) PAM plugin.
+  It replaces the default `pam_slurm.so`. Like `pam_slurm.so` it prevents users from ssh-ing into compute nodes
+  they don't have jobs running on. It also ensures users ssh-ing into a compute node will have their session bound
+  to their job's cgroup: they won't be able to use more CPU or memory than was allocated to the job.  
+  WARNING: This plugin conflicts with `pam_systemd.so`. We disable `pam_systemd.so` in `/etc/pam.d/password-auth`
+  during deployment but it will be reverted if `authselect` is later run.
+  Due to the ordering (`slurm.yml` is after `iam.yml` in `site.yml`) it should not happen during a playbook run.
+  It will happen if administrators re-run `authselect sssd --force` manually.
+  ```yaml
+  # environments/site/inventory/group_vars/all/defaults.yml:
+  appliances_enable_pam_slurm_adopt: true
+  ```
 
 ### Applying configuration
 

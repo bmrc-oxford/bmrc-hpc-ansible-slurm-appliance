@@ -30,9 +30,9 @@ The above functionality is configured by running the `ansible/portal.yml` playbo
 
 ## MATLAB
 
-_NB_ Due to licensing, the MATLAB batch connect app requires a MATLAB intallation to be present on the relevant compute nodes. The MATLAB app is therefore disabled by default, and must be enabled by setting `openondemand_matlab_partition` in e.g. `environments/site/inventory/group_vars/all/openondemand.yml` to the name of the partition where MATLAB is available.
+_NB_ Due to licensing, the MATLAB batch connect app requires a MATLAB installation to be present on the relevant compute nodes. The MATLAB app is therefore disabled by default, and must be enabled by setting `openondemand_matlab_partition` in e.g. `environments/site/inventory/group_vars/all/openondemand.yml` to the name of the partition where MATLAB is available.
 
-An Lmod modulefile also needs to be available on compute nodes - this is not provided by the appliance. See e.g.`roles/openondemand/tasks/rstudio_compute.yml` for an example. The modulefile must be named `matlab/$MATLAB_VERSION`, where the version matches thes `openondemand_matlab_version` variable. This variable is set to empty in the role default so must be defined in `environments/site/inventory/group_vars/all/openondemand.yml`.
+An Lmod modulefile also needs to be available on compute nodes - this is not provided by the appliance. See e.g.`roles/openondemand/tasks/rstudio_compute.yml` for an example. The modulefile must be named `matlab/$MATLAB_VERSION`, where the version matches the `openondemand_matlab_version` variable. This variable is set to empty in the role default so must be defined in `environments/site/inventory/group_vars/all/openondemand.yml`.
 
 As MATLAB requires a remote desktop, the TurboVNC and Xfce Desktop packages and configuration from the "openondemand_desktop" app will be automatically applied to nodes where the MATLAB app is enabled.
 
@@ -63,8 +63,21 @@ The appliance automatically configures Open OnDemand to proxy Grafana and adds a
 
 [^1]: Note that if `openondemand_auth` is `basic_pam` and anonymous Grafana login is enabled, the appliance will (by default) configure Open OnDemand's Apache server to remove the Authorisation header from proxying of all `node/` addresses. This is done as otherwise Grafana tries to use this header to authenticate, which fails with the default configuration where only the admin Grafana user `grafana` is created. Note that the removal of this header in this configuration means it cannot be used to authenticate proxied interactive applications - however the appliance-deployed remote desktop and Jupyter Notebook server applications use other authentication methods. An alternative if using `basic_pam` is not to enable anonymous Grafana login and to create Grafana users matching the local users (e.g. in `environments/<env>/hooks/post.yml`).
 
+## Image Build
+
+By default, most ondemand apps are installed in image builds when the build includes the inventory group `openondemand` (which is the default for "fatimage" builds). The apps installed are
+defined by the `openondemand_<app>_partition` variables in `environments/common/inventory/group_vars/all/builder/defaults.yml`. Note that in this case the values are not strings and are instead
+simply truthy, i.e. they do not describe cluster partition groups but just whether those apps will be installed in the image or not.
+
+For e.g. site-specific image builds where different app installs are required, due to precedence rules these must overridden in a `builder`-groupvars file e.g. `environments/site/inventory/group_vars/all/builder/defaults.yml`.
+
 ## Access
 
 By default the appliance authenticates against OOD with basic auth through PAM. When creating a new environment, a new user with username `demo_user` will be created.
 Its password is found under `vault_openondemand_default_user` in the appliance secrets store in `environments/{ENV}/inventory/group_vars/all/secrets.yml`.
 Other users can be defined by overriding the `basic_users_users` variable in your environment (templated into `environments/{ENV}/inventory/group_vars/all/basic_users.yml` by default).
+
+## Certificates
+
+The default configuration uses a self-signed certificate. Instead, you can bring your own certificate and key, or use Let's Encrypt to generate the initial certificate.
+See [../ansible/roles/openondemand/README.md](../ansible/roles/openondemand/README.md) for more details.

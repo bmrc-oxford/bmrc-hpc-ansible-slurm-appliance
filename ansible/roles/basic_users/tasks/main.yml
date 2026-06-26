@@ -1,4 +1,20 @@
 ---
+- name: Ensure uid is defined
+  ansible.builtin.assert:
+    that: "_basic_users_missing_uid | length == 0"
+    fail_msg: "User(s) {{ _basic_users_missing_uid | join(', ') }} are missing uid"
+  vars:
+    _basic_users_missing_uid: "{{ basic_users_users | reject('contains', 'uid') | map(attribute='name') }}"
+  run_once: true
+
+- name: Ensure uid is suitable
+  ansible.builtin.assert:
+    that: "_basic_users_low_uid | length == 0"
+    fail_msg: "User(s) {{ _basic_users_low_uid | join(', ') }} are not 'system' users but have a uid < basic_users_uid_min ({{ basic_users_uid_min }})"
+  vars:
+    _basic_users_low_uid: "{{ basic_users_users | reject('contains', 'system') | selectattr('uid', 'lt', basic_users_uid_min) | map(attribute='name') }}"
+  run_once: true
+
 - name: Terminate systemd user sessions for absent users
   terminate_user_sessions:
     user: "{{ item.name }}"
@@ -61,6 +77,7 @@
     owner: "{{ item.name }}"
     group: "{{ item.name }}"
     mode: u=rwX,go=
+    force: false # prevents user changes to skeleton being overwritten
   loop: "{{ basic_users_users }}"
   loop_control:
     label: "{{ item.name }}"
@@ -86,7 +103,7 @@
     label: "{{ item.name }}"
   when:
     - item.state | default('present') == 'present'
-    - item.generate_ssh_key | default(true) | bool or item.public_key is defined
+    - item.generate_ssh_key | default(basic_users_generate_ssh_key) | bool or item.public_key is defined
     - ansible_hostname == basic_users_homedir_client
 
 - name: Generate cluster ssh key
@@ -103,7 +120,7 @@
     label: "{{ item.name }}"
   when:
     - item.state | default('present') == 'present'
-    - item.generate_ssh_key | default(true)
+    - item.generate_ssh_key | default(basic_users_generate_ssh_key)
     - ansible_hostname == basic_users_homedir_client
   register: _cluster_ssh_keypair
 
@@ -121,7 +138,7 @@
     label: "{{ item.item.name }}"
   when:
     - item.item.state | default('present') == 'present'
-    - item.item.generate_ssh_key | default(true)
+    - item.item.generate_ssh_key | default(basic_users_generate_ssh_key)
     - ansible_hostname == basic_users_homedir_client
     - item.public_key is defined # NB this is the *returned* public key
 

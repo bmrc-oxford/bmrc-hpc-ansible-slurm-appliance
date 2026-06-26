@@ -39,11 +39,11 @@ In summary, the way this functionality works is as follows:
    controlled by the [compute_init](../../ansible/roles/compute_init/README.md)
    role, to fully configure the node again. It retrieves the required cluster
    configuration information from the control node via an NFS mount.
-7. Once the `slurmd` daemon starts on a compute node, the slurm controller
+7. Once the `slurmd` daemon starts on a compute node, the Slurm controller
    registers the node as having finished rebooting. It then launches the actual
    job, which does not do anything.
 
-## Prerequsites
+## Prerequisites
 
 To enable a compute node to rejoin the cluster after a rebuild, functionality
 must be built into the image. Before progressing you should check that all the
@@ -103,7 +103,6 @@ compute = {
 
 5. Update image references in the OpenTofu configuration. Normally these should
    be in:
-
    - `environments/site/tofu/variables.tf`: `cluster_image_id` for the default
      cluster image.
    - `environments/$ENV/tofu/main.tf`: parameter `image_id` in node groups
@@ -114,7 +113,6 @@ compute = {
    rebuild jobs. The default definition in `environments/common/inventory/group_vars/all/openhpc.yml`
    will automatically include this via `openhpc_rebuild_partition` also in that
    file. If modifying this, note the important parameters are:
-
    - `name`: Partition name matching `rebuild` role variable `rebuild_partitions`,
      default `rebuild`.
    - `nodegroups`: A list of nodegroup names, matching `openhpc_nodegroup` and
@@ -134,7 +132,7 @@ compute = {
        Note this is used instead of `PriorityTier` as the latter (with the
        default appliance configuration) allows rebuild jobs to preempt and
        suspend running user jobs, which is probably undesirable.
-     - `Hidden`: Don't show this partition in e.g. `sinfo` for unpriviledged
+     - `Hidden`: Don't show this partition in e.g. `sinfo` for unprivileged
        users.
      - `RootOnly`: Only allow the root user to submit jobs to this partition.
      - `DisableRootJobs`: Don't disable the root user, in case this parameter
@@ -144,13 +142,12 @@ compute = {
        entire node. This means they do not run on nodes as the same time as
        user jobs running in partitions allowing non-exclusive use.
 
-   The value for `maxtime` needs to be sufficent not just for a single node
+   The value for `maxtime` needs to be sufficient not just for a single node
    to be rebuilt, but also to allow for any batching in either OpenTofu or
    in Nova - see remarks in the [production docs](../production.md).
 
    If it is desirable to roll out changes more gradually, it is possible to
    create multiple "rebuild" partitions, but it is necessary that:
-
    - The rebuild partitions should not themselves overlap, else nodes may be
      rebuilt more than once.
    - Each rebuild partition should entirely cover one or more "normal"
@@ -158,7 +155,6 @@ compute = {
      mix of nodes using old and new images.
 
 7. Configure the [rebuild](../../ansible/roles/rebuild/README.md) role:
-
    - Add the `control` node into the `rebuild` group.
    - Ensure an application credential to use for rebuilding nodes is available
      on the deploy host (default location `~/.config/openstack/clouds.yaml`).
@@ -176,7 +172,7 @@ compute = {
    > Due to OpenTofu/Terraform state limitations, this will plan to delete and
    > recreate all compute nodes in node groups where `ignore_image_changes: true`.
    > was not previously set. This is a one-time issue with adding this
-   > parameter, i.e. subsequent applys will not require this.
+   > parameter, i.e. subsequent applies will not require this.
 
 TODO: clarify whether, if the image is bumped at this point, the compute nodes
 actually get recreated on the new or the old image??
@@ -193,7 +189,7 @@ However in general these are likely to be done as part of a general cluster
 upgrade. As described in the introduction to this page that will involve
 rebuilding the login and control nodes to the new image then re-running the
 `site.yml` playbook to reconfigure the cluster. That process is disruptive in
-that users have no access via SSH or Open Ondemand while it is occuring.
+that users have no access via SSH or Open Ondemand while it is occurring.
 However there is no need to drain compute nodes and create reservations etc.
 
 Triggering rebuild jobs is done using the following playbook:
@@ -207,7 +203,7 @@ currently defined in the OpenTofu configuration.
 
 Note that some of the [rebuild role variables](../../ansible/roles/rebuild/README.md)
 may also be useful as extravars, especially for testing or debugging. For
-example the following comand will run in a non-default partition and does not
+example the following command will run in a non-default partition and does not
 actually reboot/rebuild nodes, which may be useful for testing interactions with
 other priority or QOS settings:
 
@@ -258,7 +254,7 @@ The output from the first terminal should show:
 - Job C pends for both partitions
 - Job A completes
 - Rebuild jobs run on the "standard" partition, jumping ahead of JobB and JobC
-- Rebuild jobs complete in the "extra" paritition
+- Rebuild jobs complete in the "extra" partition
 - JobC runs in the "extra" partition
 - JobC completes
 - Rebuild jobs complete in the "standard" partition

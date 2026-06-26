@@ -30,15 +30,18 @@ without requiring LDAP etc. Features:
   This should be a host mounting the home directories. Default is the first
   node in the `login` group which is appropriate for the default appliance
   configuration.
+- `basic_users_uid_min`: Optional int, default `1000`. The minimum UID for
+  normal users, i.e. those without the `system` attribute.
 - `basic_users_users`: Optional, default empty list. A list of mappings defining
   information for each user. In general, mapping keys/values are passed through
   as parameters to [ansible.builtin.user](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html)
   and default values are as given there, with the following differences:
-  - `generate_ssh_key`: Default is `true`, and the generated key is added to
-    the user's authorized keys.
+  - `generate_ssh_key`: Whether to generate a key and add it to the user's
+    authorized keys to allow SSH between nodes. Default determined by
+    `basic_users_generate_ssh_key` (see below).
   - `ssh_key_comment`: Default is username.
   - `home`: Set automatically based on the username and
-    `basic_users_homedir_server_path`. Can be overriden for users with
+    `basic_users_homedir_server_path`. Can be overridden for users with
     non-standard home directory paths.
   - `uid`: Should be set, so that the UID/GID is consistent across the cluster
     (which Slurm requires).
@@ -53,6 +56,8 @@ without requiring LDAP etc. Features:
   - `ssh_key_type` defaults to `ed25519` instead of the `ansible.builtin.user`
     default of `rsa`.
   - Any other keys may present for other purposes (i.e. not used by this role).
+- `basic_users_generate_ssh_key`: Optional bool. Default for `generate_ssh_key`
+  parameter in `basic_users_users` above. Default `true`.
 - `basic_users_groups`: Optional, default empty list. A list of mappings defining information for each group. Mapping keys/values are passed through as parameters to [ansible.builtin.group](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/group_module.html) and default values are as given there.
 - `basic_users_override_sssd`: Optional bool, default false. Whether to disable `sssd` when ensuring users/groups exist with this role. Permits creating local users/groups even if they clash with users provided via sssd (e.g. from LDAP). Ignored if host is not in group `sssd` as well. Note with this option active `sssd` will be stopped and restarted each time this role is run.
 
@@ -62,65 +67,70 @@ None.
 
 ## Example Configurations
 
-With default appliance NFS configuration, create user `alice` with access
-to all nodes except the control node, and delete user `bob`:
+1. With default appliance NFS configuration, create user `alice` with access
+   to all nodes except the control node, and delete user `bob`:
 
-```yaml
-basic_users_users:
-  - comment: Alice Aardvark
-    name: alice
-    uid: 2005
-    public_key: ssh-ed25519 ...
-  - comment: Bob Badger
-    name: bob
-    uid: 2006
-    public_key: ssh-ed25519 ...
-    state: absent
-```
+   ```yaml
+   basic_users_uid_min: 2000
+   basic_users_users:
+     - comment: Alice Aardvark
+       name: alice
+       uid: 2005
+       public_key: ssh-ed25519 ...
+     - comment: Bob Badger
+       name: bob
+       uid: 2006
+       public_key: ssh-ed25519 ...
+       state: absent
+   ```
 
-Using an external share which:
+   Note the UIDs for these users are above the `basic_users_uid_min` set.
 
-- does not root squash (so this role can create directories on it)
-- is mounted to all nodes including the control node (so this role can set
-  authorized keys there)
+2. Using an external fileshare which:
+   - Does not root squash (so this role can create directories on it)
+   - Is mounted to all nodes including the control node (so this role can set
+     authorized keys there)
 
-Create user `Carol`:
+   create user `carol`:
 
-```yaml
-basic_users_homedir_host: "{{ ansible_play_hosts | first }}" # doesn't matter which host is used
-basic_users_homedir_host_path: /home # homedir_host is client not server
-basic_users_user:
-  - comment: Carol Crane
-    name: carol
-    uid: 2007
-    public_key: ssh-ed25519 ...
-```
+   ```yaml
+   basic_users_uid_min: 2000
+   basic_users_homedir_host: "{{ ansible_play_hosts | first }}" # doesn't matter which host is used
+   basic_users_homedir_host_path: /home # homedir_host is client not server
+   basic_users_user:
+     - comment: Carol Crane
+       name: carol
+       uid: 2007
+       public_key: ssh-ed25519 ...
+   ```
 
-Using an external share which _does_ root squash, so home directories cannot be
-created by this role and must already exist, create user `Dan`:
+3. Using an external share which _does_ root squash, so home directories cannot be
+   created by this role and must already exist, create user `Dan`:
 
-```yaml
-basic_users_homedir_host: "{{ ansible_play_hosts | first }}"
-basic_users_homedir_host_path: /home
-basic_users_users:
-  - comment: Dan Deer
-    create_home: false
-    name: dan
-    uuid: 2008
-    public_key: ssh-ed25519 ...
-```
+   ```yaml
+   basic_users_uid_min: 2000
+   basic_users_homedir_host: "{{ ansible_play_hosts | first }}"
+   basic_users_homedir_host_path: /home
+   basic_users_users:
+     - comment: Dan Deer
+       create_home: false
+       name: dan
+       uuid: 2008
+       public_key: ssh-ed25519 ...
+   ```
 
-Using NFS exported from the control node, but mounted to all nodes (so that
-authorized keys applies to all nodes), create user `Erin` with passwordless sudo:
+4. Using NFS exported from the control node, but mounted to all nodes (so that
+   authorized keys applies to all nodes), create user `Erin` with passwordless sudo:
 
-```yaml
-basic_users_users:
-  - comment: Erin Eagle
-    name: erin
-    uid: 2009
-    shell: /bin/bash # override default nologin on control
-    groups:
-      - adm # enables ssh to compute nodes even without a job running
-    sudo: erin ALL=(ALL) NOPASSWD:ALL
-    public_key: ssh-ed25519 ...
-```
+   ```yaml
+   basic_users_uid_min: 2000
+   basic_users_users:
+     - comment: Erin Eagle
+       name: erin
+       uid: 2009
+       shell: /bin/bash # override default nologin on control
+       groups:
+         - adm # enables ssh to compute nodes even without a job running
+       sudo: erin ALL=(ALL) NOPASSWD:ALL
+       public_key: ssh-ed25519 ...
+   ```

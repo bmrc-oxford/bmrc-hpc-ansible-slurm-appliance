@@ -1,17 +1,16 @@
 ---
-- hosts: freeipa_client
-  tags:
-    - freeipa
-    - freeipa_server # as this is only relevant if using freeipa_server
-    - freeipa_host
-  gather_facts: false
+
+- name: Persist hostkeys across rebuilds
+  # Must be:
+  # - after filesystems.yml (for storage)
+  # - before ipa (re)enrolment, which updates IPA record to match actual hostkey
+  # - before portal.yml (where OOD login node hostkeys are scanned)
+  hosts: persist_hostkeys:!builder
   become: true
+  gather_facts: false
   tasks:
-    - name: Ensure FreeIPA client hosts are added to the FreeIPA server
-      ansible.builtin.import_role:
-        name: freeipa
-        tasks_from: addhost.yml
-      when: groups['freeipa_server'] | length > 0
+    - ansible.builtin.import_role:
+        name: persist_hostkeys
 
 - name: Persist hostkeys across rebuilds
   # Must be:
@@ -29,7 +28,7 @@
   tags:
     - freeipa
     - freeipa_client
-  gather_facts: true
+  gather_facts: false
   become: true
   tasks:
     - name: Install FreeIPA client
@@ -38,22 +37,9 @@
         tasks_from: client-install.yml
       when: "appliances_mode != 'configure'"
     - name: Enrol FreeIPA client
-      ansible.builtin.import_role:
+      ansible.builtin.include_role:
         name: freeipa
         tasks_from: enrol.yml
-
-- hosts: freeipa_server
-  tags:
-    - freeipa
-    - freeipa_server
-    - users
-  gather_facts: true
-  become: true
-  tasks:
-    - name: Add FreeIPA users
-      ansible.builtin.import_role:
-        name: freeipa
-        tasks_from: users.yml
 
 - hosts: sssd
   become: true
@@ -63,3 +49,13 @@
     - name: Configure sssd
       ansible.builtin.import_role:
         name: sssd
+
+- hosts: opkssh
+  become: true
+  gather_facts: false
+  tags: opkssh
+  tasks:
+    - name: Configure opkssh
+      ansible.builtin.include_role:
+        name: opkssh
+        tasks_from: "{{ 'configure.yml' if appliances_mode == 'configure' else 'main.yml' }}"

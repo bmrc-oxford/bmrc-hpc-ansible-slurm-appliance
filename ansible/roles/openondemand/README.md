@@ -8,7 +8,7 @@ This uses the [osc.ood](https://github.com/OSC/ood-ansible) Ansible role to prov
 
 - An OpenHPC v2.4 or later cluster (due to [this issue](https://github.com/openhpc/ohpc/issues/1346) in previous versions).
 - The `openondemand` node, i.e. the node which will host the Open Ondemand server/portal must:
-  - Have the slurm packages (e.g. `sinfo` etc) installed and be able to contact the Slurm controller (e.g. add this node to the `login` group).
+  - Have the Slurm packages (e.g. `sinfo` etc) installed and be able to contact the Slurm controller (e.g. add this node to the `login` group).
   - Have access to any cluster shared filesystems.
 - Open Ondemand's authentication maps authenticated users (e.g. via OIDC) to local users on the `openondemand` node.
   Therefore whatever mechanism provides cluster users (e.g. `basic_users`, `freeipa`, `ldap` via sssd) must cover the `openondemand` node.
@@ -17,7 +17,10 @@ This uses the [osc.ood](https://github.com/OSC/ood-ansible) Ansible role to prov
 
 ### General
 
-- `openondemand_clusters`: Required. Synonym for [osc.ood: clusters](https://github.com/OSC/ood-ansible#clusters) role variable.
+- `openondemand_cluster`: Required. `{v2: ...}`, a single value for the [osc.ood: clusters](https://github.com/OSC/ood-ansible#clusters) role variable.
+- `openondemand_clusters`: Deprecated. `{ignored_name: { v2: ...},}`, same structure as [osc.ood: clusters](https://github.com/OSC/ood-ansible#clusters) role variable.
+  Please use `openondemand_cluster` instead, since only one cluster is supported in this list (for instance by `tasks/configure.yml`).
+  Also note that the key will be replaced by `openhpc_cluster_name` because those must match since OOD 4.1 for account and qos retrieval.
 - `openondemand_servername`: Required. Synonym for [osc.ood: servername](https://github.com/OSC/ood-ansible/blob/master/defaults/main/ood_portal.yml#L27) role variable.
   This defines what the Open Ondemand portal's Apache server uses for the [name-based virtual host](https://httpd.apache.org/docs/current/mod/core.html#servername).
   It should be the IP or hostname(+domain) part of the URL used to access Open Ondemand in the browser, e.g. `ondemand.mysite.org`. **NB:** If a domain or external IP is not available, specify the host's internal IP here and use SSH with a `DynamicForward` option and a SOCKS proxy to access this address.
@@ -26,14 +29,14 @@ This uses the [osc.ood](https://github.com/OSC/ood-ansible) Ansible role to prov
 
 ### Authentication
 
-See the Open Ondemand [Authentication docs](https://osc.github.io/ood-documentation/latest/authentication/overview.html) for an overview of the authentication process.
+See the Open Ondemand [Authentication docs](https://osc.github.io/ood-documentation/latest/authentication.html) for an overview of the authentication process.
 
 - `openondemand_auth`: Required. Authentication method, either `'oidc'`, `dex`
-or `'basic_pam'`. See relevant subsection below.
+  or `'basic_pam'`. See relevant subsection below.
 
 #### OIDC authentication
 
-The following variables are active when `openondemand_auth` is `oidc`. This role uses the variables below plus a few required defaults to set the `osc.ood: ood_auth_openidc` [variable](https://github.com/OSC/ood-ansible#open-id-connect) - if the below is insufficent to correctly configure OIDC then set `ood_auth_openidc` directly.
+The following variables are active when `openondemand_auth` is `oidc`. This role uses the variables below plus a few required defaults to set the `osc.ood: ood_auth_openidc` [variable](https://github.com/OSC/ood-ansible#open-id-connect) - if the below is insufficient to correctly configure OIDC then set `ood_auth_openidc` directly.
 
 - `openondemand_oidc_client_id`: Required. Client ID, as specified by the OIDC provider
 - `openondemand_oidc_client_secret`: Required. Client secret, as specified the OIDC provider (should be vault-protected).
@@ -51,12 +54,13 @@ for more. The [osc.ood role](https://github.com/OSC/ood-ansible) variables such
 as `user_map_match` may be set directly if necessary.
 
 #### DEX authentication
+
 This runs DEX on the Open Ondemand host to provide an OIDC endpoint which federates
 from some other identity provider. Generally no OIDC configuration is required.
 Dex configuration can be provided using the `dex_settings` [osc.ood role](https://github.com/OSC/ood-ansible)
-variable.
+variable:
 
-**IMPORTANT** This takes a string of yaml, not actual yaml. E.g.:
+**IMPORTANT** This takes a string of YAML, not actual YAML. E.g.:
 
 ```yaml
 dex_settings: |
@@ -68,8 +72,11 @@ dex_settings: |
   ...
 ```
 
+See [DEX documentation](https://dexidp.io/docs/connectors/) for full details of
+options for each connector, e.g. [an example LDAP configuration](https://dexidp.io/docs/connectors/ldap/#configuration).
+
 See comments above for OIDC regarding remote user mapping. For LDAP the default
-mapping is likely to be sufficent.
+mapping is likely to be sufficient.
 
 #### Basic/PAM authentication
 
@@ -84,6 +91,19 @@ This role enables SSL on the Open Ondemand server, using the following self-sign
 - `openondemand_ssl_cert`: Optional. Default `/etc/pki/tls/certs/localhost.crt`.
 - `openondemand_ssl_cert_key`: Optional. Default `/etc/pki/tls/private/localhost.key`
 
+Alternatively, you can generate a certificate from Let's Encrypt automatically by configuring the following variables:
+
+- `openondemand_certbot`: Optional. Default is false. Set to true to request a certificate from Let's Encrypt.
+- `openondemand_certbot_email`: Required when `openondemand_certbot` is true. Email address for registration and recovery contact. Can provide multiple comma-separated addresses.
+- `openondemand_certbot_staging:` Optional. Whether to use Let's Encrypt staging server to provide (invalid) test certs. For testing and development only.
+
+If using Let's Encrypt:
+
+- Leave `openondemand_ssl_cert` and `openondemand_ssl_cert_key` set to their default values.
+- `openondemand_servername` must be a valid DNS name, not an IP.
+- Port 80 on the `openondemand` host to be externally accessible.
+- Certificates will be renewed automatically by the systemd timer `certbot-renew.timer`.
+
 ### Dashboard and application configuration
 
 - `openondemand_dashboard_docs_url`: Optional. URL of docs to show under Help in dashboard. Default `(undefined)`.
@@ -95,14 +115,17 @@ This role enables SSL on the Open Ondemand server, using the following self-sign
   - `new_window`: Optional. Whether to open link in new window. Bool, default `false`.
   - `app_name`: Optional. Unique name for app appended to `/var/www/ood/apps/sys/`. Default is `name`, useful if that is not unique or not suitable as a path component.
 - `openondemand_dashboard_support_url`: Optional. URL or email etc to show as support contact under Help in dashboard. Default `(undefined)`.
-- `openondemand_desktop_partition`: Optional. Name of Slurm partition to use for remote desktops. Requires a corresponding group named "openondemand_desktop" and entry in openhpc_partitions.
+- `openondemand_desktop_partition`: Optional. Name of Slurm partition to use for remote desktops, by default supplied with `openhpc_partitions` entry. During open ondemand config the string is used to provide a default partition in the UX. During image build, with `openondemand` group, setting this partition as a boolean determines if app installed in image.
 - `openondemand_desktop_screensaver`: Optional. Whether to enable screen locking/screensaver. **NB:** Users must have passwords if this is enabled. Bool, default `false`.
 - `openondemand_filesapp_paths`: List of paths (in addition to $HOME, which is always added) to include shortcuts to within the Files dashboard app.
-- `openondemand_jupyter_partition`: Required. Name of Slurm partition to use for Jupyter Notebook servers. Requires a corresponding group named "openondemand_jupyter" and entry in openhpc_partitions.
+- `openondemand_jupyter_partition`: Required. Name of Slurm partition to use for Jupyter Notebook servers, by default supplied with `openhpc_partitions` entry. During open ondemand config the string is used to provide a default partition in the UX. During image build, with `openondemand` group, setting this partition as a boolean determines if app installed in image.
 - `openondemand_gres_options`: Optional. A list of `[label, value]` items used
   to provide a drop-down for resource/GRES selection in application forms. The
   default constructs a list from all GRES definitions in the cluster. See the
   `option` attribute of the Select Field [form widget](https://osc.github.io/ood-documentation/latest/how-tos/app-development/interactive/form-widgets.html#form-widgets).
+- `openondemand_module_file_dir`: Optional. Path to [lmod modules files](https://osc.github.io/ood-documentation/latest/reference/files/ondemand-d-ymls.html#module-file-dir)
+  for [module browser page](https://osc.github.io/ood-documentation/latest/release-notes/v4.1-release-notes.html#module-browser-page).
+  Default is `/etc/ood/modules` which is automatically populated by the role.
 
 ### Monitoring
 
@@ -112,18 +135,17 @@ This role enables SSL on the Open Ondemand server, using the following self-sign
 
 The Open Ondemand portal can proxy other servers. Variables:
 
-- `openondemand_host_regex`: Synomyn for the `osc.ood: host_regex` [variable](https://osc.github.io/ood-documentation/latest/app-development/interactive/setup/enable-reverse-proxy.html). A Python regular expression matching servernames which Open Ondemand should proxy. Enables proxying and restricts which addresses are proxied (for security). E.g. this might be:
+- `openondemand_host_regex`: Synomyn for the `osc.ood: host_regex` [variable](https://osc.github.io/ood-documentation/latest/reference/files/ood-portal-yml.html#configure-reverse-proxy). A Python regular expression matching servernames which Open Ondemand should proxy. Enables proxying and restricts which addresses are proxied (for security). E.g. this might be:
 
   `'({{ openhpc_cluster_name }}-compute-\d+)|({{ groups["grafana"] | first }})'`
 
   to proxy:
-
   - All "compute" nodes, e.g. for Open Ondemand interactive apps such as remote desktop and Jupyter notebook server.
   - The Grafana server - note a link to Grafana is always added to the Open Ondemand dashboard.
 
   The exact pattern depends on inventory hostnames / partitions / addresses.
 
-- `openondemand_node_proxy_directives`: Optional, default ''. Multiline string to insert into Apache directives definition for `node_uri` ([docs](https://osc.github.io/ood-documentation/master/reference/files/ood-portal-yml.html#configure-reverse-proxy)).
+- `openondemand_node_proxy_directives`: Optional, default ''. Multiline string to insert into Apache directives definition for `node_uri` ([docs](https://osc.github.io/ood-documentation/latest/reference/files/ood-portal-yml.html#configure-reverse-proxy)).
 
 Note that:
 

@@ -14,9 +14,9 @@
   ansible.builtin.file:
     path: /etc/resolv.conf
     state: absent
-  when: "'resolv_conf' not in group_names" # if its been overriden, deleting it is the wrong thing to do
+  when: "'resolv_conf' not in group_names" # if its been overridden, deleting it is the wrong thing to do
 
-- name: Reenable NetworkManager control of resolv.conf
+- name: Re-enable NetworkManager control of resolv.conf
   # NB: This *doesn't* delete the 90-dns-none.conf file created by the resolv_conf role
   # as if nameservers are explicitly being set by that role we don't want to allow NM
   # to override it again.
@@ -38,7 +38,7 @@
   ansible.builtin.command: cloud-init clean --logs --seed
 
 - name: Cleanup /tmp # noqa: no-changed-when
-  ansible.builtin.command: rm -rf /tmp/*
+  ansible.builtin.shell: rm -rvf /tmp/*
 
 - name: Delete files triggering vulnerability scans
   ansible.builtin.file:
@@ -53,6 +53,32 @@
     # chrony role: only used for role dev, venv never created on disk
     - /etc/ansible-init/playbooks/roles/mrlesmithjr.chrony/poetry.lock
     - /etc/ansible-init/playbooks/roles/mrlesmithjr.chrony/requirements.txt
+    - /etc/ansible-init/playbooks/roles/mrlesmithjr.chrony/requirements-dev.txt
+    # netbox collection: only used for role dev
+    - /usr/lib/ansible-init/lib/python3.9/site-packages/ansible_collections/netbox/netbox/poetry.lock
+    # esbuild in OOD
+    - /var/www/ood/apps/sys/dashboard/node_modules/@esbuild/linux-x64/bin/esbuild
+    - /usr/lib/rstudio-server/bin/quarto/bin/tools/x86_64/esbuild
+
+- name: Replace rclone with a no-op script
+  ansible.builtin.copy:
+    content: |
+      #!/bin/sh
+      echo "The rclone executable has been removed in ansible-slurm-appliance images due to too many security warnings." 1>&2
+      exit 1
+    dest: /usr/bin/rclone
+    owner: root
+    group: root
+    mode: "0555"
+
+- name: Stop journald
+  # Stop journald from writing data to the journal after we have cleared it.
+  ansible.builtin.service:
+    name: systemd-journald
+    state: stopped
+
+- name: Clear any journal files # noqa: no-changed-when
+  ansible.builtin.command: rm -rf /var/log/journal/*
 
 - name: Get package facts
   ansible.builtin.package_facts:

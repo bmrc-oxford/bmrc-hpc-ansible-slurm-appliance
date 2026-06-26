@@ -5,18 +5,19 @@
 
 # NB: Variables prefixed ood_ are all from https://github.com/OSC/ood-ansible
 
-ondemand_package_version: "4.0.7" # used in ansible/cleanup.yml
+ondemand_package_version: "4.1.4" # used in ansible/cleanup.yml
 ondemand_package: "ondemand-{{ ondemand_package_version }}" # osc.ood role var controlling installed package
 
 openondemand_servername: "{{ hostvars[groups['openondemand'].0].ansible_host if groups['openondemand'] else '' }}"
 
 openondemand_auth: basic_pam
 
-openondemand_jupyter_partition: "{{ openhpc_partitions[0]['name'] }}"
-openondemand_desktop_partition: "{{ openhpc_partitions[0]['name'] }}"
-openondemand_rstudio_partition: "{{ openhpc_partitions[0]['name'] }}"
+# Manages case where openhpc_partitions are not defined e.g. for site image builds
+openondemand_jupyter_partition: "{{ openhpc_partitions[0].name | default('') }}"
+openondemand_desktop_partition: "{{ openhpc_partitions[0].name | default('') }}"
+openondemand_rstudio_partition: "{{ openhpc_partitions[0].name | default('') }}"
 openondemand_matlab_partition: '' # Requires target site to already have MATLAB so set to empty
-openondemand_codeserver_partition: "{{ openhpc_partitions[0]['name'] }}"
+openondemand_codeserver_partition: "{{ openhpc_partitions[0].name | default('') }}"
 
 # Regex defining hosts which openondemand can proxy; the default regex is compute nodes (for apps) and grafana host,
 # e.g. if the group `compute` has hosts `compute-{0,1,2,..}` this will be '(compute-\d+)|(control)'.
@@ -34,42 +35,41 @@ openondemand_dashboard_links_grafana:
 openondemand_dashboard_links: "{{ openondemand_dashboard_links_grafana if groups['grafana'] | length > 0 }}"
 
 # For FreeIPA-enroled hosts, the shell host must be an IPA-registered host to avoid an ssh key prompt
-openondemand_login_host: "{{ inventory_hostname if inventory_hostname in groups['freeipa_client'] else 'localhost' }}"
+# so do not use localhost:
+openondemand_login_host: "{{ inventory_hostname }}"
 
-openondemand_clusters:
-  slurm:
-    v2:
-      metadata:
-        title: "{{ openhpc_cluster_name }}" # interpolation here works as openondemand is lexically after openhpc
-      login:
-        host: "{{ openondemand_login_host }}"
-        default: true
-      job:
-        adapter: slurm
-        cluster: "{{ openhpc_cluster_name }}"
-      batch_connect:
-        basic:
-          script_wrapper: |
-            module purge
-            %s
-          set_host: host=$(hostname -s)
-        vnc:
-          script_wrapper: |
-            module purge
+openondemand_cluster:
+  v2:
+    metadata:
+      title: "{{ openhpc_cluster_name }}" # interpolation here works as openondemand is lexically after openhpc
+    login:
+      host: "{{ openondemand_login_host }}"
+      default: true
+    job:
+      adapter: slurm
+    batch_connect:
+      basic:
+        script_wrapper: |
+          module purge
+          %s
+        set_host: host=$(hostname -s)
+      vnc:
+        script_wrapper: |
+          module purge
 
-            export PATH=/opt/TurboVNC/bin:$PATH
-            # avoid "Failed to create secure directory (/run/user/*/pulse)"
-            export XDG_RUNTIME_DIR="$TMPDIR/xdg_runtime"
+          export PATH=/opt/TurboVNC/bin:$PATH
+          # avoid "Failed to create secure directory (/run/user/*/pulse)"
+          export XDG_RUNTIME_DIR="$TMPDIR/xdg_runtime"
 
-            # Workaround to avoid "Unable to contact settings server" when
-            # lauching xfce4-session
-            xfce4-session() { /bin/dbus-launch /bin/xfce4-session $@ ; }
-            export -f xfce4-session
-            %s
-          set_host: host=$(hostname -s)
-      custom: "{{ openondemand_clusters_grafana if groups['grafana'] | length > 0 else {} }}"
+          # Workaround to avoid "Unable to contact settings server" when
+          # launching xfce4-session
+          xfce4-session() { /bin/dbus-launch /bin/xfce4-session $@ ; }
+          export -f xfce4-session
+          %s
+        set_host: host=$(hostname -s)
+    custom: "{{ openondemand_cluster_grafana if groups['grafana'] | length > 0 else {} }}"
 
-openondemand_clusters_grafana:
+openondemand_cluster_grafana:
   # embed grafana panels in Jobs app: https://osc.github.io/ood-documentation/latest/customization.html#grafana-support
   grafana:
     host: "{{ grafana_url }}"
@@ -117,10 +117,10 @@ ood_install_apps: >-
 openondemand_apps_desktop_default:
   title: Remote Desktop
   description: Request a desktop to run GUI applications.
-  cluster: slurm
+  cluster: "{{ openhpc_cluster_name }}"
   form:
     - desktop
-    - bc_queue
+    - auto_queues
     - bc_num_hours
     - num_cores
     - gres
@@ -128,7 +128,7 @@ openondemand_apps_desktop_default:
     - node
   attributes:
     desktop: xfce
-    bc_queue:
+    auto_queues:
       value: "{{ openondemand_desktop_partition | default(none) }}"
       help: 'If GPUs are needed enter a100 and see GRES options'
     num_cores:
@@ -157,6 +157,8 @@ openondemand_apps_desktop_default:
     script:
       job_name: "ood-desktop"
       native:
+        - "--partition"
+        - "<%= auto_queues %>"
         - <%= "--nodes=1" %>
         - <%= "--ntasks=#{num_cores}" %>
         <% if node != '' %>
@@ -172,11 +174,11 @@ openondemand_apps_desktop: "{{ {'bc_desktop':openondemand_apps_desktop_default} 
 openondemand_apps_jupyter_default:
   title: Jupyter Notebook
   description: Request a Jupyter Notebook server
-  cluster: slurm
+  cluster: "{{ openhpc_cluster_name }}"
   form:
     - modules
     - extra_jupyter_args
-    - bc_queue
+    - auto_queues
     - bc_num_hours
     - num_cores
     - gres
@@ -206,7 +208,7 @@ openondemand_apps_jupyter_default:
       help: Select a particular node or leave empty to let Slurm pick the next available
       value: ""
     extra_jupyter_args: ""
-    bc_queue:
+    auto_queues:
       value: "{{ openondemand_jupyter_partition | default(none) }}"
       help: 'If GPUs are needed enter a100 and see GRES options'
   submit: |
@@ -220,6 +222,8 @@ openondemand_apps_jupyter_default:
     script:
       job_name: "ood-jupyter"
       native:
+        - "--partition"
+        - "<%= auto_queues %>"
         - <%= "--nodes=1" %>
         - <%= "--ntasks=#{num_cores}" %>
         <% if node != '' %>
@@ -236,14 +240,14 @@ openondemand_apps_rstudio_module_options:
 openondemand_apps_rstudio_default:
   title: RStudio
   description: Request a RStudio server
-  cluster: slurm
+  cluster: "{{ openhpc_cluster_name }}"
   attributes:
-    bc_queue:
+    auto_queues:
       value: "{{ openondemand_rstudio_partition | default(none) }}"
     rstudio_module:
       label: RStudio module
       required: true
-      cachable: true
+      cacheable: true
       help: Choose your RStudio module
       widget: select
       options: "{{ openondemand_apps_rstudio_module_options }}"
@@ -260,7 +264,7 @@ openondemand_apps_rstudio_default:
       max: 48
       step: 1
       value: 1
-      cachable: true
+      cacheable: true
     ram:
       widget: number_field
       label: RAM in GB
@@ -269,7 +273,7 @@ openondemand_apps_rstudio_default:
       max: 700
       step: 1
       value: 4
-      cachable: true
+      cacheable: true
     bc_num_hours:
       widget: number_field
       help: Maximum runtime in hours for your session. NB Ensure this is within the maximum allowed by your chosen partition
@@ -277,7 +281,7 @@ openondemand_apps_rstudio_default:
       max: 240
       step: 1
       value: 30
-      cachable: true
+      cacheable: true
     bc_email_on_started: false
     auto_modules_RStudio-Server:
       default: false
@@ -296,9 +300,8 @@ openondemand_apps_rstudio_default:
       min: 0
       step: 1
   form:
-    - bc_queue
-    - rstudio_module
     - auto_queues
+    - rstudio_module
     - extra_modules_script
     - cores
     - ram
@@ -316,7 +319,7 @@ openondemand_apps_rstudio_default:
     script:
       native:
         - "--partition"
-        - "<%= bc_queue %>"
+        - "<%= auto_queues %>"
         - "--ntasks"
         - "1"
         - "--mem"
@@ -333,10 +336,10 @@ openondemand_apps_rstudio: "{{ {'rstudio':openondemand_apps_rstudio_default} if 
 openondemand_apps_matlab_default:
   title: MATLAB
   description: Request a desktop to run MATLAB.
-  cluster: slurm
+  cluster: "{{ openhpc_cluster_name }}"
   form:
     - desktop
-    - bc_queue
+    - auto_queues
     - bc_num_hours
     - matlab_module
     - cores
@@ -347,12 +350,12 @@ openondemand_apps_matlab_default:
     desktop: xfce
     # bc_account: # i.e. slurm account
     #   value: root
-    bc_queue:
+    auto_queues:
       value: "{{ openondemand_matlab_partition | default(none) }}"
     matlab_module:
       label: MATLAB module
       required: true
-      cachable: true
+      cacheable: true
       help: Choose your MATLAB module
       widget: select
       options:
@@ -365,7 +368,7 @@ openondemand_apps_matlab_default:
       max: 48
       step: 1
       value: 1
-      cachable: true
+      cacheable: true
     ram:
       widget: number_field
       label: RAM in GB
@@ -374,7 +377,7 @@ openondemand_apps_matlab_default:
       max: 700
       step: 1
       value: 4
-      cachable: true
+      cacheable: true
     bc_num_hours:
       widget: number_field
       help: Maximum runtime in hours for your session. NB Ensure this is within the maximum allowed by your chosen partition
@@ -382,7 +385,7 @@ openondemand_apps_matlab_default:
       max: 240
       step: 1
       value: 30
-      cachable: true
+      cacheable: true
     gres:
       label: Resources
       help: Select GPU or other Slurm GRES resources
@@ -403,7 +406,7 @@ openondemand_apps_matlab_default:
       job_name: "ood-matlab"
       native:
         - "--partition"
-        - "<%= bc_queue %>"
+        - "<%= auto_queues %>"
         - "--ntasks"
         - "1"
         - "--mem"
@@ -418,9 +421,9 @@ openondemand_apps_matlab: "{{ {'matlab':openondemand_apps_matlab_default} if ope
 openondemand_apps_codeserver_default:
   title: Code Server
   description: Request a Code Server
-  cluster: slurm
+  cluster: "{{ openhpc_cluster_name }}"
   form:
-    - bc_queue
+    - auto_queues
     - bc_num_hours
     - codeserver_module
     - cores
@@ -429,12 +432,12 @@ openondemand_apps_codeserver_default:
     codeserver_module:
       label: Code Server module
       required: true
-      cachable: true
+      cacheable: true
       help: Choose your Code Server module
       widget: select
       options:
         - ["Code Server v{{ openondemand_code_server_version}}", "code-server/{{ openondemand_code_server_version }}"]
-    bc_queue:
+    auto_queues:
       value: "{{ openondemand_codeserver_partition | default(none) }}"
     cores:
       label: Number of CPU cores
@@ -444,7 +447,7 @@ openondemand_apps_codeserver_default:
       max: 48
       step: 1
       value: 1
-      cachable: true
+      cacheable: true
     ram:
       widget: number_field
       label: RAM in GB
@@ -453,7 +456,7 @@ openondemand_apps_codeserver_default:
       max: 700
       step: 1
       value: 4
-      cachable: true
+      cacheable: true
     bc_num_hours:
       widget: number_field
       help: Maximum runtime in hours for your session. NB Ensure this is within the maximum allowed by your chosen partition
@@ -471,7 +474,7 @@ openondemand_apps_codeserver_default:
       job_name: "ood-codeserver"
       native:
         - "--partition"
-        - "<%= bc_queue %>"
+        - "<%= auto_queues %>"
         - "--ntasks"
         - "1"
         - "--mem"

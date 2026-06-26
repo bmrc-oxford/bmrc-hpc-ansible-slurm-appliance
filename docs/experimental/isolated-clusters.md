@@ -45,6 +45,7 @@ See above for definition of "Default" features. In the "Isolated?" column:
 | gateway              | n/a      | n/a - build only         |
 | grafana              | Y        | Y                        |
 | hpctests             | Y        | Y                        |
+| journald             | Y        | Y                        |
 | k3s_agent            | -        | ?                        |
 | k3s_server           | -        | ?                        |
 | k9s                  | -        | ?                        |
@@ -89,7 +90,7 @@ inventory_groups = 'proxy,freeipa_client'
 ```
 
 ```yaml
-# environments/$ENV/group_vars/builder/overrrides.yml:
+# environments/$ENV/group_vars/builder/overrides.yml:
 proxy_basic_user: someuser
 proxy_basic_password: "{{ vault_proxy_basic_password }}"
 proxy_http_address: squid.mysite.org
