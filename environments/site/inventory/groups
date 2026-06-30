@@ -103,15 +103,11 @@ openhpc
 [vgpu]
 # Hosts where vGPU/MIG should be configured - see docs/mig.md
 
-<<<<<<< HEAD
-[eessi]
-=======
 [journald:children]
 # Hosts where journald should be configured. See ansible/roles/journald/README.md.
 cluster
 
 [eessi:children]
->>>>>>> stackhpc/main
 # Hosts on which EESSI stack should be configured
 
 [resolv_conf]
