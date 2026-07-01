@@ -1,0 +1,5 @@
+---
+
+appliances_pulp_url: "http://10.1.0.187:8080"
+pulp_site_upstream_username: bmrc-staging
+pulp_site_upstream_password: "{{ vault_pulp_site_upstream_password }}"

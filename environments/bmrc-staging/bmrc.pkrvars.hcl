@@ -1,0 +1,9 @@
+image_name = "openhpc-bmrc"
+flavor = "m1.medium"                           # 4GB
+networks = ["52381e53-f9c4-4c84-ad75-1bd5e70f2855"] # demo-vxlan
+source_image_name = "rocky_linux_9_8_lvm"
+inventory_groups = "fatimage,freeipa_client,openondemand,extra_packages,lustre"
+volume_size = 50
+floating_ip = "1e656132-48ec-44cf-9432-c4ba606012d8" #  129.67.8.236 
+security_groups = ["default", "SSH-demo"]
+ssh_username = "cloud-user"

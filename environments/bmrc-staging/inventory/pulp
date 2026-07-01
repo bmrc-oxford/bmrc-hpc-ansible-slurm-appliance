@@ -1,0 +1,2 @@
+[pulp_server]
+pulp_host ansible_host=localhost ansible_user=cloud-user
