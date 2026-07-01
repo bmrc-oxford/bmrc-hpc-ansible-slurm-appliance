@@ -1,11 +1,12 @@
 #!/bin/bash
 # Source this file to quickly load required environment to run the ansible appliance
 
-export ANSIBLE_VAULT_IDENTITY_LIST=bmrc@$APPLIANCES_REPO_ROOT/dev/hashi-vault-client.py
 export ENV="bmrc-staging"
 if [ -z "$OS_CLOUD" ] && [ -z "$OS_PROJECT_NAME" ]; then
   echo "Please export OS_CLOUD according to your ~/.config/openstack/clouds.yaml or source an openrc file"
+else
+  mydir="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+  source "$mydir/../venv/bin/activate"
+  source "$mydir/../environments/$ENV/activate"
+  export ANSIBLE_VAULT_IDENTITY_LIST=bmrc@$APPLIANCES_REPO_ROOT/dev/hashi-vault-client.py
 fi
-mydir="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
-source "$mydir/../venv/bin/activate"
-source "$mydir/../environments/$ENV/activate"
