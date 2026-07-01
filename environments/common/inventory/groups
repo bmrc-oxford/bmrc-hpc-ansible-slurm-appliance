@@ -200,9 +200,6 @@ k3s_agent
 [dnf_repos:children]
 # Hosts to replace system repos with Pulp repos
 # Roles/groups listed here *always* do installs:
-extra_packages
-doca
-# TODO: can't express: if cuda and builder, enable dnf_repos
 
 [pulp_site]
 # Add builder to this group to automatically sync pulp during image build
