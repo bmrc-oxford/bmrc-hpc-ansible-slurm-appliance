@@ -1,5 +1,8 @@
 ---
-# Repos and GPG keys are provided by dnf_repos role
+# Repos and GPG keys are provided by dnf_repos role, which we don't use
+- name: Install CERNVM-FS repo
+  ansible.builtin.package:
+    name: https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
 
 - name: Install CVMFS
   ansible.builtin.dnf:
