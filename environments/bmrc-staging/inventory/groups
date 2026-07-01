@@ -10,8 +10,7 @@ fatimage
 # All Slurm compute nodes (in all partitions).
 fatimage
 
-[nfs:children]
-openhpc
+[nfs]
 
 [hpctests:children]
 # Login group to use for running mpi-based testing.
@@ -57,9 +56,8 @@ login
 [block_devices:children]
 # Environment-specific so not defined here
 
-[basic_users:children]
+[basic_users]
 # Add `openhpc` group to add Slurm users via creation of users on each node.
-openhpc
 
 [openondemand:children]
 # Host to run Open OnDemand server on - subset of login
@@ -89,8 +87,9 @@ compute
 # Hosts to manage /etc/hosts e.g. if no internal DNS. See ansible/roles/etc_hosts/README.md
 cluster
 
-[freeipa_client]
+[freeipa_client:children]
 # Hosts to be a FreeIPA client. See ansible/roles/freeipa/README.md
+openhpc
 
 [doca]
 # Add `builder` to install NVIDIA DOCA during image build
@@ -100,7 +99,6 @@ cluster
 
 [slurm_recompile:children]
 # Hosts to recompile Slurm for - allows supporting Slurm autodetection method 'nvml'
-cuda
 
 [vgpu]
 # Hosts where vGPU/MIG should be configured - see docs/mig.md
@@ -111,7 +109,6 @@ cluster
 
 [eessi:children]
 # Hosts on which EESSI stack should be configured
-openhpc
 
 [resolv_conf]
 # Allows defining nameservers in /etc/resolv.conf - see ansible/roles/resolv_conf/README.md
@@ -119,8 +116,9 @@ openhpc
 [proxy]
 # Hosts to configure http/s proxies - see ansible/roles/proxy/README.md
 
-[manila]
+[manila:children]
 # Hosts to configure for manila fileshares
+openhpc
 
 [persist_hostkeys:children]
 # Hosts to use common set of hostkeys which persist across reimaging.
@@ -135,6 +133,7 @@ control
 [tuned:children]
 # Hosts to run TuneD configuration
 fatimage
+cluster
 
 [ansible_init:children]
 # Hosts to run linux-ansible-init
@@ -173,8 +172,8 @@ fatimage
 [dnf_repos:children]
 # Hosts to replace system repos with Pulp repos
 # Some roles do installs when in install mode/on build VM only:
-#fatimage
-#builder
+fatimage
+builder
 
 [cacerts]
 # Hosts to configure CA certificates and trusts on
@@ -190,11 +189,12 @@ fatimage
 # Hosts to configure for node health checks
 compute
 
-[topology]
+[topology:children]
 # Compute nodes to be included in the Slurm topology plugin's topology tree. See ansible/roles/topology
 # Should be set to `compute` if enabled
 # Note that this feature currently assumes all compute nodes are VMs, enabling
 # when the cluster contains baremetal compute nodes may lead to unexpected scheduling behaviour
+compute
 
 [pulp_site]
 # Add builder to this group to automatically sync pulp during image build
@@ -218,9 +218,12 @@ compute
 # Hosts to run opkssh to allow SSH via OIDC
 
 ## Vulnerability mitigation groups
+## apply to cluster until new image
 [mitigate_dirtyfrag:children]
-builder
+cluster
 [mitigate_ssh_keysign_pwn:children]
-builder
+cluster
 [mitigate_cve_2026_43037:children]
-builder
+cluster
+
+[proprietarygpu]
