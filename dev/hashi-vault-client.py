@@ -58,8 +58,13 @@ def main():
 
     # use a different secret name if specified
     vault_id = VAULT_ID_SECRET_MAP.get(args.vault_id, args.vault_id)
-    path = "%s/%s" % (args.secrets_root_path, args.vault_id)
-    current = client.read(path)
+    path = "%s/%s" % (args.secrets_root_path, vault_id)
+    try:
+      current = client.read(path)
+    except hvac.exceptions.Forbidden as e:
+      print("E: unable to get ansible-vault password: %s" % e, file=sys.stderr)
+      return 1
+
     if current is None:
         print(f"E: {path} not found in vault")
         return 1
