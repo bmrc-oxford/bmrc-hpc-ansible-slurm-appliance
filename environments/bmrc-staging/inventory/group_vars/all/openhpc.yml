@@ -43,4 +43,3 @@ ohpc_default_extra_repos:
       metalink: "https://mirrors.fedoraproject.org/metalink?repo=epel-8&arch=$basearch&infra=$infra&content=$contentdir"
       gpgcheck: true
       gpgkey: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8"
-

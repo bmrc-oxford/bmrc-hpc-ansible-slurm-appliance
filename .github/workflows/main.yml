@@ -34,4 +34,3 @@ jobs:
       pull-requests: write
       issues: write
     uses: ./.github/workflows/lint.yml
-
