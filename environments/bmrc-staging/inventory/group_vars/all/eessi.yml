@@ -1,0 +1,3 @@
+---
+# deviation from cvmfs-config-eessi from ark repos
+eessi_cvmfs_config_package: https://github.com/EESSI/filesystem-layer/releases/download/latest/cvmfs-config-eessi-latest.noarch.rpm
