@@ -7,3 +7,4 @@ packer/openhpc2
 .vscode
 requirements.yml.last
 .ansible
+*~
