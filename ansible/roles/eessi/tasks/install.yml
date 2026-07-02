@@ -1,12 +1,16 @@
 ---
 # Repos and GPG keys are provided by dnf_repos role, which we don't use
 - name: Install CERNVM-FS repo
-  ansible.builtin.package:
-    name: https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
+  ansible.builtin.command: yum install -y https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
+  become: true
 
 - name: Install CVMFS
   ansible.builtin.dnf:
     name: cvmfs
+
+- name: Install CERNVM-FS repo
+  ansible.builtin.command: yum install -y https://github.com/EESSI/filesystem-layer/releases/download/latest/cvmfs-config-eessi-latest.noarch.rpm
+  become: true
 
 - name: Install EESSI CVMFS config
   # checkov:skip=CKV2_ANSIBLE_4: "Ensure that packages with untrusted or missing GPG signatures are not used by dnf"
