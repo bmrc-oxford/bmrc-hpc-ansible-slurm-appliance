@@ -40,6 +40,11 @@ def main():
 
     args = parser.parse_args()
 
+    data = os.environ.get('VAULT_PASSWORD', None)
+    if data:
+        printf("W: using VAULT_PASSWORD from environment directly, instead of fetching from hashicorp vault", file=sys.stderr)
+        print(f"{data}\n")
+
     token = os.environ.get("VAULT_TOKEN", None)
     if token is None and os.environ.get("HOME"):
         token_filename = os.path.join(os.environ.get("HOME"), ".vault-token")
@@ -69,12 +74,12 @@ def main():
         return 1
 
     if current is None:
-        print(f"E: {path} not found in vault")
+        print(f"E: {path} not found in vault", file=sys.stderr)
         return 1
 
     data = current.get("data", {}).get("value")
     if not data:
-        print(f"E: empty value in {path} in vault")
+        print(f"E: empty value in {path} in vault", file=sys.stderr)
         return 1
 
     print(f"{data}\n")

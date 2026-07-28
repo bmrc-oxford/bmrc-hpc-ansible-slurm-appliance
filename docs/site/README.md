@@ -84,6 +84,12 @@ Ensure you have openstack credentials. The `./dev/activate-bmrc-staging` script 
 	# ./dev/setup-env.sh
 
 **Build**
+
+This needs a hashicorp vault token to fetch the ansible-vault secret to decrypt `environments/bmrc-staging/inventory/group_vars/all/secrets.yml`.
+Either `export VAULT_TOKEN=xxxx` or put it in `~/.vault-token`.
+
+As a fallback, `export VAULT_PASSWORD=xxxx` to the ansible-vault password to bypass hashicorp vault.
+
 	# ./dev/activate-bmrc-staging
 	# cd packer
 	# PACKER_LOG=1 packer build --on-error=ask -var-file=$PKR_VAR_environment_root/bmrc.pkrvars.hcl openstack.pkr.hcl 2>&1 | tee packer-build.log
