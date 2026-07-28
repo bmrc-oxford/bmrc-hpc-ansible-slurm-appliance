@@ -235,6 +235,20 @@
     - ansible.builtin.include_role:
         name: podman
         tasks_from: "{{ 'configure.yml' if appliances_mode == 'configure' else 'main.yml' }}"
+    # Fix from https://github.com/podman-container-tools/buildah/issues/3834#issuecomment-1076301273
+    - name: Fix write to uid_map failed
+      become: true
+      register: fix_uidmap_cap
+      changed_when: '"Fixing newuidmap" in fix_uidmap_cap.stdout'
+      ansible.builtin.shell: |
+        set -o pipefail
+        echo "newuidmap: $(getcap $(which newuidmap))"
+        echo "newgidmap: $(getcap $(which newgidmap))"
+        if ! (getcap $(which newuidmap) | grep -q ep) || ! (getcap $(which newgidmap) | grep -q ep); then
+          echo "Fixing newuidmap / newgidmap by reinstalling shadow-utils"
+          # redirect errors about missing locale files
+          rpm --restore shadow-utils 2>/dev/null
+        fi
 
 - hosts: update
   gather_facts: false

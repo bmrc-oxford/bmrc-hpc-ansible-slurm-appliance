@@ -1,0 +1,11 @@
+appliances_extra_packages_other:
+  - rdma-core-devel
+  - bzip2
+  - bc
+  - pam-devel
+  - patch
+  - vim-enhanced
+
+appliances_admin_user_groups:
+  - admins  # bmrc administrators
+  - adm  # rocky

@@ -15,3 +15,5 @@ cvmfs_config_proxy:
 cvmfs_config_default: "{{ cvmfs_config_single if cvmfs_http_proxy == '' else cvmfs_config_proxy }}"
 cvmfs_config_overrides: {}
 cvmfs_config: "{{ cvmfs_config_default | combine(cvmfs_config_overrides) }}"
+
+eessi_cvmfs_config_package: cvmfs-config-eessi

@@ -1,0 +1,7 @@
+---
+- name: Apply chosen LVM configuration
+  hosts: builder
+  become: true
+  pre_tasks:
+  roles:
+    - role: mrlesmithjr.manage_lvm

@@ -1,0 +1,18 @@
+---
+# Grow the /dev/vda5 partition and increase /var from 919MB
+manage_lvm: true
+lvm_groups:
+  - vgname: vgroot
+    create: true
+    disks:
+      - /dev/vda3
+    pvresize: true
+    lvnames:
+      - lvname: lv_var
+        filesystem: ext4
+        create: true
+        # mntp: /tmp
+        # mopts: "rw,nosuid,nodev"
+        # mount: true
+        # opts: "{{ '-i 2 -I 64K' if tmp_disks | length > 1 else '' }}"
+        size: "2G"

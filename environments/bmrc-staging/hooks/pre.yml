@@ -1,0 +1,3 @@
+---
+- name: Import parent hook
+  ansible.builtin.import_playbook: "{{ lookup('env', 'APPLIANCES_ENVIRONMENT_ROOT') }}/../site/hooks/pre.yml"
