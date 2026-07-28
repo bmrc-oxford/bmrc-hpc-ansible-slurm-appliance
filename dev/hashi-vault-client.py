@@ -40,9 +40,12 @@ def main():
 
     args = parser.parse_args()
 
-    data = os.environ.get('VAULT_PASSWORD', None)
+    data = os.environ.get("VAULT_PASSWORD", None)
     if data:
-        printf("W: using VAULT_PASSWORD from environment directly, instead of fetching from hashicorp vault", file=sys.stderr)
+        print(
+            "W: using VAULT_PASSWORD from environment directly, instead of fetching from hashicorp vault",
+            file=sys.stderr,
+        )
         print(f"{data}\n")
 
     token = os.environ.get("VAULT_TOKEN", None)
