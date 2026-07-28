@@ -6,3 +6,4 @@ inventory_groups = "fatimage,freeipa_client,openondemand,extra_packages"
 volume_size = 50
 security_groups = ["default"]
 ssh_username = "cloud-user"
+floating_ip = "f2c525f0-e305-4f36-b888-2764ab9176f6" # Manually assigned floating IP to the project
